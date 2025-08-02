@@ -1,5 +1,9 @@
 body {
-    background: #0C0C0C;
+    background: #FFFFFF;
+}
+@font-face {
+    font-family: 'n';
+    src: url(./fonts/ncrypt.ttf);
 }
 .loading {
     position: absolute;
@@ -7,7 +11,21 @@ body {
     height: 100vh;
     left: 0;
     top: 0;
-    background: #282828;
+    background-color: #000;
+    font-family: 'n';
+    animation: bgin forwards 750ms;
+    animation-delay: 250ms;
+}
+@keyframes bgin {
+    0% {
+        background-color: #000;
+    }
+    99.9% {
+        background-color: #282828;
+    }
+    100% {
+        background-color: #282828;
+    }
 }
 .blendrect {
     background: #0C0C0C;
@@ -16,23 +34,19 @@ body {
     top: -100%;
     transform: translate(-50%, -50%);
     height: 100vh;
-    width: 0.5vw;
-    animation: blendexpand 1s forwards;
-    mix-blend-mode: difference;
-    animation-delay: 0.5s;
-    z-index: 2;
+    width: 0.1vw;
+    animation: blendexpand 2s forwards;
+    animation-delay: 1.25s;
+    z-index: 3;
+    overflow: hidden;
 }
 @keyframes blendexpand {
     0% {
-        width: 0.5vw;
+        width: 0.1vw;
         top: -100%;
     }
-    40% {
-        width: 0.5vw;
-        top: 50%;
-    }
-    60% {
-        width: 0.5vw;
+    50% {
+        width: 0.1vw;
         top: 50%;
     }
     99.9% {
@@ -47,8 +61,105 @@ body {
 .lntext {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 47.5%;
     transform: translate(-50%, -50%);
-    color: white;
-    z-index: 3;
+    color: #FFF;
+    z-index: 2;
+    font-size: 4vw;
+    animation: fadein forwards 750ms;
+    animation-delay: 1s;
+    opacity: 0;
+}
+p {
+    margin: 0;
+}
+.lntextovr {
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+    color: #ff0000;
+    font-size: 4vw;
+    z-index: 4;
+}
+::selection {
+    background: #F00;
+    color: #fff;
+}
+.rect {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25vmax;
+    height: 10vh;
+    overflow: hidden;
+}
+@keyframes fadein {
+    0% {
+        opacity: 0%;
+    }
+    99.9% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+.lbar {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 1px;
+    background: #282828;
+    animation: widthin 750ms forwards;
+    animation-delay: 3s;
+    overflow: hidden;
+    z-index: 5;
+}
+.lbar::after {
+    content: '';
+    width: 0%;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%);
+    height: 1px;
+    animation: widthin 1.5s forwards;
+    background: #fff;
+    animation-delay: 3.5s;
+}
+@keyframes widthin {
+    0% {
+        width: 0
+    }
+    99.9% {
+        width: 25vmax;
+    }
+    100% {
+        width: 25vmax;
+    }
+}
+@keyframes widthout {
+    0% {
+        width: 25vmax;
+    }
+    99.9% {
+        width: 0
+    }
+    100% {
+        width: 0;
+    }
+}
+@keyframes downout {
+    0% {
+        top:25%;
+    }
+    99.9% {
+        top: 125%
+    }
+    100% {
+        top: 125%;
+    }
 }
