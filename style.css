@@ -497,7 +497,7 @@ body {
     object-fit: cover;
     position: absolute; 
 }
-#eventsv-canvas {
+.videos canvas {
     position: absolute;
     top: 50%;
     left: 50%;

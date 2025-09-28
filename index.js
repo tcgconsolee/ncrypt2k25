@@ -1,122 +1,75 @@
 const start = document.getElementById("start");
-const tv = document.getElementById("tv");
-const eventsv = document.getElementById("eventsv");
-const sofa = document.getElementById("sofa");
-const computer = document.getElementById("computer");
-const canvas = document.getElementById("eventsv-canvas");
-const ctx = canvas.getContext("2d");
 
+// mouse flags
 let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
-let cool = 12, lastTime = performance.now();
 
-const greenStrength = 1;
-const tolerance = 0;
+// global and per-video cooldowns
+let cool = 12;  // global (for "start")
+let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0 };
+let lastTime = performance.now();
 
-let greenLoopId = null;
+// store all videos + canvases
+const videos = {
+    tv: { video: document.getElementById("tv"), canvas: document.getElementById("tv-canvas"), ctx: null, loopId: null },
+    eventsv: { video: document.getElementById("eventsv"), canvas: document.getElementById("eventsv-canvas"), ctx: null, loopId: null },
+    sofa: { video: document.getElementById("sofa"), canvas: document.getElementById("sofa-canvas"), ctx: null, loopId: null },
+    computer: { video: document.getElementById("computer"), canvas: document.getElementById("computer-canvas"), ctx: null, loopId: null }
+};
+for (let key in videos) {
+    videos[key].ctx = videos[key].canvas.getContext("2d");
+}
 
-// ---------------- Tick loop for autoplay & cooldown ----------------
+// ---------------- Tick loop ----------------
 function tick(now) {
     const delta = now - lastTime;
-    if (delta >= 1000 && cool > 0) {
-        cool--;
+    if (delta >= 1000) {
+        if (cool > 0) cool--; // global cooldown
+        for (let key in cooldowns) { // per-video cooldowns
+            if (cooldowns[key] > 0) cooldowns[key]--;
+        }
         lastTime = now;
     }
-    if (cool < 0) cool = 0;
 
-    if (!mouseonsofa && sofa.currentTime > 0 && sofa.paused) sofa.play();
-    if (!mouseontv && tv.currentTime > 0 && tv.paused) tv.play();
-    if (!mouseoncomputer && computer.currentTime > 0 && computer.paused) computer.play();
-    if (!mouseoneventsv && eventsv.currentTime > 0 && eventsv.paused) eventsv.play();
+    // auto-resume when mouse not on
+    for (let key in videos) {
+        const { video } = videos[key];
+        const mouseFlag = window["mouseon" + key]; // e.g. mouseonsofa
+        if (!mouseFlag && video.currentTime > 0 && video.paused) {
+            video.play();
+        }
+    }
 
     requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
 
-// ---------------- General play/pause helpers ----------------
-function playVideo(video, mouseFlag) {
-    window[mouseFlag] = true;
-    if (cool > 0) return;
-    video.style.display = "block";
-    cool = video.duration / 2;
-    setTimeout(() => {
-        if (window[mouseFlag]) video.pause();
-    }, (video.duration / 2) * 1000);
-    video.currentTime = 0;
-    video.play();
-}
-function continueVideo(video, mouseFlag) {
-    window[mouseFlag] = false;
-    if (cool > 0) return;
-    video.play();
-}
+// ---------------- Green-screen rendering ----------------
+function startGreenScreenLoop(key) {
+    const { video, canvas, ctx } = videos[key];
+    if (videos[key].loopId) cancelAnimationFrame(videos[key].loopId);
 
-// ---------------- Sofa ----------------
-function playSofa() { playVideo(sofa, 'mouseonsofa'); }
-function conSofa() { continueVideo(sofa, 'mouseonsofa'); }
-sofa.addEventListener("ended", () => sofa.style.display = "none");
-
-// ---------------- Computer ----------------
-function playComputer() { playVideo(computer, 'mouseoncomputer'); }
-function conComputer() { continueVideo(computer, 'mouseoncomputer'); }
-computer.addEventListener("ended", () => computer.style.display = "none");
-
-// ---------------- TV ----------------
-function playTv() { playVideo(tv, 'mouseontv'); }
-function conTv() { continueVideo(tv, 'mouseontv'); }
-tv.addEventListener("ended", () => tv.style.display = "none");
-
-// ---------------- Eventsv ----------------
-function playEventsv() {
-    mouseoneventsv = true;
-    if (cool > 0) return;
-    canvas.style.display = "block";
-    cool = eventsv.duration / 2;
-    setTimeout(() => {
-        if (mouseoneventsv) eventsv.pause();
-    }, (eventsv.duration / 2) * 1000);
-    eventsv.currentTime = 0;
-    eventsv.play();
-    startGreenScreenLoop();
-}
-function conEventsv() {
-    mouseoneventsv = false;
-    if (cool > 0) return;
-    eventsv.play();
-}
-eventsv.addEventListener("ended", () => {
-    canvas.style.display = "none";
-    stopGreenScreenLoop();
-});
-
-// ---------------- Green-screen processing (no halo) ----------------
-function startGreenScreenLoop() {
-    if (greenLoopId) cancelAnimationFrame(greenLoopId);
-
-    canvas.width = eventsv.videoWidth
-    canvas.height = eventsv.videoHeight
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
 
     function renderFrame() {
-        if (eventsv.paused || eventsv.ended) {
-            greenLoopId = null;
+        if (video.paused || video.ended) {
+            videos[key].loopId = null;
             return;
         }
 
-        ctx.drawImage(eventsv, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         let frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
         let data = frame.data;
 
         for (let i = 0; i < data.length; i += 4) {
             let r = data[i], g = data[i + 1], b = data[i + 2];
 
-            // strict green detection
             if (g > r * 0.9 + 20 && g > b * 0.9 + 20) {
-                data[i + 3] = 0; // fully transparent
-                data[i] = r + (g - r) * 0.5;  // reduce green spill in red channel
-                data[i + 2] = b + (g - b) * 0.5; // reduce green spill in blue channel
-                data[i + 1] = 0; // remove remaining green
-            }
-            // soft edges: reduce green influence
-            else if (g > r && g > b) {
+                data[i + 3] = 0;
+                data[i] = r + (g - r) * 0.5;
+                data[i + 2] = b + (g - b) * 0.5;
+                data[i + 1] = 0;
+            } else if (g > r && g > b) {
                 let factor = 1 - Math.min((g - Math.max(r, b)) / 30, 1);
                 data[i + 3] = data[i + 3] * factor;
                 let avg = (r + b) / 2;
@@ -127,23 +80,70 @@ function startGreenScreenLoop() {
         }
 
         ctx.putImageData(frame, 0, 0);
-        greenLoopId = requestAnimationFrame(renderFrame);
+        videos[key].loopId = requestAnimationFrame(renderFrame);
     }
 
-    greenLoopId = requestAnimationFrame(renderFrame);
+    videos[key].loopId = requestAnimationFrame(renderFrame);
+}
+function stopGreenScreenLoop(key) {
+    if (videos[key].loopId) cancelAnimationFrame(videos[key].loopId);
+    videos[key].loopId = null;
 }
 
-function stopGreenScreenLoop() {
-    if (greenLoopId) cancelAnimationFrame(greenLoopId);
-    greenLoopId = null;
+// ---------------- Play/Pause helpers ----------------
+function playWithChroma(key, mouseFlag) {
+    window[mouseFlag] = true;
+    const { video, canvas } = videos[key];
+
+    // check both global and per-video cooldowns
+    if (cool > 0 || cooldowns[key] > 0) return;
+
+    canvas.style.display = "block";
+    cooldowns[key] = Math.floor(video.duration / 2);
+
+    setTimeout(() => {
+        if (window[mouseFlag]) video.pause();
+    }, (video.duration / 2) * 1000);
+
+    video.currentTime = 0;
+    video.play();
+    startGreenScreenLoop(key);
 }
+
+function continueWithChroma(key, mouseFlag) {
+    window[mouseFlag] = false;
+    const { video } = videos[key];
+
+    if (cool > 0 || cooldowns[key] > 0) return;
+    video.play();
+}
+
+// ---------------- Sofa ----------------
+function playSofa() { playWithChroma("sofa", "mouseonsofa"); }
+function conSofa() { continueWithChroma("sofa", "mouseonsofa"); }
+videos.sofa.video.addEventListener("ended", () => { videos.sofa.canvas.style.display = "none"; stopGreenScreenLoop("sofa"); });
+
+// ---------------- Computer ----------------
+function playComputer() { playWithChroma("computer", "mouseoncomputer"); }
+function conComputer() { continueWithChroma("computer", "mouseoncomputer"); }
+videos.computer.video.addEventListener("ended", () => { videos.computer.canvas.style.display = "none"; stopGreenScreenLoop("computer"); });
+
+// ---------------- TV ----------------
+function playTv() { playWithChroma("tv", "mouseontv"); }
+function conTv() { continueWithChroma("tv", "mouseontv"); }
+videos.tv.video.addEventListener("ended", () => { videos.tv.canvas.style.display = "none"; stopGreenScreenLoop("tv"); });
+
+// ---------------- Eventsv ----------------
+function playEventsv() { playWithChroma("eventsv", "mouseoneventsv"); }
+function conEventsv() { continueWithChroma("eventsv", "mouseoneventsv"); }
+videos.eventsv.video.addEventListener("ended", () => { videos.eventsv.canvas.style.display = "none"; stopGreenScreenLoop("eventsv"); });
 const teamd = document.getElementsByClassName("teamsection")[0];
 const teamb = document.getElementsByClassName("teambtn")[0];
 document.querySelector("#teamback img").addEventListener("click", () => {
     teamd.style.animation = "pagepush 1s forwards"
 })
 teamb.addEventListener("click", () => {
-    if (cool > 0) return;
+    if (cooldowns.sofa > 0) return;
     teamd.style.animation = "pagepull 1s forwards"
     selectm(document.getElementById(current))
 })
@@ -321,16 +321,13 @@ document.addEventListener("keydown", (e) => {
 })
 const alumnid = document.getElementsByClassName("alumnisection")[0];
 document.querySelector("#alumniback img").addEventListener("click", () => {
-    if (cool > 0) return;
     alumnid.style.animation = "pagepush 1s forwards"
 })
 document.getElementById("alumnin").addEventListener("click", () => {
-    if (cool > 0) return;
     teamd.style.animation = "pagepush 1s forwards"
     alumnid.style.animation = "pagepull 1s forwards"
 })
 document.getElementById("teamin").addEventListener("click", () => {
-    if (cool > 0) return;
     teamd.style.animation = "pagepull 1s forwards"
     alumnid.style.animation = "pagepush 1s forwards"
 })
@@ -366,6 +363,7 @@ const teaserbtn = document.getElementsByClassName("teaserbtn")[0];
 const teaser = document.getElementsByClassName("teaser")[0]
 const video = document.querySelector(".teaser video");
 teaserbtn.addEventListener("click", () => {
+    if(cooldowns.tv > 0) return;
     blur.style.display = "block";
     blur.style.animation = "blurin 1s forwards"
     teaser.style.display = "block"
