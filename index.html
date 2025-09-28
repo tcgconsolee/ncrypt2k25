@@ -4,39 +4,718 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nCrypt '25 - Home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="./imgs/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://db.onlinewebfonts.com/c/17b362f3e1b747646536a29fea86993a?family=Staff+XXX+Condensed+Test+SmBold" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <script src="https://assets.codepen.io/16327/ScrambleTextPlugin3.min.js"></script>
+    <script src="https://assets.codepen.io/16327/SplitText3.min.js"></script>
+    <script>
+    gsap.registerPlugin(TextPlugin);
+    </script>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div class="loading">
-        <div class="lntext">
+    <div class="topnav" style="border-bottom:none;top: 2.5vmin">
+        <div class="nhome">
             <p>nCrypt</p>
-        </div>            
-        <div class="blendrect">
-            <div class="rect">
-                <div class="lntextovr">
-                    <p>nCrypt</p>
-                </div>
-                <div class="lbar"></div>
-            </div>
-
         </div>
     </div>
-    <script>
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementsByClassName("lntextovr")[0].style.animation = "downout 750ms forwards"
-                document.getElementsByClassName("lbar")[0].style.animation = "widthout 750ms forwards"
-            }, 6000)
-        })
-    </script>
-    <script>
-    if (!THREE.FontLoader && window.FontLoader) {
-        THREE.FontLoader = window.FontLoader;
-    }
-    if (!THREE.TextGeometry && window.TextGeometry) {
-        THREE.TextGeometry = window.TextGeometry;
-    }
-    </script>
-    <script src="main.js" type="module"></script>
-</body>
+    <div class="y16">
+        <p>Y16</p>
+    </div>
+    <div class="n25">
+        <p>2025</p>
+    </div>
+    <div class="bg">
+        <img src="./imgs/room.png" usemap="#image-map" alt="">
+        <map name="image-map">
+            <area class = "teambtn" target="" alt="Team" title="Team" href="team" coords="818,700,818,772,913,956,996,961,1129,950,1127,900,1047,754,1024,718,1005,711,903,710,857,676,835,691" shape="poly" onmouseover="playSofa()" onmouseout="conSofa()">
+            <area class="eventsbtn" target="" alt="Events" title="Events" href="events" coords="881,238,850,218,802,253,802,635,904,667,1036,699,1090,686,1100,286,1002,267,1003,238,893,209,886,222" shape="poly" onmouseover="playEventsv()" onmouseout="conEventsv()">
+            <area target="" alt="Register" title="Register" href="register" coords="119,909,480,747,324,708,324,679,219,687,215,733,186,745,178,647,22,709,25,820,3,833,-2,882" shape="poly" onmouseover="playComputer()" onmouseout="conComputer()">
+            <area target="" class = "teaserbtn" alt="Teaser" title="Teaser" href="teaser" coords="1259,535,1259,292,1623,372,1625,613" shape="poly" onmouseover="playTv()" onmouseout="conTv()">
+            <area target="" alt="dCrypt" title="dCrypt" href="dcrypt" coords="1496,891,1518,874,1507,825,1442,811,1383,813,1320,823,1296,861,1364,891" shape="poly">
+        </map>
+    </div>
+    <div class="blur"></div>
+    <div class="teaser">
+        <video controls src="./imgs/room/teaser.mp4"></video>
+    </div>
+<div class="videos">
+    <video src="./imgs/room/start.mp4" id="start" autoplay muted playsinline></video>
+    <video src="./imgs/room/tv.mp4" style="display:none" id="tv" muted playsinline></video>
+    <video src="./imgs/room/events.mp4" id="eventsv" style="display:none" muted playsinline></video>
+    <canvas id="eventsv-canvas"></canvas>
+    <video src="./imgs/room/sofa.mp4" style="display:none" id="sofa" muted playsinline></video>
+    <video src="./imgs/room/computer.mp4" style="display:none" id="computer" muted playsinline></video>
+</div>
+
+    <div class = "teamsection">
+        <div class="top">
+            <div class="back" id = "teamback">
+                <img src="./imgs/back.svg" alt="">
+            </div>
+            <div class="ncrypt">
+                <p>nCrypt</p>
+            </div>
+        </div>
+        <div class="mainteam">
+            <div class="team" id = "aaryan-parveen">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>AARYAN PARVEEN ∙ <span style="color:#ff0000">PRESIDENT</span></p>
+                </div>
+                <div class="tnick">
+                    <p>hypernova</p>
+                </div>
+                <div class="tbg">
+                    <p>AARYAN PARVEEN AARYAN PARVEEN</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/aaryanparveen.png" alt="">
+                </div>
+            </div>
+            <div class="team" id = "vasishth-gupta">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>VASISHTH GUPTA ∙ <span style="color:#676767">VICE</span> <span style="color:#ff0000">PRESIDENT</span></p>
+                </div>
+                <div class="tnick">
+                    <p>vaist-ed</p>
+                </div>
+                <div class="tbg">
+                    <p>VASISHTH GUPTA VASISHTH GUPTA</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/vasishthgupta.png" alt="">
+                </div>
+            </div>
+            <div class="team" id = "devansh-yadav">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>DEVANSH YADAV ∙ <span style="color:#ff0000">SECRETARY</span></p>
+                </div>
+                <div class="tnick">
+                    <p>blendev</p>
+                </div>
+                <div class="tbg">
+                    <p>DEVANSH YADAV DEVANSH YADAV</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/devanshyadav.JPG" alt="">
+                </div>
+            </div>
+            <div class="team" id = "aniket-halder">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>ANIKET HALDER ∙ <span style="color:#676767">JOINT</span> <span style="color:#ff0000">SECRETARY</span></p>
+                </div>
+                <div class="tnick">
+                    <p>cosmicc.</p>
+                </div>
+                <div class="tbg">
+                    <p>ANIKET HALDER ANIKET HALDER</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/anikethalder.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "atharv-wali">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>ATHARV WALI ∙ <span style="color:#ff0000">DIRECTOR</span></p>
+                </div>
+                <div class="tnick">
+                    <p>100%</p>
+                </div>
+                <div class="tbg">
+                    <p>ATHARV WALI ATHARV WALI</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/atharvwali.png" alt="">
+                </div>
+            </div>
+            <div class="team" id = "atharv-batra">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>ATHARV BATRA ∙ <span style="color:#ff0000">DIRECTOR</span></p>
+                </div>
+                <div class="tnick">
+                    <p>twilight</p>
+                </div>
+                <div class="tbg">
+                    <p>ATHARV BATRA ATHARV BATRA</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/atharvbatra.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "shinjan-singh">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>SHINJAN SINGH ∙ <span style="color:#ff0000">DIRECTOR</span></p>
+                </div>
+                <div class="tnick">
+                    <p>shiny</p>
+                </div>
+                <div class="tbg">
+                    <p>SHINJAN SINGH SHINJAN SINGH</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/shinjansingh.JPG" alt="">
+                </div>
+            </div>
+            <div class="team" id = "parikshit-jha">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>PARIKSHIT JHA ∙ <span style="color:#ff0000">DIRECTOR</span></p>
+                </div>
+                <div class="tnick">
+                    <p>lappujha</p>
+                </div>
+                <div class="tbg">
+                    <p>PARIKSHIT JHA PARIKSHIT JHA</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/parikshitjha.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "aadit-agarwal">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>AADIT AGARWAL ∙ <span style="color:#ff0000">LEAD</span></p>
+                </div>
+                <div class="tnick">
+                    <p>aadihht</p>
+                </div>
+                <div class="tbg">
+                    <p>AADIT AGARWAL AADIT AGARWAL</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/aaditagarwal.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "ranveer-kalra">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>RANVEER KALRA ∙ <span style="color:#ff0000">LEAD</span></p>
+                </div>
+                <div class="tnick">
+                    <p>100%</p>
+                </div>
+                <div class="tbg">
+                    <p>RANVEER KALRA RANVEER KALRA</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/ranveerkalra.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "nandini-pathania">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>NANDINI PATHANIA ∙ <span style="color:#ff0000">LEAD</span></p>
+                </div>
+                <div class="tnick">
+                    <p>Nia</p>
+                </div>
+                <div class="tbg">
+                    <p>NANDINI PATHANIA NANDINI PATHANIA</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/nandinipathania.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "sarvangi-rana">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>SARVANGI RANA ∙ <span style="color:#ff0000">LEAD</span></p>
+                </div>
+                <div class="tnick">
+                    <p>sky</p>
+                </div>
+                <div class="tbg">
+                    <p>SARVANGI RANA SARVANGI RANA</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/sarvangirana.jpg" alt="">
+                </div>
+            </div>
+            
+            <div class="team" id = "aakash-ashok">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>AAKASH ASHOK ∙ <span style="color:#ff0000">MEMBER</span></p>
+                </div>
+                <div class="tnick">
+                    <p>tcg</p>
+                </div>
+                <div class="tbg">
+                    <p>AAKASH ASHOK AAKASH ASHOK</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/aakashashok.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "shaurya-sirohi">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>SHAURYA SIROHI ∙ <span style="color:#ff0000">MEMBER</span></p>
+                </div>
+                <div class="tnick">
+                    <p>daddydemn</p>
+                </div>
+                <div class="tbg">
+                    <p>SHAURYA SIROHI SHAURYA SIROHI</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/shauryasirohi.png" alt="">
+                </div>
+            </div>
+            <div class="team" id = "advit-sharma">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>ADVIT SHARMA ∙ <span style="color:#ff0000">MEMBER</span></p>
+                </div>
+                <div class="tnick">
+                    <p>TeaTimBu</p>
+                </div>
+                <div class="tbg">
+                    <p>ADVIT SHARMA ADVIT SHARMA</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/advitsharma.png" alt="">
+                </div>
+            </div>
+            <div class="team" id = "yohance-parate">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>YOHANCE PARATE ∙ <span style="color:#ff0000">MEMBER</span></p>
+                </div>
+                <div class="tnick">
+                    <p>steepystatiq</p>
+                </div>
+                <div class="tbg">
+                    <p>YOHANCE PARATE YOHANCE PARATE</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/yohanceparate.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "apoorva-verma">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>APOORVA VERMA ∙ <span style="color:#ff0000">MEMBER</span></p>
+                </div>
+                <div class="tnick">
+                    <p>RessoVeloce</p>
+                </div>
+                <div class="tbg">
+                    <p>APOORVA VERMA APOORVA VERMA</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/apoorvaverma.jpg" alt="">
+                </div>
+            </div>
+            <div class="team" id = "puneet-jangid">
+                <div class="tyear">
+                <p>NCRYPT Y16</p>
+                </div>
+                <div class="tteam">
+                    <p>2k25</p>
+                </div>
+                <div class="tname">
+                    <p>PUNEET JANGID ∙ <span style="color:#ff0000">MEMBER</span></p>
+                </div>
+                <div class="tnick">
+                    <p>KillSwitch</p>
+                </div>
+                <div class="tbg">
+                    <p>PUNEET JANGID PUNEET JANGID</p>
+                </div>
+                <div class="timg"
+                data-mouse-attractionState="active"
+                data-mouse-attraction="mid"
+                data-mouse-attractionVal="30"
+                data-mouse-magnetism="5"
+                data-hover-type="outline">
+                    <img src="./imgs/members/puneetjangid.jpg" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="members">
+            <div class="member" id = "aaryan_parveen">
+                <img src="./imgs/members/aaryanparveen.png" alt="">
+            </div>
+            <div class="member" id = "vasishth_gupta">
+                <img src="./imgs/members/vasishthgupta.png" alt="">
+            </div>
+            <div class="member" id = "devansh_yadav">
+                <img src="./imgs/members/devanshyadav.JPG" alt="">
+            </div>
+            <div class="member" id = "aniket_halder">
+                <img src="./imgs/members/anikethalder.jpg" alt="">
+            </div>
+            <div class="member" id = "atharv_wali">
+                <img src="./imgs/members/atharvwali.png" alt="">
+            </div>
+            <div class="member" id = "atharv_batra">
+                <img src="./imgs/members/atharvbatra.jpg" alt="">
+            </div>
+            <div class="member" id = "shinjan_singh">
+                <img src="./imgs/members/shinjansingh.JPG" alt="">
+            </div>
+            <div class="member" id = "parikshit_jha">
+                <img src="./imgs/members/parikshitjha.jpg" alt="">
+            </div>
+            <div class="member" id = "aadit_agarwal">
+                <img src="./imgs/members/aaditagarwal.jpg" alt="">
+            </div>
+            <div class="member" id = "ranveer_kalra">
+                <img src="./imgs/members/ranveerkalra.jpg" alt="">
+            </div>
+            <div class="member" id = "nandini_pathania">
+                <img src="./imgs/members/nandinipathania.jpg" alt="">
+            </div>
+            <div class="member" id = "sarvangi_rana">
+                <img src="./imgs/members/sarvangirana.jpg" alt="">
+            </div>
+            <div class="member" id = "aakash_ashok">
+                <img src="./imgs/members/aakashashok.jpg" alt="">
+            </div>
+            <div class="member" id = "shaurya_sirohi">
+                <img src="./imgs/members/shauryasirohi.png" alt="">
+            </div>
+            <div class="member" id = "advit_sharma">
+                <img src="./imgs/members/advitsharma.png" alt="">
+            </div>
+            <div class="member" id = "yohance_parate">
+                <img src="./imgs/members/yohanceparate.jpg" alt="">
+            </div>
+            <div class="member" id = "apoorva_verma">
+                <img src="./imgs/members/apoorvaverma.jpg" alt="">
+            </div>
+            <div class="member" id = "puneet_jangid">
+                <img src="./imgs/members/puneetjangid.jpg" alt="">
+            </div>
+        </div>
+        <div class="tamenu">
+            <div class="tmenu">
+                <p style="color:#f00">Team</p>
+            </div>
+            <div class="amenu" id = "alumnin">
+                <p>Alumni</p>
+            </div>
+        </div>
+    </div>
+    <div class = "alumnisection">
+        <div class="top">
+            <div class="back" id = "alumniback">
+                <img src="./imgs/back.svg" alt="">
+            </div>
+            <div class="ncrypt">
+                <p>nCrypt</p>
+            </div>
+        </div>
+        <div class="mainalumni">
+            <div class="tamenu" style="right:0;top:0.25vmax;bottom:unset;left:unset;">
+                <div class="tmenu" id = "teamin" style="right:7.5vmax;top:0vmax;bottom:unset;left:unset;">
+                    <p>Team</p>
+                </div>
+                <div class="amenu">
+                    <p style="color:#f00">Alumni</p>
+                </div>
+            </div>
+            <div class="btns">
+                <div class="24">2k24</div>
+                <div class="22">2k22</div>
+            </div>  
+            <div class="pictures" id  = "alum24">
+                <div class="alum">
+                    <img src="./imgs/alumni/samarthsaluja.png"class="pic">
+                    <div class="details">Samarth Saluja ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">president</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/mehulraina.png"class="pic">
+                    <div class="details">Mehul Raina ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">secretary</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/devyanikachhwah.png"class="pic">
+                    <div class="details">Devyani Kachhwah ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">director</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/krishnadutt.png"class="pic">
+                    <div class="details">Krishna Dutt ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">director</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/sagunthukral.png"class="pic">
+                    <div class="details">Sagun Thukral ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">director</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/abeerrao.png"class="pic">
+                    <div class="details">Abeer Rao ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">director</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/siddharthjoshi.png"class="pic">
+                    <div class="details">Siddharth Joshi ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">lead</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/aryantomar.png"class="pic">
+                    <div class="details">Aryan Tomar ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">lead</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/krishnabhardwaj.png"class="pic">
+                    <div class="details">Krishna Bhardwaj ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">lead</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/aryanjangra.png"class="pic">
+                    <div class="details">Aryan Jangra ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">lead</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/aarnayadav.png"class="pic">
+                    <div class="details">Aarna Yadav ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">member</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/pranjalpachori.png"class="pic">
+                    <div class="details">Pranjal Pachori ∙ <span style="color:#676767">2k24</span> <span style="color:#f00;font-weight:400;">member</span></div>
+                </div>
+            </div>
+            <div class="pictures" id="alum22" style="display:none">
+                <div class="alum">
+                    <img src="./imgs/alumni/adityadey.png" alt="" class="pic">
+                    <div class="details">Aditya Dey ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">president</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/yashsthapliyal.png" alt="" class="pic">
+                    <div class="details">Yash S. Thapliyal ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">vice-president</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/vasugoyal.png" alt="" class="pic">
+                    <div class="details">Vasu Goyal ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">secretary</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/aryaveerralhan.png" alt="" class="pic">
+                    <div class="details">Aryaveer Ralhan ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">joint-secretary</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/ayushdixit.png" alt="" class="pic">
+                    <div class="details">Ayush Dixit ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">director</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/aaryanpanigrahi.png" alt="" class="pic">
+                    <div class="details">Aaryan Panigrahi ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">director</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/prayasgupta.png" alt="" class="pic">
+                    <div class="details">Prayas Gupta ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">director</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/chaitanyabajaj.png" alt="" class="pic">
+                    <div class="details">Chaitanya Bajaj ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">lead</span></div>
+                </div>
+                <div class="alum">
+                    <img src="./imgs/alumni/ananyapmani.png" alt="" class="pic">
+                    <div class="details">Ananya P. Mani ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">member</span></div>
+                </div> 
+                <div class="alum">
+                    <img src="./imgs/alumni/vivikabansal.png" alt="" class="pic">
+                    <div class="details">Vivika Bansal ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">member</span></div>
+                </div> 
+                <div class="alum">
+                    <img src="./imgs/alumni/sashwatdhanuka.png" alt="" class="pic">
+                    <div class="details">Sashwat Dhanuka ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">member</span></div>
+                </div> 
+                <div class="alum">
+                    <img src="./imgs/alumni/bharatsharma.png" alt="" class="pic">
+                    <div class="details">Bharat Sharma ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">member</span></div>
+                </div> 
+                <div class="alum">
+                    <img src="./imgs/alumni/vanshdeeptrivedi.png" alt="" class="pic">
+                    <div class="details">Vanshdeep Trivedi ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">member</span></div>
+                </div> 
+                <div class="alum">
+                    <img src="./imgs/alumni/ariciaguha.png" alt="" class="pic">
+                    <div class="details">Aricia Guha ∙ <span style="color:#676767">2k22</span> <span style="color:#f00;font-weight:400;">member</span></div>
+                </div> 
+            </div>
+        </div>
+        <div class="class">
+            CLASS OF 2<span>K</span>24 CLASS OF 2<span>K</span>24
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/image-map-resizer@1.0.10/js/imageMapResizer.min.js"></script>
+    <script src = "index.js"></script>
+    </body>
 </html>
