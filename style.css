@@ -71,7 +71,7 @@ body {
     position: absolute;
     right: 0;
     font-family: 'n';
-    color: #fff;
+    color: #f00;
     font-size:1.15vmax;
     line-height:0;
     height: min-content;
@@ -595,6 +595,17 @@ body {
         opacity: 1;
     }
 }
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    99.9% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
 .tamenu {
     position: absolute;
     left: 2vw;
@@ -604,13 +615,14 @@ body {
 .tamenu div {
     position: absolute;
     top: 0;
-    border: 1px solid #fff;
+    border: 1px solid #a2a2a2;
     border-radius: 10vmax;
     font-size: 0.75vmax;
+    line-height: 0;
     font-weight: 700;
     color: #fff;
     font-family: 's';
-    padding: 0vmax 2vmax;
+    padding: 0.25vmax 2vmax;
     cursor: pointer;
 }
 .tmenu {
@@ -623,3 +635,274 @@ a {
     text-decoration: none;
     color: unset;
 }
+.load {
+    position: absolute;left:0;
+    top:0;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter:blur(10px);
+    font-size: 4vmax;
+    font-family: 'Space Grotesk';
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 11;
+}
+.load p {
+    cursor: default;
+    user-select: none;
+}
+/*------------------------------------*\
+	Preloader
+\*------------------------------------*/
+
+.loader{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 99999999;
+    background-color: black;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    color: white;
+}
+
+.loader-line{
+    background: black;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    width: 5em;
+    margin-right: 3em;
+}
+
+.loader-lines{
+    position: absolute;
+    left: 50%;
+    height: 100%;
+    top: 50%;
+    display: flex;
+    transform: translate(-50%, -50%);
+}
+
+.loader-tdiv{
+    position: relative;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    width: 15em;
+    height: 15em;
+}
+
+.loader-txt{
+    font-size: 3em;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-block-end: 0;
+    margin-block-start: 0;
+    transform: translate(-50%, -50%);
+    line-height: 0;
+}
+
+.title{
+    font-family: 'august';
+    color: red;
+    font-size: 3em;
+    margin-left: .75em;
+    margin-top: 1em;
+}
+
+.landing-main{
+    position: absolute;
+    margin-top: 2em;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.landing-skills{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 3em;
+}
+
+.landing-skill{
+    color: white;
+    cursor: pointer;
+    font-family: 'sathoshi-bold';
+    font-size: 3.2em;
+    margin-block-end: 0;
+    margin-block-start: .25em;
+    animation: lsrev 0.25s 1 forwards;
+}
+
+.landing-skill:hover{
+    animation: ls 0.5s 1 forwards;
+}
+
+@keyframes ls {
+    100%{
+        letter-spacing: 0.1em;
+        color: red;
+    }
+}
+
+@keyframes lsrev {
+    0%{
+        letter-spacing: 0.1em;
+        color: red;
+    }
+    100%{
+        letter-spacing: 0;
+        color: white;
+    }
+}
+/* div.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999999999999999999;
+    width: 100%;
+    height: 100%;
+  }
+  div.loader p {
+    margin: 1em 0 0 0;
+    font-size: 16px;
+    color: white;
+    font-size: 28px;
+    font-family: "Montserrat";
+  }
+*/
+  div.logo1 {
+    width: 130px;
+    height: 130px;
+    box-sizing: border-box;
+    position: relative;
+  }
+  div.logo1::before,
+  div.logo1::after {
+    z-index: 1;
+    box-sizing: border-box;
+    content: "";
+    position: absolute;
+    border: 4px solid transparent;
+    width: 0;
+    height: 0;
+    animation-direction: alternate;
+    animation-timing-function: linear;
+  }
+  div.logo1::before {
+    top: 0;
+    left: 0;
+    animation: border-before 1.5s infinite;
+    animation-direction: alternate;
+  }
+  div.logo1::after {
+    bottom: 0;
+    right: 0;
+    animation: border-after 1.5s infinite;
+    animation-direction: alternate;
+  }
+  div.logo1 > div {
+    position: absolute;
+    opacity: 0;
+  }
+  div.logo1 div.red2 {
+    border-left: 4px solid black;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    background-color: red;
+    animation: red 1.5s infinite;
+    animation-direction: alternate;
+  }
+  div.logo1 div.orange {
+    border-bottom: 4px solid black;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 0;
+    background-color: red;
+    animation: orange 1.5s infinite;
+    animation-direction: alternate;
+  }
+  div.logo1 div.red {
+    border-right: 4px solid black;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    background-color: red;
+    animation: red 1.5s infinite;
+    animation-direction: alternate;
+  }
+  
+  @keyframes red {
+    0%,
+    50% {
+      width: 0;
+      opacity: 0;
+    }
+    50.01% {
+      opacity: 1;
+    }
+    65%,
+    100% {
+      opacity: 1;
+      width: 20%;
+    }
+  }
+  @keyframes orange {
+    0%,
+    65% {
+      height: 0;
+      opacity: 0;
+      top: 0;
+    }
+    65.01% {
+      opacity: 1;
+    }
+    80%,
+    100% {
+      opacity: 1;
+      height: 30%;
+      width: 65%;
+      height: 20%;
+      left: 23%;
+      top: 0;
+    }
+  }
+  @keyframes red2 {
+    0%,
+    75% {
+      width: 0;
+      opacity: 0;
+    }
+    75.01% {
+      opacity: 1;
+    }
+    90%,
+    100% {
+      opacity: 1;
+      width: 20%;
+    }
+  } 

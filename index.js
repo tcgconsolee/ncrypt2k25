@@ -1,30 +1,28 @@
+const load = document.getElementsByClassName("load")[0];
 const start = document.getElementById("start");
 
 // mouse flags
 let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
 
 // global and per-video cooldowns
-let cool = 12;  // global (for "start")
+let cool = 12;
 let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0 };
 let lastTime = performance.now();
 
-// store all videos + canvases
+// store all videos
 const videos = {
-    tv: { video: document.getElementById("tv"), canvas: document.getElementById("tv-canvas"), ctx: null, loopId: null },
-    eventsv: { video: document.getElementById("eventsv"), canvas: document.getElementById("eventsv-canvas"), ctx: null, loopId: null },
-    sofa: { video: document.getElementById("sofa"), canvas: document.getElementById("sofa-canvas"), ctx: null, loopId: null },
-    computer: { video: document.getElementById("computer"), canvas: document.getElementById("computer-canvas"), ctx: null, loopId: null }
+    tv: document.getElementById("tv"),
+    eventsv: document.getElementById("eventsv"),
+    sofa: document.getElementById("sofa"),
+    computer: document.getElementById("computer")
 };
-for (let key in videos) {
-    videos[key].ctx = videos[key].canvas.getContext("2d");
-}
 
 // ---------------- Tick loop ----------------
 function tick(now) {
     const delta = now - lastTime;
     if (delta >= 1000) {
-        if (cool > 0) cool--; // global cooldown
-        for (let key in cooldowns) { // per-video cooldowns
+        if (cool > 0) cool--;
+        for (let key in cooldowns) {
             if (cooldowns[key] > 0) cooldowns[key]--;
         }
         lastTime = now;
@@ -32,118 +30,72 @@ function tick(now) {
 
     // auto-resume when mouse not on
     for (let key in videos) {
-        const { video } = videos[key];
-        const mouseFlag = window["mouseon" + key]; // e.g. mouseonsofa
-        if (!mouseFlag && video.currentTime > 0 && video.paused) {
+        const video = videos[key];
+        const mouseFlag = window["mouseon" + key];
+        if (!mouseFlag && video.currentTime > 0 && video.paused && cooldowns[key] === 0 && cool === 0) {
             video.play();
         }
     }
 
     requestAnimationFrame(tick);
 }
-requestAnimationFrame(tick);
-
-// ---------------- Green-screen rendering ----------------
-function startGreenScreenLoop(key) {
-    const { video, canvas, ctx } = videos[key];
-    if (videos[key].loopId) cancelAnimationFrame(videos[key].loopId);
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    function renderFrame() {
-        if (video.paused || video.ended) {
-            videos[key].loopId = null;
-            return;
-        }
-
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        let frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        let data = frame.data;
-
-        for (let i = 0; i < data.length; i += 4) {
-            let r = data[i], g = data[i + 1], b = data[i + 2];
-
-            if (g > r * 0.9 + 20 && g > b * 0.9 + 20) {
-                data[i + 3] = 0;
-                data[i] = r + (g - r) * 0.5;
-                data[i + 2] = b + (g - b) * 0.5;
-                data[i + 1] = 0;
-            } else if (g > r && g > b) {
-                let factor = 1 - Math.min((g - Math.max(r, b)) / 30, 1);
-                data[i + 3] = data[i + 3] * factor;
-                let avg = (r + b) / 2;
-                data[i] = avg;
-                data[i + 1] = avg;
-                data[i + 2] = avg;
-            }
-        }
-
-        ctx.putImageData(frame, 0, 0);
-        videos[key].loopId = requestAnimationFrame(renderFrame);
-    }
-
-    videos[key].loopId = requestAnimationFrame(renderFrame);
-}
-function stopGreenScreenLoop(key) {
-    if (videos[key].loopId) cancelAnimationFrame(videos[key].loopId);
-    videos[key].loopId = null;
-}
 
 // ---------------- Play/Pause helpers ----------------
-function playWithChroma(key, mouseFlag) {
+function playVideo(key, mouseFlag) {
     window[mouseFlag] = true;
-    const { video, canvas } = videos[key];
+    const video = videos[key];
 
-    // check both global and per-video cooldowns
+    // don't run if cooling down
     if (cool > 0 || cooldowns[key] > 0) return;
 
-    canvas.style.display = "block";
-    cooldowns[key] = Math.floor(video.duration / 2);
+    // show the video
+    video.style.display = "block";
 
+    cooldowns[key] = Math.floor(video.duration / 2);
+    video.currentTime = 0;
+    video.play();
+
+    // Pause halfway if mouse stays
     setTimeout(() => {
         if (window[mouseFlag]) video.pause();
     }, (video.duration / 2) * 1000);
-
-    video.currentTime = 0;
-    video.play();
-    startGreenScreenLoop(key);
 }
 
-function continueWithChroma(key, mouseFlag) {
+function continueVideo(key, mouseFlag) {
     window[mouseFlag] = false;
-    const { video } = videos[key];
+    const video = videos[key];
 
     if (cool > 0 || cooldowns[key] > 0) return;
     video.play();
 }
 
-// ---------------- Sofa ----------------
-function playSofa() { playWithChroma("sofa", "mouseonsofa"); }
-function conSofa() { continueWithChroma("sofa", "mouseonsofa"); }
-videos.sofa.video.addEventListener("ended", () => { videos.sofa.canvas.style.display = "none"; stopGreenScreenLoop("sofa"); });
+function playSofa() { playVideo("sofa", "mouseonsofa"); }
+function conSofa() { continueVideo("sofa", "mouseonsofa"); }
 
-// ---------------- Computer ----------------
-function playComputer() { playWithChroma("computer", "mouseoncomputer"); }
-function conComputer() { continueWithChroma("computer", "mouseoncomputer"); }
-videos.computer.video.addEventListener("ended", () => { videos.computer.canvas.style.display = "none"; stopGreenScreenLoop("computer"); });
+function playComputer() { playVideo("computer", "mouseoncomputer"); }
+function conComputer() { continueVideo("computer", "mouseoncomputer"); }
 
-// ---------------- TV ----------------
-function playTv() { playWithChroma("tv", "mouseontv"); }
-function conTv() { continueWithChroma("tv", "mouseontv"); }
-videos.tv.video.addEventListener("ended", () => { videos.tv.canvas.style.display = "none"; stopGreenScreenLoop("tv"); });
+function playTv() { playVideo("tv", "mouseontv"); }
+function conTv() { continueVideo("tv", "mouseontv"); }
 
-// ---------------- Eventsv ----------------
-function playEventsv() { playWithChroma("eventsv", "mouseoneventsv"); }
-function conEventsv() { continueWithChroma("eventsv", "mouseoneventsv"); }
-videos.eventsv.video.addEventListener("ended", () => { videos.eventsv.canvas.style.display = "none"; stopGreenScreenLoop("eventsv"); });
+function playEventsv() { playVideo("eventsv", "mouseoneventsv"); }
+function conEventsv() { continueVideo("eventsv", "mouseoneventsv"); }
+
+for (let key in videos) {
+    videos[key].addEventListener("ended", () => {
+        cooldowns[key] = 0;
+        videos[key].style.display = "none"; // hide after finished
+    });
+}
+
+
 const teamd = document.getElementsByClassName("teamsection")[0];
 const teamb = document.getElementsByClassName("teambtn")[0];
 document.querySelector("#teamback img").addEventListener("click", () => {
     teamd.style.animation = "pagepush 1s forwards"
 })
 teamb.addEventListener("click", () => {
-    if (cooldowns.sofa > 0) return;
+    if (cooldowns.sofa > 0 || cool > 0) return;
     teamd.style.animation = "pagepull 1s forwards"
     selectm(document.getElementById(current))
 })
@@ -363,7 +315,7 @@ const teaserbtn = document.getElementsByClassName("teaserbtn")[0];
 const teaser = document.getElementsByClassName("teaser")[0]
 const video = document.querySelector(".teaser video");
 teaserbtn.addEventListener("click", () => {
-    if(cooldowns.tv > 0) return;
+    if (cooldowns.tv > 0 || cool > 0) return;
     blur.style.display = "block";
     blur.style.animation = "blurin 1s forwards"
     teaser.style.display = "block"
@@ -379,5 +331,59 @@ blur.addEventListener("click", () => {
     }, 1000);
 })
 document.getElementsByClassName("eventsbtn")[0].addEventListener("click", () => {
-    window.location.href = "./events.html"
+    if (cooldowns.eventsv > 0 || cool > 0) return;
+    window.location.href = "./events"
 })
+function init() {
+    requestAnimationFrame(tick)
+    load.style.animation = "fadeout 500ms forwards";
+    setTimeout(() => {
+        load.style.display = "none"
+    }, 500);
+    start.play();
+}
+document.getElementsByClassName("dcryptbtn")[0].addEventListener("click", () => {
+    window.location.href = "./discord"
+})
+document.getElementsByClassName("regbtn")[0].addEventListener("click", () => {
+    window.location.href = "./register"
+})
+$(document).ready(function ($) {
+    setTimeout(function () {
+        $("#l1").animate({
+            height: "0px"
+        }, 100)
+        $("#l2").animate({
+            height: "0px"
+        }, 150)
+        $("#l3").animate({
+            height: "0px"
+        }, 200)
+        $("#l4").animate({
+            height: "0px"
+        }, 250)
+        $("#l5").animate({
+            height: "0px"
+        }, 300)
+        $("#l6").animate({
+            height: "0px"
+        }, 350)
+        $("#l7").animate({
+            height: "0px"
+        }, 400)
+        $("#l8").animate({
+            height: "0px"
+        }, 450)
+        setTimeout(function () {
+            setTimeout(function () {
+                $(".loader-tdiv").animate({
+                    opacity: "0"
+                }, 500)
+                $(".loader").fadeOut(500)
+                setTimeout(() => {
+                    init()
+                }, 500);
+            }, 1500)
+        }, 500)
+    }, 1000);
+});
