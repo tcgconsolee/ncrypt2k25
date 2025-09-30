@@ -1,15 +1,12 @@
 const load = document.getElementsByClassName("load")[0];
 const start = document.getElementById("start");
 
-// mouse flags
 let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
 
-// global and per-video cooldowns
 let cool = 12;
 let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0 };
 let lastTime = performance.now();
 
-// store all videos
 const videos = {
     tv: document.getElementById("tv"),
     eventsv: document.getElementById("eventsv"),
@@ -17,22 +14,30 @@ const videos = {
     computer: document.getElementById("computer")
 };
 
-// ---------------- Tick loop ----------------
+const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
 function tick(now) {
     const delta = now - lastTime;
     if (delta >= 1000) {
         if (cool > 0) cool--;
-        for (let key in cooldowns) {
-            if (cooldowns[key] > 0) cooldowns[key]--;
+        if (!isMobile) {
+            for (let key in cooldowns) {
+                if (cooldowns[key] > 0) cooldowns[key]--;
+            }
         }
         lastTime = now;
     }
 
-    // auto-resume when mouse not on
     for (let key in videos) {
         const video = videos[key];
         const mouseFlag = window["mouseon" + key];
-        if (!mouseFlag && video.currentTime > 0 && video.paused && cooldowns[key] === 0 && cool === 0) {
+        if (
+            !mouseFlag &&
+            video.currentTime > 0 &&
+            video.paused &&
+            (isMobile ? true : cooldowns[key] === 0) &&
+            cool === 0
+        ) {
             video.play();
         }
     }
@@ -40,22 +45,20 @@ function tick(now) {
     requestAnimationFrame(tick);
 }
 
-// ---------------- Play/Pause helpers ----------------
 function playVideo(key, mouseFlag) {
     window[mouseFlag] = true;
     const video = videos[key];
 
-    // don't run if cooling down
-    if (cool > 0 || cooldowns[key] > 0) return;
+    if (cool > 0 || (!isMobile && cooldowns[key] > 0)) return;
 
-    // show the video
     video.style.display = "block";
 
-    cooldowns[key] = Math.floor(video.duration / 2);
+    if (!isMobile) {
+        cooldowns[key] = Math.floor(video.duration / 2);
+    }
     video.currentTime = 0;
     video.play();
 
-    // Pause halfway if mouse stays
     setTimeout(() => {
         if (window[mouseFlag]) video.pause();
     }, (video.duration / 2) * 1000);
@@ -65,7 +68,7 @@ function continueVideo(key, mouseFlag) {
     window[mouseFlag] = false;
     const video = videos[key];
 
-    if (cool > 0 || cooldowns[key] > 0) return;
+    if (cool > 0 || (!isMobile && cooldowns[key] > 0)) return;
     video.play();
 }
 
@@ -84,7 +87,7 @@ function conEventsv() { continueVideo("eventsv", "mouseoneventsv"); }
 for (let key in videos) {
     videos[key].addEventListener("ended", () => {
         cooldowns[key] = 0;
-        videos[key].style.display = "none"; // hide after finished
+        videos[key].style.display = "none";
     });
 }
 
@@ -95,7 +98,7 @@ document.querySelector("#teamback img").addEventListener("click", () => {
     teamd.style.animation = "pagepush 1s forwards"
 })
 teamb.addEventListener("click", () => {
-    if (cooldowns.sofa > 0 || cool > 0) return;
+    if ((cooldowns.sofa > 0 && !isMobile) || cool > 0) return;
     teamd.style.animation = "pagepull 1s forwards"
     selectm(document.getElementById(current))
 })
@@ -315,7 +318,7 @@ const teaserbtn = document.getElementsByClassName("teaserbtn")[0];
 const teaser = document.getElementsByClassName("teaser")[0]
 const video = document.querySelector(".teaser video");
 teaserbtn.addEventListener("click", () => {
-    if (cooldowns.tv > 0 || cool > 0) return;
+    if ((cooldowns.tv > 0 && !isMobile) || cool > 0) return;
     blur.style.display = "block";
     blur.style.animation = "blurin 1s forwards"
     teaser.style.display = "block"
@@ -331,7 +334,7 @@ blur.addEventListener("click", () => {
     }, 1000);
 })
 document.getElementsByClassName("eventsbtn")[0].addEventListener("click", () => {
-    if (cooldowns.eventsv > 0 || cool > 0) return;
+    if ((cooldowns.eventsv > 0 && !isMobile) || cool > 0) return;
     window.location.href = "./events"
 })
 function init() {
@@ -346,13 +349,14 @@ document.getElementsByClassName("dcryptbtn")[0].addEventListener("click", () => 
     window.location.href = "./discord"
 })
 document.getElementsByClassName("regbtn")[0].addEventListener("click", () => {
+    if ((cooldowns.computer > 0 && !isMobile) || cool>0)
     window.location.href = "./register"
 })
 $(document).ready(function ($) {
     let loaded = false;
     function animateBars() {
         $("#l1").animate({ height: "0px" }, 100)
-            .animate({ height: "100px" }, 100); // reset back
+            .animate({ height: "100px" }, 100);
 
         $("#l2").delay(50).animate({ height: "0px" }, 150)
             .animate({ height: "100px" }, 150);
