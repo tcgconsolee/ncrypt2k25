@@ -6,153 +6,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/TextPlugin.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrambleTextPlugin.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
-    <style>
-        p {
-            margin: 0;
-        }
-    </style>
-    <script>
-        gsap.registerPlugin(TextPlugin, SplitText, ScrambleTextPlugin);
-    </script>
-    <style>
-        .char {
-            display: inline-block;
-            text-align: center;
-            white-space: pre;
-        }
-    </style>
 </head>
 
 <body>
+    <div class="load">
+        <div class="press">
+            <div class="loader">
+                <div class="loader-lines">
+                    <div class="loader-line" id="l1"></div>
+                    <div class="loader-line" id="l2"></div>
+                    <div class="loader-line" id="l3"></div>
+                    <div class="loader-line" id="l4"></div>
+                    <div class="loader-line" id="l5"></div>
+                    <div class="loader-line" id="l6"></div>
+                    <div class="loader-line" id="l7"></div>
+                    <div class="loader-line" id="l8"></div>
+                </div>
+                <div class="loader-tdiv">
+                    <div class="loader-txt">
+                        <div class="logo1">
+                            <div class="red"></div>
+                            <div class="orange"></div>
+                            <div class="red2"></div>
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+        <script src="//code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <script>
+            const load = document.getElementsByClassName("load")[0]
+            function init() {
+                load.style.animation = "fadeout 500ms forwards";
+                setTimeout(() => {
+                    load.style.display = "none"
+                }, 500);
+            }
+            $(document).ready(function ($) {
+                setTimeout(function () {
+                    $("#l1").animate({
+                        height: "0px"
+                    }, 100)
+                    $("#l2").animate({
+                        height: "0px"
+                    }, 150)
+                    $("#l3").animate({
+                        height: "0px"
+                    }, 200)
+                    $("#l4").animate({
+                        height: "0px"
+                    }, 250)
+                    $("#l5").animate({
+                        height: "0px"
+                    }, 300)
+                    $("#l6").animate({
+                        height: "0px"
+                    }, 350)
+                    $("#l7").animate({
+                        height: "0px"
+                    }, 400)
+                    $("#l8").animate({
+                        height: "0px"
+                    }, 450)
+                    setTimeout(function () {
+                        setTimeout(function () {
+                            $(".loader-tdiv").animate({
+                                opacity: "0"
+                            }, 500)
+                            $(".loader").fadeOut(500)
+                            setTimeout(() => {
+                                init()
+                            }, 200);
+                        }, 1500)
+                    }, 500)
+                }, 1000);
+            });
+        </script>
+    </div>
     <div class="bg">
         <img src="./imgs/events.png" alt="">
     </div>
-    <div class="blur" style="display:block;opacity:1;"></div>
-    <div class="eventwindow">
-        <div class="eventhead">
-            <p>///// <span>nCreate</span></p>
-        </div>
-        <div class="eventdesc">
-            <p>In a unique blend of <span>Designathon</span> and <span>Hackathon</span>, participants will be challenged
-                to harness both their creative flair and technical expertise to address a thought-provoking problem
-                statement. The task is to craft a solution that is not only functional but also visually engaging. Each
-                team is expected to bring together their diverse talents to ideate, develop, and deliver a project that
-                aligns with the specific requirements provided.</p>
-        </div>
-        <div class="eventdetails">
-            <div class="eventdetail">
-                <div>
-                    <img src="./imgs/person.svg" alt="">
-                </div>
-                <div>
-                    <p>2 - 4 participants</p>
-                </div>
-            </div>
-            <div class="eventdetail">
-                <div>
-                    <img src="./imgs/location.svg" alt="">
-                </div>
-                <div>
-                    <p>Hybrid Event (Online + Offline)</p>
-                </div>
-            </div>
-            <div class="eventlinks">
-                <div>
-                    <a href = "https://docs.google.com/document/d/1TQYcMeuNIB6tggVZBrklm3imFR31ZQnp/edit?tab=t.0" target="_blank">[LR] ↗</a>
-                </div>
-                <div>
-                    <p>[REG] ↗</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        let finalText =document.querySelector(".eventhead span").innerHTML
-        gsap.to(document.querySelector(".eventhead span"), {
-            duration: 1,
-            scrambleText: {
-                text: finalText,
-                chars: "lowerAndUpperCase",
-                revealDelay: 0.5,
-                speed: 0.3,
-                delimiter: "",
-                tweenLength: true
-            },
-            ease: "power1.inOut"
-        });
-        setTimeout(() => {
-            document.getElementsByClassName("eventdesc")[0].style.animation="fadein 1s forwards"
-            document.getElementsByClassName("eventdetails")[0].style.animation="fadein 1s forwards"
-            document.getElementsByClassName("eventlinks ")[0].style.animation="fadein 1s forwards"
-        }, 1000);
-        const settings = {
-            radius: 10,
-            duration: 1.2,
-            speed: 0.5,
-            scrambleChars: '.:',
-        };
-
-        const container = document.getElementsByClassName('eventdesc')[0];
-        const p = container.querySelector('p');
-
-        // Split text into chars
-        const split = new SplitText(p, { type: 'words, chars', charsClass: 'char' });
-        const chars = split.chars;
-
-        // Lock width for each character to prevent layout shift
-        chars.forEach(c => {
-            const charWidth = c.offsetWidth;
-            gsap.set(c, {
-                display: 'inline-block',
-                width: charWidth,
-                attr: { 'data-content': c.innerHTML }
-            });
-        });
-
-        // Handle mouse movement with variable + irregular distortion
-        function handleMove(e) {
-            const time = Date.now() * 0.003; // time factor for wave motion
-
-            chars.forEach((c, i) => {
-                const { left, top, width, height } = c.getBoundingClientRect();
-                const dx = e.clientX - (left + width / 2);
-                const dy = e.clientY - (top + height / 2);
-                const dist = Math.hypot(dx, dy);
-
-                // Random radius per character
-                const charRadius = settings.radius * (0.6 + Math.random() * 0.8);
-
-                // Add wave distortion based on time + index
-                const wave = Math.sin(i * 0.4 + time) * 20;
-
-                // Add angular distortion for irregular shapes
-                const angle = Math.atan2(dy, dx);
-                const angleBias = Math.abs(Math.sin(angle * 3)) * 40;
-
-                // Final effective radius
-                const effectiveRadius = charRadius + wave + angleBias;
-
-                if (dist < effectiveRadius) {
-                    gsap.to(c, {
-                        overwrite: true,
-                        duration: settings.duration * (1 - dist / effectiveRadius),
-                        scrambleText: {
-                            text: c.dataset.content || '',
-                            chars: settings.scrambleChars,
-                            speed: settings.speed
-                        },
-                        ease: 'none'
-                    });
-                }
-            });
-        }
-
-        container.addEventListener('pointermove', handleMove);
-    </script>
+    <!--
+    nCreate - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-1893&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
+    GiT - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-2307&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
+    nCinema - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3548&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
+    nCoris - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3960&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
+    dCrypt - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3136&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
+    nXpress - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-4784&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
+    eNigma - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-5608&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
+    Surprise - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-2721&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
+    
+    -->
 </body>
 
 </html>

@@ -349,41 +349,49 @@ document.getElementsByClassName("regbtn")[0].addEventListener("click", () => {
     window.location.href = "./register"
 })
 $(document).ready(function ($) {
-    setTimeout(function () {
-        $("#l1").animate({
-            height: "0px"
-        }, 100)
-        $("#l2").animate({
-            height: "0px"
-        }, 150)
-        $("#l3").animate({
-            height: "0px"
-        }, 200)
-        $("#l4").animate({
-            height: "0px"
-        }, 250)
-        $("#l5").animate({
-            height: "0px"
-        }, 300)
-        $("#l6").animate({
-            height: "0px"
-        }, 350)
-        $("#l7").animate({
-            height: "0px"
-        }, 400)
-        $("#l8").animate({
-            height: "0px"
-        }, 450)
-        setTimeout(function () {
-            setTimeout(function () {
-                $(".loader-tdiv").animate({
-                    opacity: "0"
-                }, 500)
-                $(".loader").fadeOut(500)
-                setTimeout(() => {
-                    init()
-                }, 500);
-            }, 1500)
-        }, 500)
-    }, 1000);
+    let loaded = false;
+    function animateBars() {
+        $("#l1").animate({ height: "0px" }, 100)
+            .animate({ height: "100px" }, 100); // reset back
+
+        $("#l2").delay(50).animate({ height: "0px" }, 150)
+            .animate({ height: "100px" }, 150);
+
+        $("#l3").delay(100).animate({ height: "0px" }, 200)
+            .animate({ height: "100px" }, 200);
+
+        $("#l4").delay(150).animate({ height: "0px" }, 250)
+            .animate({ height: "100px" }, 250);
+
+        $("#l5").delay(200).animate({ height: "0px" }, 300)
+            .animate({ height: "100px" }, 300);
+
+        $("#l6").delay(250).animate({ height: "0px" }, 350)
+            .animate({ height: "100px" }, 350);
+
+        $("#l7").delay(300).animate({ height: "0px" }, 400)
+            .animate({ height: "100px" }, 400);
+
+        $("#l8").delay(350).animate({ height: "0px" }, 450)
+            .animate({ height: "100px" }, 450);
+        if(loaded) {
+            clearInterval(interval);
+
+            $(".loader-tdiv").animate({ opacity: "0" }, 500);
+            $(".loader").fadeOut(500);
+
+            setTimeout(() => {
+                init();
+            }, 500);
+        }
+    }
+
+    animateBars();
+    let interval;
+    setTimeout(() => {  
+        interval = setInterval(animateBars, 2000);
+    }, 2000);
+    $(window).on("load", function () {
+        loaded=true;
+    });
 });

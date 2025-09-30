@@ -83,9 +83,57 @@ body {
     transform: translate(-50%);
     font-family: 'n';
     color: #fff;
-    font-size:1.15vmax;
+    font-size:1.3vmax;
     line-height:0;
     height: min-content;
+}
+.nevents {
+    position: absolute;
+    left: 13.3%;
+    transform: translate(-50%);
+    font-family :'s';
+    font-size: 0.75vmax;
+    color: #f00;
+    text-shadow: 0 0 1px #000;
+    line-height: 0;
+    height: min-content;   
+    font-weight: 700; 
+}
+.ndiscord {
+    position: absolute;
+    left: 26.6%;
+    transform: translate(-50%);
+    font-family :'s';
+    font-size: 0.75vmax;
+    color: #f00;
+    text-shadow: 0 0 1px #000;
+    line-height: 0;
+    height: min-content;   
+    font-weight: 700; 
+}
+.nbrochure {
+    position: absolute;
+    left: 73.3%;
+    transform: translate(-50%);
+    font-family :'s';
+    font-size: 0.75vmax;
+    color: #f00;
+    text-shadow: 0 0 1px #000;
+    line-height: 0;
+    height: min-content;   
+    font-weight: 700; 
+}
+.nregister {
+    position: absolute;
+    left: 86.6%;
+    transform: translate(-50%);
+    font-family :'s';
+    font-size: 0.75vmax;
+    color: #f00;
+    text-shadow: 0 0 1px #000;
+    line-height: 0;
+    height: min-content;   
+    font-weight: 700; 
 }
 .y16 {
     position: absolute;
