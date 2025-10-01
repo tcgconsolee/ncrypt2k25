@@ -401,3 +401,21 @@ $(document).ready(function ($) {
         loaded=true;
     });
 });
+const els = [document.querySelector("#start"), document.querySelector("#tv"), document.querySelector("#eventsv"), document.querySelector("#sofa"), document.querySelector("#computer")];
+
+window.addEventListener("mousemove", (e) => {
+  // Get mouse position relative to the center of the window
+  const mouseX = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
+  const mouseY = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+
+  // How much to move / zoom
+  const maxTranslate = 30; // px
+  const maxScale = 1.05;   // zoom factor
+
+  const translateX = mouseX * maxTranslate;
+  const translateY = mouseY * maxTranslate;
+
+  const scale = maxScale;
+
+  els.forEach(el=>{el.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;});
+});
