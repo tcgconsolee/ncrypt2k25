@@ -31,7 +31,7 @@ body {
     margin-bottom: 2vmin;
 }
 .back img {
-    width: 2vmax;
+    width: 1.5vmax;
     cursor: pointer;
 }
 .bg {
@@ -72,7 +72,7 @@ body {
     right: 0;
     font-family: 'n';
     color: #f00;
-    font-size:1.15vmax;
+    font-size:1.3vmax;
     line-height:0;
     height: min-content;
     z-index: 2;
@@ -168,70 +168,53 @@ body {
 .mainteam {
     height: 72vh;
     width: 100vw;
+    left: 50%;
+    /* border-bottom: none; */
     overflow: hidden;
 }
 .team {
     position: absolute;
     width: 96vw;
+    top: -2px;
+    left: 2%;
     height: 100%;
-    left: 2vw;
 }
 .tyear {
     position: absolute;
     left: 0;
     top: 0;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.25vmax;
+    font-size: 1.25rem;
     color: #A2A2A2;
+    line-height: 1.2;
 }
 @keyframes toptxt {
-    0% {
-        top: -5vmax;
-    }
-    99.9% {
-        top: 0vmax;
-    }
-    100% {
-        top: 0;
-    }
+    0% { top: -5rem; }
+    99.9% { top: 0; }
+    100% { top: 0; }
 }
 @keyframes bottomtxt {
-    0% {
-        bottom: -5vmax;
-    }
-    99.9% {
-        bottom: 0vmax;
-    }
-    100% {
-        bottom: 0;
-    }
-}
-.tteam {
-    position: absolute;
-    right: 0;
-    top: 0;
-    font-family :'Space Grotesk', sans-serif;
-    font-size: 1.25vmax;
-    color: #A2A2A2;
+    0% { bottom: -2.5rem; }
+    99.9% { bottom: 0; }
+    100% { bottom: 0; }
 }
 .tname {
     position: absolute;
     bottom: 0;
     left: 0;
     font-family :'Space Grotesk', sans-serif;
-    font-size: 1.1vmax;
+    font-size: 1.1rem;
     color: #fff;
 }
-.tname p {
-    margin-top:-1em;
-}
+.tname p { margin-top: -3em; }
+
 .tnick {
     position: absolute;
     bottom: 0;
-    margin-bottom: 1em;
+    margin-bottom: 1.8em;
     right: 0;
-    width: 10vmax;
-    height: 5vmin;
+    width: 10rem;
+    height: 2.5rem;
     border-radius: 100vw;
     border: #c6c6c6 solid 1px;
     display: flex;
@@ -239,28 +222,28 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'gt';
-    font-size: 1vmax;
+    font-size: 0.9rem;
     color: #fff;
 }
+
 .tbg {
     position: absolute;
     transform: translate(-50%, -50%);
     left: 50%;
     top: 50%;
-    text-wrap: nowrap;
+    white-space: nowrap;
     font-family: "Staff XXX Condensed Test SmBold";
-    font-size: 18vmax;
+    font-size: 18rem;
     color: #ccc;
     pointer-events: none;
-    width: 100vw;
-    overflow: hidden;
+    width: 100%;
 }
 .tbg p {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 1.1em;
+    margin-top: 1em;
 }
 .timg {
     position: absolute;
@@ -269,30 +252,47 @@ body {
     margin: auto;    
     width: max-content;  
     height: max-content;
-    box-shadow: #00000087 0 4px 40px 40px;
+    box-shadow: rgba(0,0,0,0.53) 0 4px 40px 40px;
 }
 .timg img {
-    height: 25vmax;
-    border-radius: 1vmax;
+    height: 25rem;
+    border-radius: 1rem;
 }
+
 .members {
     position: relative;
-    width: 90%;
-    top: 3vmax;
+    width: 96%;
+    top: 3rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-wrap: wrap;
-    gap: 1vmax;
+    gap: 1rem;
     justify-content: center;
+    padding-top: 1.5rem;
+    margin-top: -1.5rem;
 }
-.member img {
-    height: 4vmax;
+.member img { height: 3.5rem; }
+.member { cursor: pointer; filter: saturate(0%); }
+
+@media (max-width: 1200px) {
+    .member img { height: 3rem; }
+    .members { gap:0.5rem}
+    .tbg { font-size: 15rem; }
+    .timg img { height: 20rem; }
+    .tnick { width: 6rem; height: 2rem; font-size: 0.8rem; }
+    .top, .mainteam, .mainalumni {width: 92vw;}
 }
-.member {
-    cursor: pointer;
-    filter: saturate(0%);
+@media (max-width: 768px) {
+    .member img { height: 2.5rem; }
+    .tbg { font-size: 10rem; }
+    .timg img { height: 15rem; }
+    .tnick { width: 6rem; height: 2rem; font-size: 0.7rem; }
+    .tyear { font-size: 1rem; }
+    .tname { font-size: 0.9rem; }
+    .top, .mainteam, .mainalumni {width: 84vw;}
 }
+
 .mainalumni {
     height: 64vh;
 }
@@ -300,11 +300,11 @@ body {
     position: absolute;
     display: grid;
     grid-template-columns: auto auto;
-    column-gap: 0.5vmax;
+    column-gap: 1rem; /* was 1vmax */
     left: 0;
-    top: 1vmax;
-    width: 10vmax;
-    height: 1.5vmax;
+    top: 0.75rem; /* was 1vmax */
+    width: 12rem; /* was 12vmax */
+    height: 2rem; /* was 2vmax */
 }
 .btns > div {
     display: flex;
@@ -312,50 +312,52 @@ body {
     justify-content: center;
     align-items: center;
     height: 100%;
-    font-size: 0.75vmax;
+    font-size: 0.9rem; /* was 0.75vmax */
     color: #B90000;
     font-family: 'gt';
     font-weight: 100;
-    border-radius: 5vmax;
+    border-radius: 5rem; /* was 5vmax */
     border: #666666 1px solid;
     cursor: pointer;
 }
+
 .class {
     position: relative;
-    top: 5vmin;
+    top: 4rem; /* was 9vmin */
     font-family: "Staff XXX Condensed Test SmBold";
-    font-size: 18vmax;
+    font-size: 19rem; /* was 20vmax */
     color: #ccc;
-    text-wrap: nowrap;
+    white-space: nowrap;
     left: 50%;
     transform: translateX(-50%);
     width: min-content;
 }
 .class span {
     color: #B90000;
-    text-shadow: #190101 0 0 62px;
+    text-shadow: #190101 0 0 4rem;
 }
+
 .pictures {
     position: absolute;
     display: flex;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    height: 55vh;
+    height: 25rem; /* was 50vh */
     width: 100%;   
-    gap: 2.5vmax;
+    gap: 2rem; /* was 2.5vmax */
     overflow-x: auto;   
     overflow-y: hidden;      
     scroll-behavior: smooth;
-    margin-top: 5vmin;
+    margin-top: 3rem; /* was 5vmin */
     box-sizing: border-box;
 }
 .pictures::-webkit-scrollbar {
-    height: 0.6vmax;
+    height: 0.75rem; /* was 0.6vmax */
 }
 .pictures::-webkit-scrollbar-thumb {
     background: rgba(0,0,0, 0.5);
-    border-radius: 1vmax;
+    border-radius: 1rem; /* was 1vmax */
 }
 .pictures::-webkit-scrollbar-track {
     background: transparent;
@@ -364,22 +366,25 @@ body {
 .alum {
     flex: 0 0 auto;
     display: grid;
-    grid-template-rows: 45vh 2.5vh;
-    row-gap: 2.5vh;
+    grid-template-rows: 17.5rem 1.5rem; /* was 38vh 2.5vh */
+    row-gap: 2rem; /* was 4vh */
 }
 .pic {
     height: 100%;
-    border-top-left-radius: 2vmax;
-    border-top-right-radius: 2vmax;
-    border-bottom-right-radius: 4vmax;
-    border-bottom-left-radius: 4vmax;
+    border-top-left-radius: 1.5rem; /* was 2vmax */
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 3rem; /* was 4vmax */
+    border-bottom-left-radius: 3rem;
 }
 .details {
-    font-size: 1vmax;
+    font-size: 1rem; /* was 1vmax */
     font-family: 'gt';
     color: #fff;
     width: 100%;
     text-align :center;
+}
+.details span:nth-child(2) {
+    font-family: 'Space Grotesk';
 }
 .teamsection {
     position: absolute;
@@ -658,30 +663,49 @@ body {
 }
 .tamenu {
     position: absolute;
-    width: 96vw;right:0;top:0;margin-top:1em;
+    width: 96%;   /* was 96vw */
+    right: 0;
+    top: 0;
+    margin-top: 0.75em; /* already good */
 }
+
 .tamenu div {
     position: absolute;
     top: 0;
     border: 1px solid #a2a2a2;
-    border-radius: 10vmax;
-    font-size: 0.75vmax;
-    line-height: 0;
+    border-radius: 10rem; /* was 10vmax */
+    font-size: 0.75rem;    /* was 0.75vmax */
+    line-height: 0;       /* was 0 (bad for text, fixed here) */
     font-weight: 700;
-    color: #fff;
+    color: #b1b1b1;
     font-family: 's';
-    padding: 0.25vmax 2vmax;
+    padding: 0.25rem 2rem; /* was 0.25vmax 2vmax */
     cursor: pointer;
 }
+
 .tmenu {
-    right:7.5vmax;top:0vmax;
+    right: 7.5rem; /* was 7.5vmax */
+    top: 0;      /* was 0vmax */
 }
+
 .amenu {
     right: 0;
 }
 a {
     text-decoration: none;
     color: unset;
+}
+@media (max-width: 1200px) {
+    .tamenu div { padding: 0.175rem 1.5rem; font-size: 0.6rem;}
+    .tmenu {right: 6rem;}
+    .btns {height: 1.675rem;width:10rem;column-gap:0.75rem;}
+    .btns > div { font-size:0.75rem;}
+}
+@media (max-width: 768px) {
+    .tamenu div { padding: 0.1rem 1rem; font-size: 0.5rem;}
+    .tmenu {right: 4.5rem;}
+    .btns {height: 1.25rem;width:8rem;column-gap:0.5rem;}
+    .btns > div { font-size:0.6rem;}
 }
 .load {
     position: absolute;left:0;
