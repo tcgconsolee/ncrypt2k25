@@ -139,11 +139,11 @@ function selectm(member) {
     let finalText = target.innerHTML;
     target.innerHTML = "";
     document.querySelector(`#${el.id} .tyear`).style.animation = "none"
-    document.querySelector(`#${el.id} .tteam`).style.animation = "none"
+    document.querySelector(`#${el.id} .tamenu`).style.animation = "none"
     document.querySelector(`#${el.id} .tname`).style.animation = "none"
     document.querySelector(`#${el.id} .tnick`).style.animation = "none"
     document.querySelector(`#${el.id} .tyear`).style.top = "-5vmax"
-    document.querySelector(`#${el.id} .tteam`).style.top = "-5vmax"
+    document.querySelector(`#${el.id} .tamenu`).style.top = "-5vmax"
     document.querySelector(`#${el.id} .tname`).style.bottom = "-5vmax"
     document.querySelector(`#${el.id} .tnick`).style.bottom = "-5vmax"
 
@@ -165,7 +165,7 @@ function selectm(member) {
     }, 500);
     setTimeout(() => {
         document.querySelector(`#${el.id} .tyear`).style.animation = "toptxt 1s forwards"
-        document.querySelector(`#${el.id} .tteam`).style.animation = "toptxt 1s forwards"
+        document.querySelector(`#${el.id} .tamenu`).style.animation = "toptxt 1s forwards"
         document.querySelector(`#${el.id} .tname`).style.animation = "bottomtxt 1s forwards"
         document.querySelector(`#${el.id} .tnick`).style.animation = "bottomtxt 1s forwards"
         c.style.display = "none";
@@ -278,9 +278,11 @@ const alumnid = document.getElementsByClassName("alumnisection")[0];
 document.querySelector("#alumniback img").addEventListener("click", () => {
     alumnid.style.animation = "pagepush 1s forwards"
 })
-document.getElementById("alumnin").addEventListener("click", () => {
-    teamd.style.animation = "pagepush 1s forwards"
-    alumnid.style.animation = "pagepull 1s forwards"
+document.querySelectorAll(".alumnin").forEach(mem => {
+    mem.addEventListener("click", () => {
+        teamd.style.animation = "pagepush 1s forwards"
+        alumnid.style.animation = "pagepull 1s forwards"
+    })
 })
 document.getElementById("teamin").addEventListener("click", () => {
     teamd.style.animation = "pagepull 1s forwards"
