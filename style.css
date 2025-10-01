@@ -168,7 +168,6 @@ body {
 .mainteam {
     height: 72vh;
     width: 100vw;
-    left: 50%;
     /* border-bottom: none; */
     overflow: hidden;
 }
@@ -281,7 +280,8 @@ body {
     .tbg { font-size: 15rem; }
     .timg img { height: 20rem; }
     .tnick { width: 6rem; height: 2rem; font-size: 0.8rem; }
-    .top, .mainteam, .mainalumni {width: 92vw;}
+    .top, .team, .mainalumni {width: 92vw;}
+    .team {left:4vw}
 }
 @media (max-width: 768px) {
     .member img { height: 2.5rem; }
@@ -290,11 +290,12 @@ body {
     .tnick { width: 6rem; height: 2rem; font-size: 0.7rem; }
     .tyear { font-size: 1rem; }
     .tname { font-size: 0.9rem; }
-    .top, .mainteam, .mainalumni {width: 84vw;}
+    .top,.team, .mainalumni {width: 84vw;}
+    .team {left:8vw}
 }
 
 .mainalumni {
-    height: 64vh;
+    height: 27.5rem;
 }
 .btns {
     position: absolute;
@@ -323,9 +324,9 @@ body {
 
 .class {
     position: relative;
-    top: 4rem; /* was 9vmin */
+    top: 4rem;
     font-family: "Staff XXX Condensed Test SmBold";
-    font-size: 19rem; /* was 20vmax */
+    font-size: 20vmax;
     color: #ccc;
     white-space: nowrap;
     left: 50%;
@@ -700,12 +701,14 @@ a {
     .tmenu {right: 6rem;}
     .btns {height: 1.675rem;width:10rem;column-gap:0.75rem;}
     .btns > div { font-size:0.75rem;}
+    .alum {grid-template-rows: 14rem 1rem;}
 }
 @media (max-width: 768px) {
     .tamenu div { padding: 0.1rem 1rem; font-size: 0.5rem;}
     .tmenu {right: 4.5rem;}
     .btns {height: 1.25rem;width:8rem;column-gap:0.5rem;}
     .btns > div { font-size:0.6rem;}
+    .alum {grid-template-rows: 10rem 0.5rem;}
 }
 .load {
     position: absolute;left:0;
