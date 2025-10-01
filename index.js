@@ -3,7 +3,7 @@ const start = document.getElementById("start");
 
 let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
 
-let cool = 12;
+let cool = 0;
 let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0 };
 let lastTime = performance.now();
 

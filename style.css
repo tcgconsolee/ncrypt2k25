@@ -524,7 +524,7 @@ body {
     width: 50vw;
     max-height: 90vh;
 }
-.teaser video {
+.teaser video, .teaser iframe {
     width: 100%;
 }
 .videos {
