@@ -526,6 +526,8 @@ body {
 }
 .teaser video, .teaser iframe {
     width: 100%;
+    border:none;
+    outline:none;
 }
 .videos {
     position: absolute;
