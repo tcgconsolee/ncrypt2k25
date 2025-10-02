@@ -1,5 +1,13 @@
 const load = document.getElementsByClassName("load")[0];
 const start = document.getElementById("start");
+document.addEventListener('keypress', n)
+function n(e) {
+    if(e.key==="n") {
+        start.currentTime = start.duration
+        cool=0
+    }
+    document.removeEventListener("keypress", n)
+}
 
 let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
 
