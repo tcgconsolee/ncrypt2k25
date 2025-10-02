@@ -235,7 +235,8 @@ body {
     font-size: 18rem;
     color: #ccc;
     pointer-events: none;
-    width: 100%;
+    overflow: hidden;
+    width: 100vw;
 }
 .tbg p {
     width: 100%;

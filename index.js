@@ -120,12 +120,12 @@ function selectm(member) {
 
     let c = document.getElementById(current.replace("_", "-"));
     let el = document.getElementById(member.id.replace("_", "-"));
+    el.style.display = "block";
     current = member.id;
 
     let i1 = Array.from(team).indexOf(c);
     let i2 = Array.from(team).indexOf(el);
 
-    el.style.display = "block";
 
     if (i1 > i2) {
         c.style.animation = "lteampush 1s forwards";
