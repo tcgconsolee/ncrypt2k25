@@ -553,6 +553,7 @@ body {
     min-height: 100vh;
     object-fit: cover;
     position: absolute; 
+    transform: scale(1.02);
 }
 .videos canvas {
     position: absolute;

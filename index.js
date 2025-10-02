@@ -405,18 +405,12 @@ const els = [document.querySelector("#start"), document.querySelector("#tv"), do
 
 window.addEventListener("mousemove", (e) => {
     if(isMobile) return;
-  // Get mouse position relative to the center of the window
-  const mouseX = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
-  const mouseY = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+  const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
 
-  // How much to move / zoom
-  const maxTranslate = 1; // px
-  const maxScale = 1.02;   // zoom factor
-
+  const maxTranslate = 1;
   const translateX = -mouseX * maxTranslate;
   const translateY = -mouseY * maxTranslate;
 
-  const scale = maxScale;
-
-  els.forEach(el=>{el.style.transform = `translate(${translateX}vmax, ${translateY}vmax) scale(${scale})`;});
+  els.forEach(el=>{el.style.transform = `translate(${translateX}%, ${translateY}%) scale(1.02)`;});
 });
