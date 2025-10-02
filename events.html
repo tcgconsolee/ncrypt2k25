@@ -135,7 +135,7 @@ function animate(){
   const ease=0.06;
   currentX+=(targetX-currentX)*ease;
   currentY+=(targetY-currentY)*ease;
-  imgContainer.style.transform=`translate(${currentX}px, ${currentY}px) scale(1.03)`;
+  imgContainer.style.transform=`translate(${currentX}px, ${currentY}px) scale(1.02)`;
 
   document.querySelectorAll('.dot').forEach(dot=>{
     const originalX=parseFloat(dot.dataset.x);
