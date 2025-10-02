@@ -221,15 +221,15 @@ window.addEventListener('resize', () => {
   updateDotPositions(); // recalculates dots consistently
 });
 
-window.addEventListener('wheel', function(e) {
-  if (e.ctrlKey) e.preventDefault();
-}, { passive: false });
+// window.addEventListener('wheel', function(e) {
+//   if (e.ctrlKey) e.preventDefault();
+// }, { passive: false });
 
-window.addEventListener('keydown', function(e) {
-  if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
-    e.preventDefault();
-  }
-});
+// window.addEventListener('keydown', function(e) {
+//   if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
+//     e.preventDefault();
+//   }
+// });
 </script>
 </body>
 </html>
