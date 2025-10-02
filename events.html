@@ -7,6 +7,9 @@
 <title>Document</title>
 <link rel="stylesheet" href="style.css">
 <style>
+    .bg img {
+        width: 100vw;
+    }
   /* Dot style */
   .dot {
     position: absolute;
@@ -80,7 +83,7 @@
 
 <div class="bg">
   <div class="bg-inner">
-    <img src="./imgs/events.png" usemap="#events-map">
+    <img src="./imgs/events.png" usemap="#events-map" id = "events-img">
   </div>
   <map name="events-map">
     <area target="_blank" alt="nQuest" title="nQuest" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-5196&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="1088,364,1596,126,1610,628,1095,842" shape="poly">
@@ -152,52 +155,72 @@ function animate(){
 }
 animate();
 
-window.addEventListener('load', ()=>{ imageMapResize(); });
+let dotData = [];
 
-window.addEventListener('load', ()=> {
+window.addEventListener('load', () => {
+  const img = document.querySelector('#events-img');
   const map = document.querySelector('map[name="events-map"]');
   const areas = map.querySelectorAll('area');
 
-  document.querySelectorAll('.dot').forEach(d => d.remove());
-
-  const dots = [];
+  // store ORIGINAL coords before imageMapResize() changes them
+  dotData = [];
   areas.forEach(area => {
     const coords = area.coords.split(',').map(Number);
-    let x = 0, y = 0;
+    dotData.push({ area, coords, shape: area.shape });
+  });
 
-    if(area.shape === 'poly') {
-      let sumX = 0, sumY = 0;
-      for(let i=0; i<coords.length; i+=2){
-        sumX += coords[i]; sumY += coords[i+1];
-      }
-      x = sumX / (coords.length/2);
-      y = sumY / (coords.length/2);
-    } else if(area.shape === 'rect') {
-      x = (coords[0]+coords[2])/2;
-      y = (coords[1]+coords[3])/2;
-    } else if(area.shape === 'circle') {
-      x = coords[0]; y = coords[1];
-    }
+  imageMapResize(); // safe to run AFTER we save originals
 
+  // create dots
+  document.querySelectorAll('.dot').forEach(d => d.remove());
+  dotData.forEach(({ area }, i) => {
     const dot = document.createElement('div');
     dot.className = 'dot';
-    dot.dataset.x = x;
-    dot.dataset.y = y;
-    dot.style.left = x+'px';
-    dot.style.top = (y-150)+'px';
-    imgContainer.appendChild(dot);
-    dots.push(dot);
+    document.querySelector('.bg-inner').appendChild(dot);
+    dotData[i].dot = dot;
+
+    // hover links
+    area.addEventListener('mouseenter', () => dot.classList.add('active'));
+    area.addEventListener('mouseleave', () => dot.classList.remove('active'));
   });
 
-  areas.forEach((area, index) => {
-    area.addEventListener('mouseenter', () => {
-      dots[index].classList.add('active');
-    });
-    area.addEventListener('mouseleave', () => {
-      dots[index].classList.remove('active');
-    });
-  });
+  updateDotPositions();
 });
+
+function updateDotPositions() {
+  const img = document.querySelector('#events-img');
+  const scaleX = img.offsetWidth / img.naturalWidth;
+  const scaleY = img.offsetHeight / img.naturalHeight;
+
+  dotData.forEach(({ dot, coords, shape }) => {
+    let x = 0, y = 0;
+
+    if (shape === 'poly') {
+      let sumX = 0, sumY = 0;
+      for (let i = 0; i < coords.length; i += 2) {
+        sumX += coords[i];
+        sumY += coords[i + 1];
+      }
+      x = sumX / (coords.length / 2);
+      y = sumY / (coords.length / 2);
+    } else if (shape === 'rect') {
+      x = (coords[0] + coords[2]) / 2;
+      y = (coords[1] + coords[3]) / 2;
+    } else if (shape === 'circle') {
+      x = coords[0];
+      y = coords[1];
+    }
+
+    dot.style.left = (x * scaleX-(img.offsetWidth-window.innerWidth)/2) + 'px';
+    dot.style.top = (y * scaleY -(img.offsetHeight-window.innerHeight)/2) + 'px'; // with upward offset
+  });
+}
+
+window.addEventListener('resize', () => {
+  imageMapResize();    // rescales <area> so links still work
+  updateDotPositions(); // recalculates dots consistently
+});
+
 window.addEventListener('wheel', function(e) {
   if (e.ctrlKey) e.preventDefault();
 }, { passive: false });
