@@ -99,7 +99,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/image-map-resizer/1.0.10/js/imageMapResizer.min.js"></script>
 
 <script>
-// Loader animation
 const load = document.getElementsByClassName("load")[0];
 function init() {
   load.style.animation = "fadeout 500ms forwards";
@@ -118,12 +117,10 @@ $(document).ready(function () {
   },1000);
 });
 
-// Parallax variables
 const imgContainer = document.querySelector('.bg-inner');
 const img = imgContainer.querySelector('img');
 let targetX=0,targetY=0,currentX=0,currentY=0;
 
-// Mouse move
 window.addEventListener("mousemove", (e)=>{
   const mouseX=(e.clientX/window.innerWidth-0.5)*2;
   const mouseY=(e.clientY/window.innerHeight-0.5)*2;
@@ -134,37 +131,31 @@ window.addEventListener("mousemove", (e)=>{
   targetY=-mouseY*maxTranslateY;
 });
 
-// Animate parallax
 function animate(){
-  const ease=0.01;
+  const ease=0.06;
   currentX+=(targetX-currentX)*ease;
   currentY+=(targetY-currentY)*ease;
   imgContainer.style.transform=`translate(${currentX}px, ${currentY}px) scale(1.03)`;
 
-  // Move dots with 150px upward offset
   document.querySelectorAll('.dot').forEach(dot=>{
     const originalX=parseFloat(dot.dataset.x);
     const originalY=parseFloat(dot.dataset.y);
     dot.style.left=(originalX-(img.offsetWidth-window.innerWidth)/2)+'px';
-    dot.style.top=(originalY-(img.offsetHeight-window.innerHeight)/2)+'px'; // 150px up
+    dot.style.top=(originalY-(img.offsetHeight-window.innerHeight)/2)+'px';
   });
 
   requestAnimationFrame(animate);
 }
 animate();
 
-// Image map resize
 window.addEventListener('load', ()=>{ imageMapResize(); });
 
-// Create dots at centroid of areas with 150px upward shift
 window.addEventListener('load', ()=> {
   const map = document.querySelector('map[name="events-map"]');
   const areas = map.querySelectorAll('area');
 
-  // remove old dots
   document.querySelectorAll('.dot').forEach(d => d.remove());
 
-  // create dots
   const dots = [];
   areas.forEach(area => {
     const coords = area.coords.split(',').map(Number);
@@ -194,7 +185,6 @@ window.addEventListener('load', ()=> {
     dots.push(dot);
   });
 
-  // attach hover events
   areas.forEach((area, index) => {
     area.addEventListener('mouseenter', () => {
       dots[index].classList.add('active');
