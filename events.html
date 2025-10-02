@@ -2,104 +2,217 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Dot style */
+  .dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #ffffff60;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 2;
+    transition: all ease-in-out 500ms;
+  }
+  .dot.active {
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    transition: all ease-in-out 500ms;
+  }
+  .dot::after {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    content: '';
+    width: 18px;
+    height: 18px;
+    border-radius: inherit;
+    border: #fff solid 1px;
+  }
+  area {
+    pointer-events: all;
+  }
+  /* Background container */
+
+  .bg-inner {
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    margin: auto;
+    transform: translate(0px, 0px) scale(1.03);
+    transform-origin: center center;
+  }
+</style>
 </head>
 
 <body>
-    <div class="load">
-        <div class="press">
-            <div class="loader">
-                <div class="loader-lines">
-                    <div class="loader-line" id="l1"></div>
-                    <div class="loader-line" id="l2"></div>
-                    <div class="loader-line" id="l3"></div>
-                    <div class="loader-line" id="l4"></div>
-                    <div class="loader-line" id="l5"></div>
-                    <div class="loader-line" id="l6"></div>
-                    <div class="loader-line" id="l7"></div>
-                    <div class="loader-line" id="l8"></div>
-                </div>
-                <div class="loader-tdiv">
-                    <div class="loader-txt">
-                        <div class="logo1">
-                            <div class="red"></div>
-                            <div class="orange"></div>
-                            <div class="red2"></div>
-                
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="load">
+  <div class="press">
+    <div class="loader">
+      <div class="loader-lines">
+        <div class="loader-line" id="l1"></div>
+        <div class="loader-line" id="l2"></div>
+        <div class="loader-line" id="l3"></div>
+        <div class="loader-line" id="l4"></div>
+        <div class="loader-line" id="l5"></div>
+        <div class="loader-line" id="l6"></div>
+        <div class="loader-line" id="l7"></div>
+        <div class="loader-line" id="l8"></div>
+      </div>
+      <div class="loader-tdiv">
+        <div class="loader-txt">
+          <div class="logo1">
+            <div class="red"></div>
+            <div class="orange"></div>
+            <div class="red2"></div>
+          </div>
         </div>
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <script src="//code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-        <script>
-            const load = document.getElementsByClassName("load")[0]
-            function init() {
-                load.style.animation = "fadeout 500ms forwards";
-                setTimeout(() => {
-                    load.style.display = "none"
-                }, 500);
-            }
-            $(document).ready(function ($) {
-                setTimeout(function () {
-                    $("#l1").animate({
-                        height: "0px"
-                    }, 100)
-                    $("#l2").animate({
-                        height: "0px"
-                    }, 150)
-                    $("#l3").animate({
-                        height: "0px"
-                    }, 200)
-                    $("#l4").animate({
-                        height: "0px"
-                    }, 250)
-                    $("#l5").animate({
-                        height: "0px"
-                    }, 300)
-                    $("#l6").animate({
-                        height: "0px"
-                    }, 350)
-                    $("#l7").animate({
-                        height: "0px"
-                    }, 400)
-                    $("#l8").animate({
-                        height: "0px"
-                    }, 450)
-                    setTimeout(function () {
-                        setTimeout(function () {
-                            $(".loader-tdiv").animate({
-                                opacity: "0"
-                            }, 500)
-                            $(".loader").fadeOut(500)
-                            setTimeout(() => {
-                                init()
-                            }, 200);
-                        }, 1500)
-                    }, 500)
-                }, 1000);
-            });
-        </script>
+      </div>
     </div>
-    <div class="bg">
-        <img src="./imgs/events.png" alt="">
-    </div>
-    <!--
-    nCreate - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-1893&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
-    GiT - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-2307&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
-    nCinema - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3548&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
-    nCoris - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3960&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
-    dCrypt - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3136&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
-    nXpress - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-4784&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
-    eNigma - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-5608&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
-    Surprise - https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-2721&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391
-    
-    -->
-</body>
+  </div>
+</div>
 
+<div class="bg">
+  <div class="bg-inner">
+    <img src="./imgs/events.png" usemap="#events-map">
+  </div>
+  <map name="events-map">
+    <area target="" alt="nQuest" title="nQuest" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-5196&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="1088,364,1596,126,1610,628,1095,842" shape="poly">
+    <area target="" alt="nCoris" title="nCoris" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3960&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="1932,268,2403,376,2403,685,2203,860,1864,779,1935,585" shape="poly">
+    <area target="" alt="nCreate" title="nCreate" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-1893&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="1420,1282,1484,1322,1522,1350,1596,1360,1664,1356,2132,1329,2152,1289,2179,1261,2213,1251,2257,1251,2308,1258,2352,1292,2372,1343,2417,1417,2423,1492,2423,1570,2423,1662,2400,1695,2406,1590,2145,1567,2128,1753,1440,1777,1390,1767,1362,1743,1335,1685,1301,1628,1278,1563,1274,1461,1281,1383,1298,1329,1349,1292,1386,1289" shape="poly">
+    <area target="" alt="eNigma" title="eNigma" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-5608&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="810,1491,783,1447,769,1287,532,1297,535,1457,573,1511" shape="poly">
+    <area target="" alt="dCrypt" title="dCrypt" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3136&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="471,1482,468,1252,400,1269,332,1293,278,1320,227,1350,169,1377,166,1615,224,1577,295,1544,369,1513,413,1496" shape="poly">
+    <area target="" alt="Surprise" title="Surprise" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-2721&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="789,1843,929,1778,1122,1815,1125,2056,993,2124,789,2084" shape="poly">
+    <area target="" alt="nXpress" title="nXpress" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-4784&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="3712,1499,3570,1519,3128,1478,3044,1756,2691,1818,3616,2024,3837,1896,3837,1740,3833,1594,3779,1553" shape="poly">
+    <area target="" alt="GiT" title="GiT" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-2307&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="2901,1746,2749,1746,2654,1706,2667,1655,2766,1628,2800,1584,2810,1512,2732,1509,2640,1506,2613,1478,2664,1407,2715,1353,2823,1373,2925,1445,2979,1489,3013,1601,3020,1709" shape="poly">
+    <area target="" alt="nCinema" title="nCinema" href="https://www.figma.com/proto/iRpyuppcLYcvl1qz7vmFFj/nCrypt-25?page-id=125%3A44&node-id=1022-3548&p=f&viewport=26980%2C-27766%2C1.28&t=ouHIiiPnI4cd91V9-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1022%3A391" coords="2938,474,2925,1234,3830,1400,3826,674" shape="poly">
+  </map>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/image-map-resizer/1.0.10/js/imageMapResizer.min.js"></script>
+
+<script>
+// Loader animation
+const load = document.getElementsByClassName("load")[0];
+function init() {
+  load.style.animation = "fadeout 500ms forwards";
+  setTimeout(() => { load.style.display = "none"; }, 500);
+}
+$(document).ready(function () {
+  setTimeout(() => {
+    for(let i=1;i<=8;i++){
+      $("#l"+i).animate({height:"0px"}, 50*i+50);
+    }
+    setTimeout(() => {
+      $(".loader-tdiv").animate({opacity:"0"},500);
+      $(".loader").fadeOut(500);
+      setTimeout(init,200);
+    },2000);
+  },1000);
+});
+
+// Parallax variables
+const imgContainer = document.querySelector('.bg-inner');
+const img = imgContainer.querySelector('img');
+let targetX=0,targetY=0,currentX=0,currentY=0;
+
+// Mouse move
+window.addEventListener("mousemove", (e)=>{
+  const mouseX=(e.clientX/window.innerWidth-0.5)*2;
+  const mouseY=(e.clientY/window.innerHeight-0.5)*2;
+  const rect=img.getBoundingClientRect();
+  const maxTranslateX=(rect.width-window.innerWidth)/2;
+  const maxTranslateY=(rect.height-window.innerHeight)/2;
+  targetX=-mouseX*maxTranslateX;
+  targetY=-mouseY*maxTranslateY;
+});
+
+// Animate parallax
+function animate(){
+  const ease=0.06;
+  currentX+=(targetX-currentX)*ease;
+  currentY+=(targetY-currentY)*ease;
+  imgContainer.style.transform=`translate(${currentX}px, ${currentY}px) scale(1.03)`;
+
+  // Move dots with 150px upward offset
+  document.querySelectorAll('.dot').forEach(dot=>{
+    const originalX=parseFloat(dot.dataset.x);
+    const originalY=parseFloat(dot.dataset.y);
+    dot.style.left=(originalX-(img.offsetWidth-window.innerWidth)/2)+'px';
+    dot.style.top=(originalY-(img.offsetHeight-window.innerHeight)/2)+'px'; // 150px up
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Image map resize
+window.addEventListener('load', ()=>{ imageMapResize(); });
+
+// Create dots at centroid of areas with 150px upward shift
+window.addEventListener('load', ()=> {
+  const map = document.querySelector('map[name="events-map"]');
+  const areas = map.querySelectorAll('area');
+
+  // remove old dots
+  document.querySelectorAll('.dot').forEach(d => d.remove());
+
+  // create dots
+  const dots = [];
+  areas.forEach(area => {
+    const coords = area.coords.split(',').map(Number);
+    let x = 0, y = 0;
+
+    if(area.shape === 'poly') {
+      let sumX = 0, sumY = 0;
+      for(let i=0; i<coords.length; i+=2){
+        sumX += coords[i]; sumY += coords[i+1];
+      }
+      x = sumX / (coords.length/2);
+      y = sumY / (coords.length/2);
+    } else if(area.shape === 'rect') {
+      x = (coords[0]+coords[2])/2;
+      y = (coords[1]+coords[3])/2;
+    } else if(area.shape === 'circle') {
+      x = coords[0]; y = coords[1];
+    }
+
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.dataset.x = x;
+    dot.dataset.y = y;
+    dot.style.left = x+'px';
+    dot.style.top = (y-150)+'px';
+    imgContainer.appendChild(dot);
+    dots.push(dot);
+  });
+
+  // attach hover events
+  areas.forEach((area, index) => {
+    area.addEventListener('mouseenter', () => {
+      dots[index].classList.add('active');
+    });
+    area.addEventListener('mouseleave', () => {
+      dots[index].classList.remove('active');
+    });
+  });
+});
+window.addEventListener('wheel', function(e) {
+  if (e.ctrlKey) e.preventDefault();
+}, { passive: false });
+
+window.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
+    e.preventDefault();
+  }
+});
+</script>
+</body>
 </html>

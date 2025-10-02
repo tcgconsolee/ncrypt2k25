@@ -351,8 +351,8 @@ document.getElementsByClassName("dcryptbtn")[0].addEventListener("click", () => 
     window.location.href = "./discord"
 })
 document.getElementsByClassName("regbtn")[0].addEventListener("click", () => {
-    if ((cooldowns.computer > 0 && !isMobile) || cool>0)
-    window.location.href = "./register"
+    if ((cooldowns.computer > 0 && !isMobile) || cool > 0)
+        window.location.href = "./register"
 })
 $(document).ready(function ($) {
     let loaded = false;
@@ -380,7 +380,7 @@ $(document).ready(function ($) {
 
         $("#l8").delay(350).animate({ height: "0px" }, 450)
             .animate({ height: "100px" }, 450);
-        if(loaded) {
+        if (loaded) {
             clearInterval(interval);
 
             $(".loader-tdiv").animate({ opacity: "0" }, 500);
@@ -394,23 +394,51 @@ $(document).ready(function ($) {
 
     animateBars();
     let interval;
-    setTimeout(() => {  
+    setTimeout(() => {
         interval = setInterval(animateBars, 2000);
     }, 2000);
     $(window).on("load", function () {
-        loaded=true;
+        loaded = true;
     });
 });
-const els = [document.querySelector("#start"), document.querySelector("#tv"), document.querySelector("#eventsv"), document.querySelector("#sofa"), document.querySelector("#computer")];
+const els = [
+  document.querySelector(".bg"),
+  document.querySelector("#start"),
+  document.querySelector("#tv"),
+  document.querySelector("#eventsv"),
+  document.querySelector("#sofa"),
+  document.querySelector("#computer")
+];
+
+let targetX = 0, targetY = 0;
+let currentX = 0, currentY = 0;
 
 window.addEventListener("mousemove", (e) => {
-    if(isMobile) return;
   const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
   const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
 
-  const maxTranslate = 1;
-  const translateX = -mouseX * maxTranslate;
-  const translateY = -mouseY * maxTranslate;
+  const rect = els[0].getBoundingClientRect();
+  const extraX = rect.width - window.innerWidth;
+  const extraY = rect.height - window.innerHeight;
 
-  els.forEach(el=>{el.style.transform = `translate(${translateX}%, ${translateY}%) scale(1.02)`;});
+  const maxTranslateX = extraX / 2;
+  const maxTranslateY = extraY / 2;
+
+  targetX = -mouseX * maxTranslateX;
+  targetY = -mouseY * maxTranslateY;
 });
+
+function animate() {
+  const ease = 0.06;
+
+  currentX += (targetX - currentX) * ease;
+  currentY += (targetY - currentY) * ease;
+
+  els.forEach(el => {
+    el.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.03)`;
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
