@@ -429,7 +429,7 @@ window.addEventListener("mousemove", (e) => {
 });
 
 function animate() {
-  const ease = 0.01;
+  const ease = 0.06;
 
   currentX += (targetX - currentX) * ease;
   currentY += (targetY - currentY) * ease;

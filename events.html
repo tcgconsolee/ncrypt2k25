@@ -127,8 +127,12 @@ window.addEventListener("mousemove", (e)=>{
   const rect=img.getBoundingClientRect();
   const maxTranslateX=(rect.width-window.innerWidth)/2;
   const maxTranslateY=(rect.height-window.innerHeight)/2;
+  if(maxTranslateY > 40) {
+    targetY=-mouseY*40;
+  } else {
+    targetY=-mouseY*maxTranslateY;
+  }
   targetX=-mouseX*maxTranslateX;
-  targetY=-mouseY*maxTranslateY;
 });
 
 function animate(){
