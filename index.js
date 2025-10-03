@@ -451,7 +451,6 @@ function animate() {
   currentX += (targetX - currentX) * ease;
   currentY += (targetY - currentY) * ease;
 
-  // Move the entire container
   imgContainer.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.02)`;
 
   requestAnimationFrame(animate);
@@ -493,7 +492,6 @@ function buildDotDataFromMap(mapName = "image-map") {
 
     dotData.push({ area, coords, shape, cx, cy, dot });
 
-    // hover link
     area.addEventListener("mouseenter", () => dot.classList.add("active"));
     area.addEventListener("mouseleave", () => dot.classList.remove("active"));
   });
@@ -502,11 +500,9 @@ function buildDotDataFromMap(mapName = "image-map") {
 function updateDotPositions() {
   if (!img.naturalWidth || !img.naturalHeight) return;
 
-  // how the image is currently scaled
   const scaleX = img.clientWidth / img.naturalWidth;
   const scaleY = img.clientHeight / img.naturalHeight;
 
-  // img's position inside .bg-inner
   const offsetX = img.offsetLeft;
   const offsetY = img.offsetTop;
 
@@ -519,7 +515,6 @@ function updateDotPositions() {
   });
 }
 
-// initialize once image is loaded
 function initDots() {
   buildDotDataFromMap("image-map");
   updateDotPositions();
@@ -531,7 +526,6 @@ if (img.complete) {
   img.addEventListener("load", initDots);
 }
 
-// keep in sync on resize
 window.addEventListener("resize", () => {
   if (typeof imageMapResize === "function") imageMapResize();
   updateDotPositions();
