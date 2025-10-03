@@ -430,150 +430,109 @@ const els = [
     document.querySelector("#sofa"),
     document.querySelector("#computer")
 ];
-
-let targetX = 0, targetY = 0;
-let currentX = 0, currentY = 0;
+const imgContainer = document.querySelector('.bg-inner');
+const img = imgContainer.querySelector('img');
+let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
 
 window.addEventListener("mousemove", (e) => {
-    const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  const rect = img.getBoundingClientRect();
 
-    const rect = els[0].getBoundingClientRect();
-    const extraX = rect.width - window.innerWidth;
-    const extraY = rect.height - window.innerHeight;
+  const maxTranslateX = (rect.width - window.innerWidth) / 2;
+  const maxTranslateY = (rect.height - window.innerHeight) / 2;
 
-    const maxTranslateX = extraX / 2;
-    const maxTranslateY = extraY / 2;
-
-    targetX = -mouseX * maxTranslateX;
-    targetY = -mouseY * maxTranslateY;
+  targetX = -mouseX * maxTranslateX;
+  targetY = -mouseY * (maxTranslateY > 40 ? 40 : maxTranslateY);
 });
 
 function animate() {
-    const ease = 0.06;
+  const ease = 0.06;
+  currentX += (targetX - currentX) * ease;
+  currentY += (targetY - currentY) * ease;
 
-    currentX += (targetX - currentX) * ease;
-    currentY += (targetY - currentY) * ease;
+  // Move the entire container
+  imgContainer.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.02)`;
 
-    els.forEach(el => {
-        el.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.03)`;
-    });
-
-    requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 }
-
 animate();
-const imgContainer = document.querySelector('.bg-inner');
-const img = imgContainer.querySelector('img');
-
-function animated() {
-    document.querySelectorAll('.dot').forEach(dot => {
-        const originalX = parseFloat(dot.dataset.x);
-        const originalY = parseFloat(dot.dataset.y);
-        dot.style.left = (originalX) + 'px';
-        dot.style.top = (originalY) + 'px';
-    });
-
-    requestAnimationFrame(animated);
-}
-animated();
 
 let dotData = [];
 
-window.addEventListener('load', () => {
-    const img = document.querySelector('#img');
-    const map = document.querySelector('map[name="image-map"]');
-    const areas = map.querySelectorAll('area');
-
-    dotData = [];
-    areas.forEach(area => {
-        const coords = area.coords.split(',').map(Number);
-        dotData.push({ area, coords, shape: area.shape });
-    });
-
-    imageMapResize();
-
-    document.querySelectorAll('.dot').forEach(d => d.remove());
-    dotData.forEach(({ area }, i) => {
-        const dot = document.createElement('div');
-        dot.className = 'dot';
-        document.querySelector('.bg-inner').appendChild(dot);
-        dotData[i].dot = dot;
-
-        area.addEventListener('mouseenter', () => dot.classList.add('active'));
-        area.addEventListener('mouseleave', () => dot.classList.remove('active'));
-    });
-
-    createDots();
-});
-function createDots() {
-    const img = document.getElementById("img");
-
-    dotData.forEach(({ dot, coords, shape }) => {
-        let x = 0, y = 0;
-
-        if (shape === 'poly') {
-            let sumX = 0, sumY = 0;
-            for (let i = 0; i < coords.length; i += 2) {
-                sumX += coords[i];
-                sumY += coords[i + 1];
-            }
-            x = sumX / (coords.length / 2);
-            y = sumY / (coords.length / 2);
-        } else if (shape === 'rect') {
-            x = (coords[0] + coords[2]) / 2;
-            y = (coords[1] + coords[3]) / 2;
-        } else if (shape === 'circle') {
-            x = coords[0];
-            y = coords[1];
-        }
-
-        dot.style.left = `${x + (window.innerWidth - img.offsetWidth)/2}px`;
-        dot.style.top = `${y + (window.innerHeight - img.offsetHeight)/2}px`;
-    });
+function centroid(coords) {
+  let sx = 0, sy = 0, count = 0;
+  for (let i = 0; i < coords.length; i += 2) {
+    sx += coords[i];
+    sy += coords[i + 1];
+    count++;
+  }
+  return { x: sx / count, y: sy / count };
 }
+
+function buildDotDataFromMap(mapName = "image-map") {
+  const map = document.querySelector(`map[name="${mapName}"]`);
+  if (!map) return;
+  dotData = [];
+
+  map.querySelectorAll("area").forEach(area => {
+    const coords = area.coords.split(",").map(Number);
+    const shape = (area.shape || "poly").toLowerCase();
+    let cx = 0, cy = 0;
+
+    if (shape === "poly" || shape === "rect") {
+      const c = centroid(coords);
+      cx = c.x; cy = c.y;
+    } else if (shape === "circle") {
+      cx = coords[0]; cy = coords[1];
+    }
+
+    const dot = document.createElement("div");
+    dot.className = "dot";
+    imgContainer.appendChild(dot);
+
+    dotData.push({ area, coords, shape, cx, cy, dot });
+
+    // hover link
+    area.addEventListener("mouseenter", () => dot.classList.add("active"));
+    area.addEventListener("mouseleave", () => dot.classList.remove("active"));
+  });
+}
+
 function updateDotPositions() {
-            const img = document.querySelector('#img');
-            const scaleX = img.offsetWidth / img.naturalWidth;
-            const scaleY = img.offsetHeight / img.naturalHeight;
+  if (!img.naturalWidth || !img.naturalHeight) return;
 
-            dotData.forEach(({ dot, coords, shape }) => {
-                let x = 0, y = 0;
+  // how the image is currently scaled
+  const scaleX = img.clientWidth / img.naturalWidth;
+  const scaleY = img.clientHeight / img.naturalHeight;
 
-                if (shape === 'poly') {
-                    let sumX = 0, sumY = 0;
-                    for (let i = 0; i < coords.length; i += 2) {
-                        sumX += coords[i];
-                        sumY += coords[i + 1];
-                    }
-                    x = sumX / (coords.length / 2);
-                    y = sumY / (coords.length / 2);
-                } else if (shape === 'rect') {
-                    x = (coords[0] + coords[2]) / 2;
-                    y = (coords[1] + coords[3]) / 2;
-                } else if (shape === 'circle') {
-                    x = coords[0];
-                    y = coords[1];
-                }
+  // img's position inside .bg-inner
+  const offsetX = img.offsetLeft;
+  const offsetY = img.offsetTop;
 
-                dot.style.left = (x * scaleX - (img.offsetWidth - window.innerWidth) / 2) + 'px';
-                dot.style.top = (y * scaleY - (img.offsetHeight - window.innerHeight) / 2) + 'px'; 
-            });
-        }
+  dotData.forEach(item => {
+    const left = offsetX + item.cx * scaleX;
+    const top = offsetY + item.cy * scaleY;
 
+    item.dot.style.left = `${left}px`;
+    item.dot.style.top = `${top}px`;
+  });
+}
 
+// initialize once image is loaded
+function initDots() {
+  buildDotDataFromMap("image-map");
+  updateDotPositions();
+}
 
-window.addEventListener('resize', () => {
-    imageMapResize();
-    updateDotPositions();
+if (img.complete) {
+  initDots();
+} else {
+  img.addEventListener("load", initDots);
+}
+
+// keep in sync on resize
+window.addEventListener("resize", () => {
+  if (typeof imageMapResize === "function") imageMapResize();
+  updateDotPositions();
 });
-
-// window.addEventListener('wheel', function(e) {
-//   if (e.ctrlKey) e.preventDefault();
-// }, { passive: false });
-
-// window.addEventListener('keydown', function(e) {
-//   if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
-//     e.preventDefault();
-//   }
-// });
