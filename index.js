@@ -1,10 +1,15 @@
 const load = document.getElementsByClassName("load")[0];
 const start = document.getElementById("start");
 document.addEventListener('keypress', n)
+let pressed = false;
 function n(e) {
     if (e.key === "n") {
         start.currentTime = start.duration
         cool = 0
+        pressed=true;
+        document.querySelectorAll(".dot").forEach(dot => {
+            dot.style.display="block"
+        })
     }
     document.removeEventListener("keypress", n)
 }
@@ -349,11 +354,19 @@ document.getElementsByClassName("eventsbtn")[0].addEventListener("click", () => 
 })
 function init() {
     requestAnimationFrame(tick)
+    setTimeout(() => {
+        document.querySelectorAll(".dot").forEach(dot => {
+            dot.style.display="block"
+        })
+    }, 13000);
+    document.getElementsByClassName("pressn")[0].style.animation="fade 5s forwards"
     load.style.animation = "fadeout 500ms forwards";
     setTimeout(() => {
         load.style.display = "none"
     }, 500);
-    start.play();
+    if(!pressed) {
+        start.play();
+    }
 }
 document.getElementsByClassName("dcryptbtn")[0].addEventListener("click", () => {
     window.location.href = "./discord"
@@ -491,13 +504,10 @@ window.addEventListener('load', () => {
         area.addEventListener('mouseleave', () => dot.classList.remove('active'));
     });
 
-    updateDotPositions();
+    createDots();
 });
-
-function updateDotPositions() {
-    const img = document.querySelector('#img');
-    const scaleX = img.offsetWidth / img.naturalWidth;
-    const scaleY = img.offsetHeight / img.naturalHeight;
+function createDots() {
+    const img = document.getElementById("img");
 
     dotData.forEach(({ dot, coords, shape }) => {
         let x = 0, y = 0;
@@ -518,10 +528,40 @@ function updateDotPositions() {
             y = coords[1];
         }
 
-        dot.style.left = (x * scaleX ) + 'px';
-        dot.style.top = (y * scaleY) + 'px';
+        dot.style.left = `${x + (window.innerWidth - img.offsetWidth)/2}px`;
+        dot.style.top = `${y + (window.innerHeight - img.offsetHeight)/2}px`;
     });
 }
+function updateDotPositions() {
+            const img = document.querySelector('#img');
+            const scaleX = img.offsetWidth / img.naturalWidth;
+            const scaleY = img.offsetHeight / img.naturalHeight;
+
+            dotData.forEach(({ dot, coords, shape }) => {
+                let x = 0, y = 0;
+
+                if (shape === 'poly') {
+                    let sumX = 0, sumY = 0;
+                    for (let i = 0; i < coords.length; i += 2) {
+                        sumX += coords[i];
+                        sumY += coords[i + 1];
+                    }
+                    x = sumX / (coords.length / 2);
+                    y = sumY / (coords.length / 2);
+                } else if (shape === 'rect') {
+                    x = (coords[0] + coords[2]) / 2;
+                    y = (coords[1] + coords[3]) / 2;
+                } else if (shape === 'circle') {
+                    x = coords[0];
+                    y = coords[1];
+                }
+
+                dot.style.left = (x * scaleX - (img.offsetWidth - window.innerWidth) / 2) + 'px';
+                dot.style.top = (y * scaleY - (img.offsetHeight - window.innerHeight) / 2) + 'px'; 
+            });
+        }
+
+
 
 window.addEventListener('resize', () => {
     imageMapResize();
