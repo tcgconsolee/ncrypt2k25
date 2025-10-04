@@ -13,10 +13,17 @@ function n(e) {
     }
     document.removeEventListener("keypress", n)
 }
+let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
+
+let cool = 13;
+let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0, mode:0 };
+let lastTime = performance.now();
 let currentmode = 0;
 const dark = document.getElementById("darkmode")
 const light = document.getElementById("lightmode")
 document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
+    if(cool>0 || cooldowns.mode>0) return;
+    cooldowns.mode=3;
     if(currentmode === 0) {
         currentmode = 1;
         dark.style.display = "block"; dark.play();
@@ -33,11 +40,7 @@ document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
     }
 })
 
-let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
 
-let cool = 13;
-let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0 };
-let lastTime = performance.now();
 
 const videos = {
     tv: document.getElementById("tv"),
@@ -379,7 +382,7 @@ const teaserbtn = document.getElementsByClassName("teaserbtn")[0];
 const teaser = document.getElementsByClassName("teaser")[0]
 const video = document.querySelector(".teaser video");
 teaserbtn.addEventListener("click", () => {
-    if ((cooldowns.tv > 0 && !isMobile) || cool > 0) return;
+    if ((cooldowns.computer > 0 && !isMobile) || cool > 0) return;
     blur.style.display = "block";
     blur.style.animation = "blurin 1s forwards"
     teaser.style.display = "block"
@@ -418,7 +421,7 @@ document.getElementsByClassName("dcryptbtn")[0].addEventListener("click", () => 
     window.location.href = "./discord"
 })
 document.getElementsByClassName("regbtn")[0].addEventListener("click", () => {
-    if ((cooldowns.computer > 0 && !isMobile) || cool > 0)
+    if ((cooldowns.tv > 0 && !isMobile) || cool > 0)
         window.location.href = "./register"
 })
 $(document).ready(function ($) {
