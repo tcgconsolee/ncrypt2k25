@@ -53,7 +53,7 @@ const darkvideos = {
 }
 
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-if(isMobile) window.location.href = "/mobile"
+if(isMobile) window.location.href = "./mobile"
 
 function tick(now) {
     const delta = now - lastTime;
