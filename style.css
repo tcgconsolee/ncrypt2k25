@@ -81,7 +81,7 @@ body {
     font-size:1.3vmax;
     line-height:0;
     height: min-content;
-    z-index: 2;
+    z-index: 8;
 }
 .nhome {
     position: absolute;
@@ -150,7 +150,7 @@ body {
     font-size:1.15vmax;
     line-height:0;
     height: min-content;
-    z-index:2;
+    z-index:8;
 }
 .n25 {
     position: absolute;
@@ -161,7 +161,7 @@ body {
     font-size:1.15vmax;
     line-height:0;
     height: min-content;
-    z-index:2;
+    z-index:8;
 }
 .mainteam, .mainalumni {
     position: relative;
@@ -447,7 +447,7 @@ body {
             padding-bottom: 2vmin;
             border-bottom: #666 0.1px solid;
             margin-bottom: 2vmin;
-            z-index : 2;
+            z-index : 8;
         }
         @keyframes lteampush {
             0% {
@@ -583,6 +583,9 @@ body {
     box-shadow: -2px 4px 4px #00000040, -2px 4px 4px #00000040;
     backdrop-filter: blur(2px);
     padding: 2vmax 3vmax;
+}
+#lightmode, #darkmode {
+    z-index: -1;
 }
 .eventhead {
     font-family:'gt';

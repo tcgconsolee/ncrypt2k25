@@ -13,6 +13,25 @@ function n(e) {
     }
     document.removeEventListener("keypress", n)
 }
+let currentmode = 0;
+const dark = document.getElementById("darkmode")
+const light = document.getElementById("lightmode")
+document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
+    if(currentmode === 0) {
+        currentmode = 1;
+        dark.style.display = "block"; dark.play();
+        setTimeout(() => {
+            light.style.display = "none"
+            start.style.display = "none"
+        }, 5);
+    } else {
+        currentmode = 0;
+        light.style.display = "block"; light.play();
+        setTimeout(() => {
+            dark.style.display = "none"
+        }, 5);
+    }
+})
 
 let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
 
@@ -26,8 +45,15 @@ const videos = {
     sofa: document.getElementById("sofa"),
     computer: document.getElementById("computer")
 };
+const darkvideos = {
+    tv: document.getElementById("dtv"),
+    eventsv: document.getElementById("deventsv"),
+    sofa: document.getElementById("dsofa"),
+    computer: document.getElementById("dcomputer")
+}
 
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+if(isMobile) window.location.href = "/mobile"
 
 function tick(now) {
     const delta = now - lastTime;
@@ -42,7 +68,12 @@ function tick(now) {
     }
 
     for (let key in videos) {
-        const video = videos[key];
+        let video;
+        if(currentmode === 0) {
+            video = videos[key];
+        } else {
+            video = darkvideos[key]
+        }
         const mouseFlag = window["mouseon" + key];
         if (
             !mouseFlag &&
@@ -60,7 +91,13 @@ function tick(now) {
 
 function playVideo(key, mouseFlag) {
     window[mouseFlag] = true;
-    const video = videos[key];
+    
+    let video;
+    if(currentmode === 0) {
+        video = videos[key];
+    } else {
+        video = darkvideos[key]
+    }
 
     if (cool > 0 || (!isMobile && cooldowns[key] > 0)) return;
 
@@ -79,7 +116,12 @@ function playVideo(key, mouseFlag) {
 
 function continueVideo(key, mouseFlag) {
     window[mouseFlag] = false;
-    const video = videos[key];
+    let video;
+    if(currentmode === 0) {
+        video = videos[key];
+    } else {
+        video = darkvideos[key]
+    }
 
     if (cool > 0 || (!isMobile && cooldowns[key] > 0)) return;
     video.play();
@@ -101,6 +143,10 @@ for (let key in videos) {
     videos[key].addEventListener("ended", () => {
         cooldowns[key] = 0;
         videos[key].style.display = "none";
+    });
+    darkvideos[key].addEventListener("ended", () => {
+        cooldowns[key] = 0;
+        darkvideos[key].style.display = "none";
     });
 }
 
@@ -475,6 +521,7 @@ function buildDotDataFromMap(mapName = "image-map") {
   dotData = [];
 
   map.querySelectorAll("area").forEach(area => {
+    if(area.classList.contains("modebtn")) return;
     const coords = area.coords.split(",").map(Number);
     const shape = (area.shape || "poly").toLowerCase();
     let cx = 0, cy = 0;
