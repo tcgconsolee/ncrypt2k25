@@ -16,32 +16,11 @@ function n(e) {
 let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
 
 let cool = 13;
-let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0, mode:0 };
+let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0};
 let lastTime = performance.now();
 let currentmode = 0;
 const dark = document.getElementById("darkmode")
 const light = document.getElementById("lightmode")
-document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
-    if(cool>0 || cooldowns.mode>0) return;
-    cooldowns.mode=3;
-    if(currentmode === 0) {
-        currentmode = 1;
-        dark.style.display = "block"; dark.play();
-        setTimeout(() => {
-            light.style.display = "none"
-            start.style.display = "none"
-        }, 5);
-    } else {
-        currentmode = 0;
-        light.style.display = "block"; light.play();
-        setTimeout(() => {
-            dark.style.display = "none"
-        }, 5);
-    }
-})
-
-
-
 const videos = {
     tv: document.getElementById("tv"),
     eventsv: document.getElementById("eventsv"),
@@ -54,6 +33,35 @@ const darkvideos = {
     sofa: document.getElementById("dsofa"),
     computer: document.getElementById("dcomputer")
 }
+document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
+    if(cool>0) return;
+    cool=3;
+    if(currentmode === 0) {
+        currentmode = 1;
+        dark.style.display = "block"; dark.play();
+        for (let key in videos) {
+            videos[key].pause();
+            videos[key].currentTime = 0;
+            videos[key].style.display = "none"
+        }
+        setTimeout(() => {
+            light.style.display = "none"
+            start.style.display = "none"
+        }, 100);
+    } else {
+        currentmode = 0;
+        light.style.display = "block"; light.play();
+        for (let key in darkvideos) {
+            darkvideos[key].pause();
+            darkvideos[key].currentTime = 0;
+            darkvideos[key].style.display = "none"
+        }
+        setTimeout(() => {
+            dark.style.display = "none"
+        }, 100);
+    }
+})
+
 
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 if(isMobile) window.location.href = "./mobile"
@@ -421,7 +429,7 @@ document.getElementsByClassName("dcryptbtn")[0].addEventListener("click", () => 
     window.location.href = "./discord"
 })
 document.getElementsByClassName("regbtn")[0].addEventListener("click", () => {
-    if ((cooldowns.tv > 0 && !isMobile) || cool > 0)
+    if ((cooldowns.tv > 0 && !isMobile) || cool > 0) return;
         window.location.href = "./register"
 })
 $(document).ready(function ($) {
