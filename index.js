@@ -411,11 +411,11 @@ document.getElementsByClassName("eventsbtn")[0].addEventListener("click", () => 
 })
 function init() {
     requestAnimationFrame(tick)
-    setTimeout(() => {
+    start.addEventListener("ended", () => {
         document.querySelectorAll(".dot").forEach(dot => {
             dot.style.display="block"
         })
-    }, 13000);
+    });
     document.getElementsByClassName("pressn")[0].style.animation="fade 5s forwards"
     load.style.animation = "fadeout 500ms forwards";
     setTimeout(() => {
@@ -532,7 +532,6 @@ function buildDotDataFromMap(mapName = "image-map") {
   dotData = [];
 
   map.querySelectorAll("area").forEach(area => {
-    if(area.classList.contains("modebtn")) return;
     const coords = area.coords.split(",").map(Number);
     const shape = (area.shape || "poly").toLowerCase();
     let cx = 0, cy = 0;
