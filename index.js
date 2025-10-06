@@ -500,11 +500,11 @@ window.addEventListener("mousemove", (e) => {
   const maxTranslateY = (rect.height - window.innerHeight) / 2;
 
   targetX = -mouseX * maxTranslateX;
-  targetY = -mouseY * (maxTranslateY > 25 ? 25 : maxTranslateY);
+  targetY = -mouseY * (maxTranslateY > 15 ? 15 : maxTranslateY);
 });
 
 function animate() {
-  const ease = 0.04;
+  const ease = 0.02;
   currentX += (targetX - currentX) * ease;
   currentY += (targetY - currentY) * ease;
 
