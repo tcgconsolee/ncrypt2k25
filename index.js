@@ -415,6 +415,31 @@ function init() {
         document.querySelectorAll(".dot").forEach(dot => {
             dot.style.display="block"
         })
+        cool=3;
+        if(currentmode === 0) {
+            currentmode = 1;
+            dark.style.display = "block"; dark.play();
+            for (let key in videos) {
+                videos[key].pause();
+                videos[key].currentTime = 0;
+                videos[key].style.display = "none"
+            }
+            setTimeout(() => {
+                light.style.display = "none"
+                start.style.display = "none"
+            }, 100);
+        } else {
+            currentmode = 0;
+            light.style.display = "block"; light.play();
+            for (let key in darkvideos) {
+                darkvideos[key].pause();
+                darkvideos[key].currentTime = 0;
+                darkvideos[key].style.display = "none"
+            }
+            setTimeout(() => {
+                dark.style.display = "none"
+            }, 100);
+        }
     });
     document.getElementsByClassName("pressn")[0].style.animation="fade 5s forwards"
     load.style.animation = "fadeout 500ms forwards";
