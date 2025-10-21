@@ -6,9 +6,9 @@ function n(e) {
     if (e.key === "n") {
         start.currentTime = start.duration
         cool = 0
-        pressed=true;
+        pressed = true;
         document.querySelectorAll(".dot").forEach(dot => {
-            dot.style.display="block"
+            dot.style.display = "block"
         })
     }
     document.removeEventListener("keypress", n)
@@ -16,7 +16,7 @@ function n(e) {
 let mouseonsofa = false, mouseontv = false, mouseoneventsv = false, mouseoncomputer = false;
 
 let cool = 13;
-let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0};
+let cooldowns = { sofa: 0, tv: 0, computer: 0, eventsv: 0 };
 let lastTime = performance.now();
 let currentmode = 0;
 const dark = document.getElementById("darkmode")
@@ -34,9 +34,9 @@ const darkvideos = {
     computer: document.getElementById("dcomputer")
 }
 document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
-    if(cool>0) return;
-    cool=3;
-    if(currentmode === 0) {
+    if (cool > 0) return;
+    cool = 3;
+    if (currentmode === 0) {
         currentmode = 1;
         dark.style.display = "block"; dark.play();
         for (let key in videos) {
@@ -64,7 +64,7 @@ document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
 
 
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-if(isMobile) window.location.href = "./mobile"
+if (isMobile) window.location.href = "./mobile"
 
 function tick(now) {
     const delta = now - lastTime;
@@ -80,7 +80,7 @@ function tick(now) {
 
     for (let key in videos) {
         let video;
-        if(currentmode === 0) {
+        if (currentmode === 0) {
             video = videos[key];
         } else {
             video = darkvideos[key]
@@ -102,9 +102,9 @@ function tick(now) {
 
 function playVideo(key, mouseFlag) {
     window[mouseFlag] = true;
-    
+
     let video;
-    if(currentmode === 0) {
+    if (currentmode === 0) {
         video = videos[key];
     } else {
         video = darkvideos[key]
@@ -128,7 +128,7 @@ function playVideo(key, mouseFlag) {
 function continueVideo(key, mouseFlag) {
     window[mouseFlag] = false;
     let video;
-    if(currentmode === 0) {
+    if (currentmode === 0) {
         video = videos[key];
     } else {
         video = darkvideos[key]
@@ -247,7 +247,24 @@ function selectm(member) {
         if (cooldown < 1) clearInterval(interval);
     }, 100);
 }
+const secret = "penguin";
+let buffer = "";
 
+document.addEventListener("keydown", (e) => {
+    if(current!="aaryan_parveen" || teamd.style.animation!="1s ease 0s 1 normal forwards running pagepull") return;
+    const key = e.key.toLowerCase();
+
+    buffer += key;
+
+    if (buffer.length > secret.length) {
+        buffer = buffer.slice(-secret.length);
+    }
+
+    if (buffer === secret) {
+        window.location.href="/penguin";
+        buffer = "";
+    }
+});
 members.forEach(member => {
     member.addEventListener("click", () => {
         selectm(member);
@@ -413,10 +430,10 @@ function init() {
     requestAnimationFrame(tick)
     start.addEventListener("ended", () => {
         document.querySelectorAll(".dot").forEach(dot => {
-            dot.style.display="block"
+            dot.style.display = "block"
         })
-        cool=3;
-        if(currentmode === 0) {
+        cool = 3;
+        if (currentmode === 0) {
             currentmode = 1;
             dark.style.display = "block"; dark.play();
             for (let key in videos) {
@@ -441,12 +458,12 @@ function init() {
             }, 100);
         }
     });
-    document.getElementsByClassName("pressn")[0].style.animation="fade 5s forwards"
+    document.getElementsByClassName("pressn")[0].style.animation = "fade 5s forwards"
     load.style.animation = "fadeout 500ms forwards";
     setTimeout(() => {
         load.style.display = "none"
     }, 500);
-    if(!pressed) {
+    if (!pressed) {
         start.play();
     }
 }
@@ -455,7 +472,7 @@ document.getElementsByClassName("dcryptbtn")[0].addEventListener("click", () => 
 })
 document.getElementsByClassName("regbtn")[0].addEventListener("click", () => {
     if ((cooldowns.tv > 0 && !isMobile) || cool > 0) return;
-        window.location.href = "./register"
+    window.location.href = "./register"
 })
 $(document).ready(function ($) {
     let loaded = false;
@@ -517,98 +534,98 @@ const img = imgContainer.querySelector('img');
 let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
 
 window.addEventListener("mousemove", (e) => {
-  const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-  const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-  const rect = img.getBoundingClientRect();
+    const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    const rect = img.getBoundingClientRect();
 
-  const maxTranslateX = (rect.width - window.innerWidth) / 2;
-  const maxTranslateY = (rect.height - window.innerHeight) / 2;
+    const maxTranslateX = (rect.width - window.innerWidth) / 2;
+    const maxTranslateY = (rect.height - window.innerHeight) / 2;
 
-  targetX = -mouseX * maxTranslateX;
-  targetY = -mouseY * (maxTranslateY > 15 ? 15 : maxTranslateY);
+    targetX = -mouseX * maxTranslateX;
+    targetY = -mouseY * (maxTranslateY > 15 ? 15 : maxTranslateY);
 });
 
 function animate() {
-  const ease = 0.02;
-  currentX += (targetX - currentX) * ease;
-  currentY += (targetY - currentY) * ease;
+    const ease = 0.02;
+    currentX += (targetX - currentX) * ease;
+    currentY += (targetY - currentY) * ease;
 
-  imgContainer.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.02)`;
+    imgContainer.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.02)`;
 
-  requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 }
 animate();
 
 let dotData = [];
 
 function centroid(coords) {
-  let sx = 0, sy = 0, count = 0;
-  for (let i = 0; i < coords.length; i += 2) {
-    sx += coords[i];
-    sy += coords[i + 1];
-    count++;
-  }
-  return { x: sx / count, y: sy / count };
+    let sx = 0, sy = 0, count = 0;
+    for (let i = 0; i < coords.length; i += 2) {
+        sx += coords[i];
+        sy += coords[i + 1];
+        count++;
+    }
+    return { x: sx / count, y: sy / count };
 }
 
 function buildDotDataFromMap(mapName = "image-map") {
-  const map = document.querySelector(`map[name="${mapName}"]`);
-  if (!map) return;
-  dotData = [];
+    const map = document.querySelector(`map[name="${mapName}"]`);
+    if (!map) return;
+    dotData = [];
 
-  map.querySelectorAll("area").forEach(area => {
-    const coords = area.coords.split(",").map(Number);
-    const shape = (area.shape || "poly").toLowerCase();
-    let cx = 0, cy = 0;
+    map.querySelectorAll("area").forEach(area => {
+        const coords = area.coords.split(",").map(Number);
+        const shape = (area.shape || "poly").toLowerCase();
+        let cx = 0, cy = 0;
 
-    if (shape === "poly" || shape === "rect") {
-      const c = centroid(coords);
-      cx = c.x; cy = c.y;
-    } else if (shape === "circle") {
-      cx = coords[0]; cy = coords[1];
-    }
+        if (shape === "poly" || shape === "rect") {
+            const c = centroid(coords);
+            cx = c.x; cy = c.y;
+        } else if (shape === "circle") {
+            cx = coords[0]; cy = coords[1];
+        }
 
-    const dot = document.createElement("div");
-    dot.className = "dot";
-    imgContainer.appendChild(dot);
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        imgContainer.appendChild(dot);
 
-    dotData.push({ area, coords, shape, cx, cy, dot });
+        dotData.push({ area, coords, shape, cx, cy, dot });
 
-    area.addEventListener("mouseenter", () => dot.classList.add("active"));
-    area.addEventListener("mouseleave", () => dot.classList.remove("active"));
-  });
+        area.addEventListener("mouseenter", () => dot.classList.add("active"));
+        area.addEventListener("mouseleave", () => dot.classList.remove("active"));
+    });
 }
 
 function updateDotPositions() {
-  if (!img.naturalWidth || !img.naturalHeight) return;
+    if (!img.naturalWidth || !img.naturalHeight) return;
 
-  const scaleX = img.clientWidth / img.naturalWidth;
-  const scaleY = img.clientHeight / img.naturalHeight;
+    const scaleX = img.clientWidth / img.naturalWidth;
+    const scaleY = img.clientHeight / img.naturalHeight;
 
-  const offsetX = img.offsetLeft;
-  const offsetY = img.offsetTop;
+    const offsetX = img.offsetLeft;
+    const offsetY = img.offsetTop;
 
-  dotData.forEach(item => {
-    const left = offsetX + item.cx * scaleX;
-    const top = offsetY + item.cy * scaleY;
+    dotData.forEach(item => {
+        const left = offsetX + item.cx * scaleX;
+        const top = offsetY + item.cy * scaleY;
 
-    item.dot.style.left = `${left}px`;
-    item.dot.style.top = `${top}px`;
-  });
+        item.dot.style.left = `${left}px`;
+        item.dot.style.top = `${top}px`;
+    });
 }
 
 function initDots() {
-  buildDotDataFromMap("image-map");
-  updateDotPositions();
+    buildDotDataFromMap("image-map");
+    updateDotPositions();
 }
 
 if (img.complete) {
-  initDots();
+    initDots();
 } else {
-  img.addEventListener("load", initDots);
+    img.addEventListener("load", initDots);
 }
 
 window.addEventListener("resize", () => {
-  if (typeof imageMapResize === "function") imageMapResize();
-  updateDotPositions();
+    if (typeof imageMapResize === "function") imageMapResize();
+    updateDotPositions();
 });

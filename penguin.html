@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="./imgs/logo.png" />
+    <title>penguin</title>
+    <style>
+        @font-face {
+            font-family: 'n';
+            src: url(./fonts/ncrypt.ttf);
+        }
+        @font-face {
+            font-family: 'gt';
+            src: url(./fonts/gtwalsheim.otf);
+        }
+        @font-face {
+            font-family: 's';
+            src: url(./fonts/satoshi.ttf);
+        }
+        body {
+            background: #0b0b0b;
+            color: #fff;
+            font-family: 's';
+            font-weight: 900;
+            padding:2.5vh 4vw;
+        }
+        h1 {
+            font-size: 3em;
+            font-family: 'gt';
+        }
+        label {
+            margin-right: 5px;
+        }
+        input {
+            background: none;
+            outline: none;
+            border: none;
+            color: #f00;
+            font-family: 's';
+        }
+        input:focus {
+            outline: none;
+        }
+        p {
+            margin:0.5em 0 0 0;
+            font-weight: 500;
+        }
+        #container {
+            position: absolute;
+            width: 25%;
+            left: 50%;
+            bottom: 40%;
+            transform: translate(-50%);
+            display: flex;
+            justify-content:end;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>
+            yo
+        </h1>
+        <div class="row">
+            <label for="1">>></label><input type="text" id = "1" name = "1">
+        </div>
+    </div>
+    
+    <script>
+        let current = 1;
+        let response;
+
+        let cmds = [
+            "ping"
+            // add commands here
+        ]
+        const container = document.getElementById("container");
+        let input = document.getElementById("1")
+        document.addEventListener("click", () => {
+            input.focus();
+        })
+        function inp() {
+            input.focus();
+            input.addEventListener("change", () => {
+                let cmd = cmds.indexOf(input.value)
+                if (cmd>-1) {
+                    if(cmd == 0) {
+                        // ping command at 0th index of list
+                        response = "Pong!"
+                    } // add command responses after this with else statements
+
+                    // next line mechanism
+                    input.disabled=true;
+                    container.insertAdjacentHTML('beforeend',`<p>${response}</p><br>`)
+                    current++;
+                    container.insertAdjacentHTML('beforeend',
+                        `
+                        <div class = "row">
+                            <label for="${current}">>></label>
+                            <input type="text" id = "${current}" name = "${current}"><br>
+                        </div>
+                        `
+                    )
+                    input=document.getElementById(current)
+                    inp();
+                } else {
+                    if(input.value=="") return;
+                    alert("Invalid command!")
+                }
+            })
+        }
+        inp();
+    </script>
+</body>
+</html>
