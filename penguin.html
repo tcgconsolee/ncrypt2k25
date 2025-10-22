@@ -1,117 +1,982 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="./imgs/logo.png" />
-    <title>penguin</title>
-    <style>
-        @font-face {
-            font-family: 'n';
-            src: url(./fonts/ncrypt.ttf);
-        }
-        @font-face {
-            font-family: 'gt';
-            src: url(./fonts/gtwalsheim.otf);
-        }
-        @font-face {
-            font-family: 's';
-            src: url(./fonts/satoshi.ttf);
-        }
-        body {
-            background: #0b0b0b;
-            color: #fff;
-            font-family: 's';
-            font-weight: 900;
-            padding:2.5vh 4vw;
-        }
-        h1 {
-            font-size: 3em;
-            font-family: 'gt';
-        }
-        label {
-            margin-right: 5px;
-        }
-        input {
-            background: none;
-            outline: none;
-            border: none;
-            color: #f00;
-            font-family: 's';
-        }
-        input:focus {
-            outline: none;
-        }
-        p {
-            margin:0.5em 0 0 0;
-            font-weight: 500;
-        }
-        #container {
-            position: absolute;
-            left: 10%;
-            top: 10%;
-            height: min-content;
-            max-height: 70%;
-            display: flex;
-            justify-content:end;
-            flex-direction: column;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>penguin</title>
+<style>
+@font-face { 
+  font-family: 's'; 
+  src: url(./fonts/satoshi.ttf); 
+}
+
+:root{
+  --bg:#0a0002;
+  --red:#e10600;
+  --deep:#140003;
+  --glow:#ff1a1a;
+  --muted:#7a0006;
+  --ink:#220005;
+}
+
+/* Reset */
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}
+
+html,body{height:100%}
+body{
+  font-family: 's', sans-serif;
+  color: #fff;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, #1a0006 0%, transparent 60%),
+    radial-gradient(900px 500px at 80% 80%, #140005 0%, transparent 60%),
+    linear-gradient(180deg, #000 0%, var(--ink) 30%, var(--deep) 65%, #000 100%),
+    radial-gradient(1400px 900px at 50% 50%, #0c0002 0%, #000 70%);
+  background-color: var(--bg);
+  overflow: hidden;
+  letter-spacing: 0.03em;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* Veil effects */
+.veil::before,
+.veil::after{
+  content:"";
+  position:fixed; inset:0; pointer-events:none;
+}
+.veil::before{
+  background:
+    repeating-linear-gradient(180deg, rgba(255,0,0,0.03) 0 2px, transparent 2px 4px),
+    radial-gradient(1000px 600px at 50% 10%, rgba(225,6,0,0.04), transparent 60%);
+  mix-blend-mode: screen;
+  animation: scan 7s linear infinite;
+}
+.veil::after{
+  background:
+    radial-gradient(80vw 60vh at 50% 120%, rgba(0,0,0,0.8), transparent 60%),
+    radial-gradient(140vw 100vh at -10% -20%, rgba(0,0,0,0.7), transparent 60%);
+  filter: blur(2px);
+}
+@keyframes scan {
+  0% {transform: translateY(-10px)}
+  50% {transform: translateY(10px)}
+  100% {transform: translateY(-10px)}
+}
+
+/* Panel */
+.panel{
+  position:relative;
+  width: 800px;
+  height: 500px;
+  background: linear-gradient(180deg, rgba(32,0,3,0.9), rgba(8,0,1,0.9));
+  border: 1px solid rgba(255,0,0,0.2);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow:
+    0 0 0 1px rgba(255,0,0,0.15) inset,
+    0 30px 80px rgba(225,6,0,0.12),
+    0 6px 18px rgba(0,0,0,0.8);
+  backdrop-filter: blur(6px) saturate(120%);
+  transform: translateZ(0);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  animation: bootup 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes bootup{
+  0%{
+    transform: scale(0,0);
+    filter: brightness(0);
+    opacity: 0;
+  }
+  25%{
+    transform: scale(0.002,0.0001);
+    filter: brightness(5);
+    opacity: 0.8;
+  }
+  50%{
+    transform: scale(1,0.01);
+    filter: brightness(2);
+    opacity: 1;
+  }
+  100%{
+    transform: scale(1,1);
+    filter: brightness(1);
+    opacity: 1;
+  }
+}
+
+/* Meta bar */
+.meta{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; margin-bottom: 14px;
+  color: rgba(255,255,255,0.65);
+  font-size: 12px; text-transform: uppercase;
+  letter-spacing: .18em;
+}
+.dot{width:8px;height:8px;border-radius:999px;background:var(--red);box-shadow:0 0 16px var(--glow),0 0 2px var(--glow);}
+
+/* Title */
+.title{
+  font-size: 3em;
+  line-height: 0.95;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 6px 0 20px;
+  color:#fff;
+  text-shadow:
+    0 0 10px rgba(255, 26, 26, 0.25),
+    0 0 28px rgba(225, 6, 0, 0.25);
+  position:relative;
+  display:inline-block;
+  letter-spacing:.06em;
+  filter: drop-shadow(0 0 6px rgba(255,0,0,0.25));
+  animation: hum 3.3s ease-in-out infinite;
+}
+@keyframes hum{
+  0%,100%{transform: translateZ(0) scale(1)}
+  50%{transform: translateZ(0) scale(1.005)}
+}
+
+/* Glitch effect */
+.title .glitch{
+  position:relative; display:inline-block;
+}
+.title .glitch::before,
+.title .glitch::after{
+  content:attr(data-text);
+  position:absolute; left:0; top:0; width:100%; overflow:hidden;
+  clip-path: polygon(0 0,100% 0,100% 45%,0 60%);
+  mix-blend-mode:screen;
+}
+.title .glitch::before{
+  transform: translate(-2px, -1px);
+  text-shadow: -2px 0 var(--glow);
+  opacity:.7;
+  animation: glitch1 2.2s infinite linear alternate-reverse;
+}
+.title .glitch::after{
+  transform: translate(2px, 1px);
+  text-shadow: 2px 0 var(--red);
+  opacity:.6;
+  animation: glitch2 1.6s infinite linear alternate;
+}
+@keyframes glitch1{
+  0%{clip-path: polygon(0 10%,100% 5%,100% 22%,0 28%)}
+  50%{clip-path: polygon(0 62%,100% 55%,100% 70%,0 76%)}
+  100%{clip-path: polygon(0 82%,100% 78%,100% 96%,0 100%)}
+}
+@keyframes glitch2{
+  0%{clip-path: polygon(0 0,100% 0,100% 12%,0 18%)}
+  50%{clip-path: polygon(0 34%,100% 30%,100% 48%,0 52%)}
+  100%{clip-path: polygon(0 68%,100% 66%,100% 86%,0 90%)}
+}
+
+/* Terminal */
+#terminal{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  color:#ffb3b3;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,0,0,0.15);
+  border-radius: 12px;
+  padding: 18px;
+  flex:1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: inset 0 0 20px rgba(255,0,0,0.08);
+  font-size: 14px;
+  line-height: 1.6;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  white-space: pre-wrap;
+}
+
+#terminal p:first-of-type {
+  margin-top: -50px;
+}
+#terminal::-webkit-scrollbar{
+  display: none; /* Chrome/Safari/Opera */
+}
+.row{
+  display:flex;
+  align-items:center;
+  margin: 6px 0;
+  
+}
+
+.row:first-child {
+  margin-top: 0;
+}
+label{
+  color:#ff7070;
+  margin-right: 8px;
+  font-weight: 600;
+}
+input{
+  background:none;
+  border:none;
+  outline:none;
+  color:#ffdada;
+  font-family:inherit;
+  font-size:1em;
+  width:100%;
+  flex:1;
+}
+input:focus{outline:none;}
+p{
+  margin: 4px 0 0 20px;
+  color:#ffbfbf;
+  font-size:.95em;
+}
+
+/* Embers */
+.embers{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.ember{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background: var(--glow);
+  box-shadow: 0 0 10px var(--glow), 0 0 2px var(--glow);
+  top: 100%;
+  left: 50%;
+  animation: rise linear infinite;
+  opacity:.55;
+  border-radius:999px;
+}
+@keyframes rise{
+  0%{transform: translate(-50%,0) scale(1); opacity:.1}
+  80%{opacity:.8}
+  100%{transform: translate(calc(-50% + var(--x)), -120vh) scale(0.6); opacity:0}
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce){
+  .veil::before,.title,.title .glitch::before,.title .glitch::after,.ember{animation:none}
+}
+
+/* CRT Shutdown */
+@keyframes crt-shutdown{
+  0%{
+    transform: scale(1,1);
+    filter: brightness(1);
+    opacity: 1;
+  }
+  50%{
+    transform: scale(1,0.01);
+    filter: brightness(2);
+    opacity: 1;
+  }
+  75%{
+    transform: scale(0.002,0.0001);
+    filter: brightness(5);
+    opacity: 0.8;
+  }
+  100%{
+    transform: scale(0,0);
+    filter: brightness(0);
+    opacity: 0;
+  }
+}
+
+.panel.shutdown{
+  animation: crt-shutdown 0.8s cubic-bezier(0.5, 1, 0.32, 1) forwards;
+}
+
+.veil.shutdown::before{
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+</style>
 </head>
 <body>
-    <div id="container">
-        <h1>
-            yo
-        </h1>
-        <div class="row">
-            <label for="1">>></label><input type="text" id = "1" name = "1">
-        </div>
+<div class="veil"></div>
+
+<section class="panel">
+    <div class="meta">
+      <span>Channel: NOVA</span>
+      <div class="dot"></div>
+      <span>Terminal: ACTIVE</span>
     </div>
-    
-    <script>
-        let current = 1;
-        let response;
 
-        let cmds = [
-            "ping"
-            // add commands here
-        ]
-        const container = document.getElementById("container");
-        let input = document.getElementById("1")
-        document.addEventListener("click", () => {
-            input.focus();
-        })
-        function inp() {
-            input.focus();
-            input.addEventListener("change", () => {
-                let cmd = cmds.indexOf(input.value)
-                if (cmd>-1) {
-                    if(cmd == 0) {
-                        // ping command at 0th index of list
-                        response = "Pong!"
-                    } // add command responses after this with else statements
+    <h1 class="title"><span class="glitch" data-text="hypernova:~$">hypernova:~$</span></h1>
 
-                    // next line mechanism
-                    input.disabled=true;
-                    container.insertAdjacentHTML('beforeend',`<p>${response}</p><br>`)
-                    current++;
-                    container.insertAdjacentHTML('beforeend',
-                        `
-                        <div class = "row">
-                            <label for="${current}">>></label>
-                            <input type="text" id = "${current}" name = "${current}"><br>
-                        </div>
-                        `
-                    )
-                    input=document.getElementById(current)
-                    inp();
-                } else {
-                    if(input.value=="") return;
-                    alert("Invalid command!")
-                }
-            })
+    <div id="terminal"><div class='row'>
+        <label>❯</label><input type='text' id='1' autofocus>
+      </div>
+    </div>
+
+    <div class="embers" id="embers"></div>
+</section>
+
+<script>
+  
+  // Embers
+  const root=document.getElementById('embers');
+  const count = Math.min(80, Math.max(30, Math.floor(window.innerWidth/20)));
+  for(let i=0;i<count;i++){
+    const e=document.createElement('div');
+    e.className='ember';
+    const delay=Math.random()*6;
+    const dur=6+Math.random()*9;
+    const x=(Math.random()*200-100)+'vw';
+    const left=(Math.random()*100)+'vw';
+    e.style.left=left;
+    e.style.animationDuration=dur+'s';
+    e.style.animationDelay=(-delay)+'s';
+    e.style.setProperty('--x',x);
+    root.appendChild(e);
+  }
+
+  // Filesystem
+  let currentDir = '/home/penguin';
+  const FS = {
+    '/home/penguin': ['readme.md','logs','.bash_history','poems','about.txt'],
+    '/home/penguin/poems': ['the_tyger.txt','the_heavenly_spheres.txt','ozymandias.txt','do_not_go_gentle.txt','graveyard.txt','the_chamber_of_lies.txt']
+
+  };
+  const FILES = {
+    '/home/penguin/readme.md':'NOVA CHANNEL TERMINAL v23.02.14.06-alpha\nAuthorized personnel only.\nGlory to Penguins.',
+    '/home/penguin/logs':'[SYSTEM] Boot sequence initiated\n[SYSTEM] All systems nominal\n[SYSTEM] Channel NOVA active',
+    '/home/penguin/.bash_history':'ifconfig\nls\nuname -a\nrm poems/graveyard.txt\necho "Some other day." > poems/graveyard.txt\nnc 84.4.9.25 84\napt-get install penguinfacts\nyellow\nalias 143="wolf"',
+    '/home/penguin/about.txt':"Hypernova, the God of the Penguin's New World, filled with easter eggs about penguins and wolves. Arise, Awake, and Stop not until the goal is reached.",
+    '/home/penguin/poems/the_tyger.txt':'Tyger Tyger, burning bright,\nIn the forests of the night;\nWhat immortal hand or eye,\nCould frame thy fearful symmetry?\n\nIn what distant deeps or skies\nBurnt the fire of thine eyes?\nOn what wings dare he aspire?\nWhat the hand, dare seize the fire?',
+    '/home/penguin/poems/heavenly_spheres.txt':'Look how the floor of heaven\nIs thick inlaid with patines of bright gold:\nThere\'s not the smallest orb which thou behold\'st\nBut in his motion like an angel sings,\nStill quiring to the young-eyed cherubins.',
+    '/home/penguin/poems/ozymandias.txt':'I met a traveller from an antique land,\nWho said—"Two vast and trunkless legs of stone\nStand in the desert... Near them, on the sand,\nHalf sunk a shattered visage lies, whose frown,\nAnd wrinkled lip, and sneer of cold command,\nTell that its sculptor well those passions read"',
+    '/home/penguin/poems/do_not_go_gentle.txt':'Do not go gentle into that good night,\nOld age should burn and rave at close of day;\nRage, rage against the dying of the light.\n\nThough wise men at their end know dark is right,\nBecause their words had forked no lightning they\nDo not go gentle into that good night.',
+    '/home/penguin/poems/the_chamber_of_lies.txt':'In weary days, theres a mind in plight,\nA soul so apathetic, of reality\'s sight,\nWith everything that should suffice,\nYet nothing which may entice.\n\nSuddenly, a new world is to perceive,\nA room so bright, his wildest fantasies, at arms reach.\nA place of joy, too good to be true\nA haven of delight, a moment\'s peace to pursue.\n\nThe clock ticks down, moments turn to days,\nUntil at last on his mind it weighs,\nA desire to know, outside what lurks and lumbers,\nPointing to a window, a glimpse, of the shadows and the thunders.\n\nA world unknown, a mystery to unfold,\nThe night\'s eclipse and the noises never growing old.\nDays spent with no regard for existence,\nIn pure bliss, the bliss of ignorance.\n\nSoon enough, the fear creeps in,\nThe room, a trap, a world of illusion.\nThe window shows, an endless night,\nA reflection, an end of light.\n\nIn desperation, a plea to wake,\nHe calls for the morning\'s break.\nAnd then, the eyes open with a snap,\nThe chamber of dreams, a forgotten wrap.\n\nA Thank to God, a rather grateful thought.\nBut then, a strange idea crosses the mind,\nhe Laughs, "What if this too, is just a simulation?"\nA never-ending cycle of imagination.',
+    '/home/penguin/poems/the_heavenly_spheres.txt':'In our pursuit for greatness,\nWe sought the heavenly spheres.\nChasing the promise of glory,\nand the idea of eternal wares.\n\nWe climbed the tallest mountains\nand sailed the roughest seas.\nI left far behind the "mortals",\nwho gave up the joy that was never to cease.\n\nBlinded by the dazzle of my triumphs,\nI felt the sands of the desert\nslipping away, as I arched ever closer\nto the mission at play.\n\nToday, I stand at the pinnacle,\nthe pinnacle of my fleet to the stars.\nYet it is now that I embrace the world below,\nthe moments in full glory, those I failed to bestow.\n\nThe heavenly trees and the heavenly streams,\nthe laughter of life and the warmth of its dreams.\nA realization that now dawns upon me,\nalong with this night, frail and gray.\n\nAs I rest upon this pedestal high,\nI shall be telling those who pass me by:\n\nIn my pursuit for greatness,\nI sought the heavenly spheres.\nChasing the promise of glory,\nand the idea of eternal wares.',
+    '/home/penguin/poems/graveyard.txt':'Some other day.'
+
+  };
+
+  // Terminal
+  let current=1;
+  const terminal=document.getElementById("terminal");
+  let input=document.getElementById("1");
+  let commandHistory=[];
+  let historyIndex=-1;
+  
+  
+  document.addEventListener("click",()=>input.focus());
+  document.addEventListener("copy",e=>e.preventDefault());
+  document.addEventListener("cut",e=>e.preventDefault());
+  document.addEventListener("paste",e=>e.preventDefault());
+  document.addEventListener("contextmenu",e=>e.preventDefault());
+  document.addEventListener("selectstart",e=>e.preventDefault());
+  document.addEventListener("dragstart",e=>e.preventDefault());
+
+  function addLine(text){
+  terminal.insertAdjacentHTML("beforeend",`<p>${text.trimStart()}</p>`);
+}
+
+  function newInput(){
+    current++;
+    terminal.insertAdjacentHTML("beforeend",`<div class='row'><label>❯</label><input type='text' id='${current}'></div>`);
+    input=document.getElementById(current);
+    input.focus();
+    handleInput();
+  }
+
+  function handleInput(){
+    input.addEventListener("keydown",(e)=>{
+      if(e.key==="ArrowUp"){
+        e.preventDefault();
+        if(commandHistory.length>0&&historyIndex<commandHistory.length-1){
+          historyIndex++;
+          input.value=commandHistory[commandHistory.length-1-historyIndex];
         }
-        inp();
-    </script>
+      }else if(e.key==="ArrowDown"){
+        e.preventDefault();
+        if(historyIndex>0){
+          historyIndex--;
+          input.value=commandHistory[commandHistory.length-1-historyIndex];
+        }else if(historyIndex===0){
+          historyIndex=-1;
+          input.value="";
+        }
+      }
+    });
+    
+    input.addEventListener("change",()=>{
+      let cmdline=input.value.trim();
+      if(cmdline){
+        commandHistory.push(cmdline);
+        historyIndex=-1;
+      }
+      let args = cmdline.split(' ');
+      let cmd = args[0].toLowerCase();
+      let out = "";
+
+      switch(cmd){
+        case 'help':
+          out="Available commands: scan, decrypt, clear, help, status, version, echo, whoami, logs, glory, pwd, ls, cd, cat, close, shutdown, exit";
+          break;
+        case 'scan':
+          if(args[1]==='84.4.9.25'){
+            out="SCANNING TARGET: 84.4.9.25\n\nPORT 84 [OPEN]\n  Service: BITING\n  Protocol: FANGS\n  Status: INFATUATED\n  Threat Level: CRIMSON\n\nPORT 666 [FILTERED]\n  Service: ENCRYPTED_WHISPERS\n  Last Activity: 3m ago\n\nDEVICE SIGNATURE: PENGUIN_NODE_7F\nWARNING: Anomalous traffic detected\nRECOMMENDATION: Avoid engagement";
+          }else if(args[1]){
+            const targets=['UNKNOWN_HOST','CIVILIAN_NODE','ENCRYPTED_TARGET','DARK_SECTOR_12'];
+            out="SCANNING TARGET: "+args[1]+"\n\nStatus: "+targets[Math.floor(Math.random()*targets.length)]+"\nPorts: CLOSED\nAccess: DENIED";
+          }else{
+            const sectors=['SECTOR 23','SECTOR 2','SECTOR 8','QUADRANT RED'];
+            const statuses=['SECURE','COMPROMISED','ACTIVE','DORMANT','INACTIVE'];
+            const packets=['0.03%','0.12%','0.01%','0.08%'];
+            const threats=['NONE','LOW','ELEVATED','CRITICAL'];
+            out="SCAN REPORT: "+sectors[Math.floor(Math.random()*sectors.length)]+" "+statuses[Math.floor(Math.random()*statuses.length)]+"\nStatus: "+statuses[Math.floor(Math.random()*statuses.length)]+"\nPacket Loss: "+packets[Math.floor(Math.random()*packets.length)]+"\nThreat Level: "+threats[Math.floor(Math.random()*threats.length)];
+          }
+          break;
+        case 'decrypt':
+          out="ZWxpdGUgYnkgYmlydGg";
+          break;
+        case 'clear':
+          terminal.innerHTML=`<div class='row'><label>❯</label><input type='text' id='1'></div>`;
+          input=document.getElementById("1");
+          current=1;
+          handleInput();
+          return;
+        case 'status':
+          out="Channel: NOVA ACTIVE\nIntegrity: 100%\nSleep: NONE\nUptime: 10000 days";
+          break;
+        case 'version':
+          out="Terminal v23.02.14.06-alpha";
+          break;
+        case 'whoami':
+          out="what does it matter anyway";
+          break;
+        case 'echo':
+          out=args.slice(1).join(' ');
+          break;
+        case 'logs':
+          out="Log entries:\n001 INIT\n002 PING\n003 ERROR";
+          break;
+        case 'glory':
+          out="glory to penguins";
+          break;
+        case 'pwd':
+          out=currentDir;
+          break;
+        case 'ls':
+          if(args[1]==='-a'){
+            out=(FS[currentDir] || []).concat(['.bash_history']).join('  ');
+          } else {
+            out=(FS[currentDir] || []).join('  ');
+          }
+          break;
+        case 'cd':
+          if(FS[currentDir].includes(args[1])){
+            currentDir += '/'+args[1];
+            out="";
+          } else { out="Directory not found"; }
+          break;
+        case 'cat':
+          let path=currentDir+'/'+args[1];
+          if(FILES[path]) out=FILES[path];
+          else out="File not found";
+          break;
+        case 'snake':
+          out="Game functionality removed.";
+          break;
+          out="Launching Snake Game...";
+          input.disabled=true;
+          addLine(out);
+          setTimeout(()=>{
+            // Fade out title
+            document.querySelector('.title').style.transition = 'opacity 0.6s';
+            document.querySelector('.title').style.opacity = '0';
+            setTimeout(()=>{
+              // CRT shutdown
+              document.querySelector('.panel').classList.add('shutdown');
+              document.querySelector('.veil').classList.add('shutdown');
+              setTimeout(()=>{
+                // Launch snake game
+                document.body.innerHTML = `
+                  <style>
+                    @font-face { 
+                      font-family: 's'; 
+                      src: url(./fonts/satoshi.ttf); 
+                    }
+                    *{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}
+                    html,body{height:100%}
+                    body{
+                      font-family:'s',sans-serif;
+                      color:#fff;
+                      background:
+                        radial-gradient(1200px 600px at 20% 10%, #1a0006 0%, transparent 60%),
+                        radial-gradient(900px 500px at 80% 80%, #140005 0%, transparent 60%),
+                        linear-gradient(180deg, #000 0%, #220005 30%, #140003 65%, #000 100%),
+                        radial-gradient(1400px 900px at 50% 50%, #0c0002 0%, #000 70%);
+                      background-color: #0a0002;
+                      overflow:hidden;
+                      letter-spacing:0.03em;
+                      display:flex;
+                      justify-content:center;
+                      align-items:center;
+                      animation: fadeIn 0.4s ease-out;
+                    }
+                    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+                    .veil::before,.veil::after{content:"";position:fixed;inset:0;pointer-events:none}
+                    .veil::before{
+                      background:
+                        repeating-linear-gradient(180deg, rgba(255,0,0,0.03) 0 2px, transparent 2px 4px),
+                        radial-gradient(1000px 600px at 50% 10%, rgba(225,6,0,0.04), transparent 60%);
+                      mix-blend-mode:screen;
+                      animation:scan 7s linear infinite;
+                    }
+                    .veil::after{
+                      background:
+                        radial-gradient(80vw 60vh at 50% 120%, rgba(0,0,0,0.8), transparent 60%),
+                        radial-gradient(140vw 100vh at -10% -20%, rgba(0,0,0,0.7), transparent 60%);
+                      filter:blur(2px);
+                    }
+                    @keyframes scan{0%{transform:translateY(-10px)}50%{transform:translateY(10px)}100%{transform:translateY(-10px)}}
+                    .panel{
+                      position:relative;
+                      width:800px;
+                      height:500px;
+                      background:linear-gradient(180deg, rgba(32,0,3,0.9), rgba(8,0,1,0.9));
+                      border:1px solid rgba(255,0,0,0.2);
+                      border-radius:20px;
+                      padding:32px;
+                      box-shadow:
+                        0 0 0 1px rgba(255,0,0,0.15) inset,
+                        0 30px 80px rgba(225,6,0,0.12),
+                        0 6px 18px rgba(0,0,0,0.8);
+                      backdrop-filter:blur(6px) saturate(120%);
+                      transform:translateZ(0);
+                      display:flex;
+                      flex-direction:column;
+                      overflow:hidden;
+                      animation:bootup 0.8s cubic-bezier(0.23,1,0.32,1);
+                    }
+                    @keyframes bootup{
+                      0%{transform:scale(0,0);filter:brightness(0);opacity:0}
+                      25%{transform:scale(0.002,0.0001);filter:brightness(5);opacity:0.8}
+                      50%{transform:scale(1,0.01);filter:brightness(2);opacity:1}
+                      100%{transform:scale(1,1);filter:brightness(1);opacity:1}
+                    }
+                    .meta{
+                      display:flex;align-items:center;justify-content:space-between;
+                      gap:12px;margin-bottom:14px;
+                      color:rgba(255,255,255,0.65);
+                      font-size:12px;text-transform:uppercase;
+                      letter-spacing:.18em;
+                    }
+                    .dot{width:8px;height:8px;border-radius:999px;background:#e10600;box-shadow:0 0 16px #ff1a1a,0 0 2px #ff1a1a}
+                    .title{
+                      font-size:3em;line-height:0.95;font-weight:800;text-transform:uppercase;
+                      margin:6px 0 20px;color:#fff;
+                      text-shadow:0 0 10px rgba(255,26,26,0.25),0 0 28px rgba(225,6,0,0.25);
+                      position:relative;display:inline-block;letter-spacing:.06em;
+                      filter:drop-shadow(0 0 6px rgba(255,0,0,0.25));
+                      animation:hum 3.3s ease-in-out infinite;
+                    }
+                    @keyframes hum{0%,100%{transform:translateZ(0) scale(1)}50%{transform:translateZ(0) scale(1.005)}}
+                    .title .glitch{position:relative;display:inline-block}
+                    .title .glitch::before,.title .glitch::after{
+                      content:attr(data-text);position:absolute;left:0;top:0;width:100%;overflow:hidden;
+                      clip-path:polygon(0 0,100% 0,100% 45%,0 60%);mix-blend-mode:screen;
+                    }
+                    .title .glitch::before{
+                      transform:translate(-2px,-1px);text-shadow:-2px 0 #ff1a1a;opacity:.7;
+                      animation:glitch1 2.2s infinite linear alternate-reverse;
+                    }
+                    .title .glitch::after{
+                      transform:translate(2px,1px);text-shadow:2px 0 #e10600;opacity:.6;
+                      animation:glitch2 1.6s infinite linear alternate;
+                    }
+                    @keyframes glitch1{
+                      0%{clip-path:polygon(0 10%,100% 5%,100% 22%,0 28%)}
+                      50%{clip-path:polygon(0 62%,100% 55%,100% 70%,0 76%)}
+                      100%{clip-path:polygon(0 82%,100% 78%,100% 96%,0 100%)}
+                    }
+                    @keyframes glitch2{
+                      0%{clip-path:polygon(0 0,100% 0,100% 12%,0 18%)}
+                      50%{clip-path:polygon(0 34%,100% 30%,100% 48%,0 52%)}
+                      100%{clip-path:polygon(0 68%,100% 66%,100% 86%,0 90%)}
+                    }
+                    .game-area{
+                      flex:1;
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      padding:0;
+                    }
+                    #gameCanvas{
+                      border:1px solid rgba(255,0,0,0.15);
+                      border-radius:12px;
+                      box-shadow:inset 0 0 20px rgba(255,0,0,0.08);
+                      background:rgba(0,0,0,0.25);
+                    }
+                    .score{
+                      position:absolute;
+                      top:70px;
+                      right:32px;
+                      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+                      font-size:14px;
+                      color:#ffb3b3;
+                      letter-spacing:0.1em;
+                    }
+                    .back-hint{
+                      position:absolute;
+                      bottom:32px;
+                      left:32px;
+                      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+                      font-size:12px;
+                      color:rgba(255,255,255,0.4);
+                      letter-spacing:0.1em;
+                    }
+                    .embers{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+                    .ember{
+                      position:absolute;width:2px;height:2px;background:#ff1a1a;
+                      box-shadow:0 0 10px #ff1a1a,0 0 2px #ff1a1a;
+                      top:100%;left:50%;animation:rise linear infinite;
+                      opacity:.55;border-radius:999px;
+                    }
+                    @keyframes rise{
+                      0%{transform:translate(-50%,0) scale(1);opacity:.1}
+                      80%{opacity:.8}
+                      100%{transform:translate(calc(-50% + var(--x)),-120vh) scale(0.6);opacity:0}
+                    }
+                    .game-over{
+                      position:absolute;inset:0;
+                      background:rgba(0,0,0,0.9);
+                      display:flex;align-items:center;justify-content:center;
+                      flex-direction:column;gap:20px;
+                      animation:fadeIn 0.3s ease-out;
+                      border-radius:20px;
+                    }
+                    .game-over-title{
+                      font-size:48px;font-weight:800;text-transform:uppercase;
+                      letter-spacing:0.15em;color:#ff4242;
+                      text-shadow:0 0 30px rgba(255,0,0,0.6);
+                    }
+                    .final-score{font-size:24px;color:#fff;letter-spacing:0.1em}
+                  </style>
+                  <div class="veil"></div>
+                  <section class="panel">
+                    <div class="meta">
+                      <span>Channel: GAME</span>
+                      <div class="dot"></div>
+                      <span>Snake: ACTIVE</span>
+                    </div>
+                    <h1 class="title"><span class="glitch" data-text="SNAKE">SNAKE</span></h1>
+                    <div class="score">SCORE: <span id="score">0</span></div>
+                    <div class="back-hint">ESC TO EXIT</div>
+                    <div class="game-area">
+                      <canvas id="gameCanvas" width="720" height="340"></canvas>
+                    </div>
+                    <div class="embers" id="embers"></div>
+                  </section>
+                  <script>
+                    // Embers
+                    const root=document.getElementById('embers');
+                    const count=Math.min(80,Math.max(30,Math.floor(window.innerWidth/20)));
+                    for(let i=0;i<count;i++){
+                      const e=document.createElement('div');
+                      e.className='ember';
+                      const delay=Math.random()*6;
+                      const dur=6+Math.random()*9;
+                      const x=(Math.random()*200-100)+'vw';
+                      const left=(Math.random()*100)+'vw';
+                      e.style.left=left;
+                      e.style.animationDuration=dur+'s';
+                      e.style.animationDelay=(-delay)+'s';
+                      e.style.setProperty('--x',x);
+                      root.appendChild(e);
+                    }
+                    
+                    // Snake Game
+                    const canvas=document.getElementById('gameCanvas');
+                    const ctx=canvas.getContext('2d');
+                    const gridSize=20;
+                    const tileCountX=36;
+                    const tileCountY=17;
+                    
+                    let snake=[{x:5,y:8},{x:4,y:8},{x:3,y:8}];
+                    let dx=1,dy=0;
+                    let food={x:25,y:8};
+                    let score=0;
+                    let gameLoop;
+                    let gameActive=true;
+                    
+                    function placeFood(){
+                      let newFood;
+                      do{
+                        newFood={
+                          x:Math.floor(Math.random()*tileCountX),
+                          y:Math.floor(Math.random()*tileCountY)
+                        };
+                      }while(snake.some(s=>s.x===newFood.x&&s.y===newFood.y));
+                      food=newFood;
+                    }
+                    
+                    function draw(){
+                      ctx.fillStyle='rgba(10,0,2,0.9)';
+                      ctx.fillRect(0,0,canvas.width,canvas.height);
+                      
+                      ctx.strokeStyle='rgba(255,0,0,0.05)';
+                      ctx.lineWidth=1;
+                      for(let i=0;i<=tileCountX;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(i*gridSize,0);
+                        ctx.lineTo(i*gridSize,canvas.height);
+                        ctx.stroke();
+                      }
+                      for(let i=0;i<=tileCountY;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(0,i*gridSize);
+                        ctx.lineTo(canvas.width,i*gridSize);
+                        ctx.stroke();
+                      }
+                      
+                      // Draw snake
+                      snake.forEach((segment,i)=>{
+                        const opacity=1-(i/snake.length)*0.4;
+                        
+                        if(i===0){
+                          // Head with strong glow
+                          ctx.shadowBlur=20;
+                          ctx.shadowColor='#ff4242';
+                          ctx.fillStyle='#ff4242';
+                          ctx.fillRect(segment.x*gridSize+2,segment.y*gridSize+2,gridSize-4,gridSize-4);
+                          ctx.shadowBlur=0;
+                        }else{
+                          // Body
+                          ctx.fillStyle='rgba(255,66,66,'+opacity+')';
+                          ctx.fillRect(segment.x*gridSize+2,segment.y*gridSize+2,gridSize-4,gridSize-4);
+                        }
+                      });
+                      
+                      // Draw food with glow
+                      ctx.shadowBlur=25;
+                      ctx.shadowColor='#ff1a1a';
+                      ctx.fillStyle='#ff4242';
+                      ctx.beginPath();
+                      ctx.arc(food.x*gridSize+gridSize/2,food.y*gridSize+gridSize/2,gridSize/2-3,0,Math.PI*2);
+                      ctx.fill();
+                      ctx.shadowBlur=0;
+                    }
+                    
+                    function update(){
+                      if(!gameActive)return;
+                      
+                      const head={x:snake[0].x+dx,y:snake[0].y+dy};
+                      
+                      if(head.x<0||head.x>=tileCountX||head.y<0||head.y>=tileCountY){
+                        gameOver();
+                        return;
+                      }
+                      
+                      if(snake.some(segment=>segment.x===head.x&&segment.y===head.y)){
+                        gameOver();
+                        return;
+                      }
+                      
+                      snake.unshift(head);
+                      
+                      if(head.x===food.x&&head.y===food.y){
+                        score++;
+                        document.getElementById('score').textContent=score;
+                        placeFood();
+                      }else{
+                        snake.pop();
+                      }
+                      
+                      draw();
+                    }
+                    
+                    function gameOver(){
+                      gameActive=false;
+                      clearInterval(gameLoop);
+                      document.querySelector('.panel').insertAdjacentHTML('beforeend','<div class="game-over"><div class="game-over-title">GAME OVER</div><div class="final-score">FINAL SCORE: '+score+'</div></div>');
+                      setTimeout(()=>{
+                        document.querySelector('.game-over').style.transition='opacity 0.5s';
+                        document.querySelector('.game-over').style.opacity='0';
+                        setTimeout(()=>{
+                          location.reload();
+                        },500);
+                      },3000);
+                    }
+                    
+                    document.addEventListener('keydown',e=>{
+                      if(e.key==='Escape'||e.keyCode===27){
+                        e.preventDefault();
+                        gameActive=false;
+                        clearInterval(gameLoop);
+                        location.reload();
+                        return;
+                      }
+                      
+                      if(!gameActive)return;
+                      
+                      e.preventDefault();
+                      if((e.key==='ArrowUp'||e.keyCode===38)&&dy===0){dx=0;dy=-1}
+                      if((e.key==='ArrowDown'||e.keyCode===40)&&dy===0){dx=0;dy=1}
+                      if((e.key==='ArrowLeft'||e.keyCode===37)&&dx===0){dx=-1;dy=0}
+                      if((e.key==='ArrowRight'||e.keyCode===39)&&dx===0){dx=1;dy=0}
+                    });
+                    
+                    // Initial draw and start
+                    draw();
+                    gameLoop=setInterval(update,120);
+                  <\/script>
+                `;
+              },800);
+            },600);
+          },500);
+          return;
+        case 'close':
+        case 'shutdown':
+        case 'exit':
+          out="Shutting down...";
+          input.disabled=true;
+          addLine(out);
+          setTimeout(()=>{
+            // Fade out title first
+            document.querySelector('.title').style.transition = 'opacity 0.6s';
+            document.querySelector('.title').style.opacity = '0';
+            setTimeout(()=>{
+              // CRT shutdown
+              document.querySelector('.panel').classList.add('shutdown');
+              document.querySelector('.veil').classList.add('shutdown');
+              setTimeout(()=>{
+                // Show ASCII art with proper aesthetic
+                document.body.innerHTML = `
+                  <style>
+                    @font-face { 
+                      font-family: 's'; 
+                      src: url(./fonts/satoshi.ttf); 
+                    }
+                    *{user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}
+                    .shutdown-screen{
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      height:100vh;
+                      background:
+                        radial-gradient(1200px 600px at 20% 10%, #1a0006 0%, transparent 60%),
+                        radial-gradient(900px 500px at 80% 80%, #140005 0%, transparent 60%),
+                        linear-gradient(180deg, #000 0%, #220005 30%, #140003 65%, #000 100%);
+                      background-color: #0a0002;
+                      animation: fadeIn 0.4s ease-out;
+                    }
+                    @keyframes fadeIn{
+                      from{opacity:0}
+                      to{opacity:1}
+                    }
+                    .shutdown-content{
+                      text-align:center;
+                      font-family:'s',sans-serif;
+                      animation: glowPulse 2s ease-in-out infinite;
+                    }
+                    @keyframes glowPulse{
+                      0%,100%{filter:brightness(1)}
+                      50%{filter:brightness(1.3)}
+                    }
+                    .ascii-art{
+                      color:#ff4242;
+                      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+                      font-size:13px;
+                      line-height:1.2;
+                      text-shadow:0 0 10px rgba(255,0,0,0.5);
+                      margin-bottom:20px;
+                    }
+                    .status-text{
+                      color:#fff;
+                      font-size:18px;
+                      font-weight:700;
+                      text-transform:uppercase;
+                      letter-spacing:0.2em;
+                      text-shadow:0 0 20px rgba(255,0,0,0.4);
+                      margin-bottom:10px;
+                    }
+                    .trace-text{
+                      color:rgba(255,255,255,0.6);
+                      font-size:13px;
+                      letter-spacing:0.15em;
+                    }
+                  </style>
+                  <div class="shutdown-screen">
+                    <div class="shutdown-content">
+                      <pre class="ascii-art">@@@@@@@@%#@@%#@@@%%##%%%%%%%%%%%%%@@@@@@@@@%#+*%@@@@@@@%#***###%%%%%%%%%**#%@@
+@@@@@@@@%%%@@@%%%%%%%%%%%%@%%@@@@@%%####%%%%*+*%%@@@%%@@@%#*******#%%%%%%%@@@@
+@@@@@@@@@@@%%@%@%%%%@@@@@@@@@@@%#***#%%@@%%*+*%%%%%@@@%@@@@%%%%##****#%%%%@%#@
+@@@@@@@@@@@@@%%%#%@@@@@@@@@@@@*+*#%@@@@@@@@%**%%%%%%@@%%@%@@@@%#*#%#*+*#%%%@#%
+@@@@%@@%%%%%%@@@@@@@@@@@@@@@#++#@@@@@@@@@@%*+#@@%%%%%%%%%%@@@@@@%#**#%*++#%@@@
+@@%%%%%%%%%%%%%@@%%@@@@@@@#+=#@@@@@%%%@@@@%**%%@@@@%%%%%%%%%###%%%%%***#*==#@@
+%%%%%%%%%%%%@@@@@%##%@@@%*=*#@@@%%%%@@@@@%#=+%@@%%%@@@@%***#%%%####%@%*+**+*%@
+%%%%%%%%%%%@@@@@@@@%##%#+=*%%%%%%@@@@@@%%%*=*%%%%%%%@@@%###*+++##%#**%@%#*##@@
+%%%%%%%%%%@@@@@@@@@@%*+-=#####%@@@@@@@@@@@#*%@@@@@@%@@@@@%#+:..:=*###**#%%%%@@
+%%%%%%%%%%%@@@@@@@@@@@%##%%@@@@@@@@#==++***+%@@@@@@@@@@@@@%%*+-=+**#%%%#*+#%#*
+%%%%%%%%%%%@@@@@@@%%%%@@@@@@@@@@@#...........=@@@@@@@@@@@@@@%%%#***#%%@@%%%#*#
+%%%%%%%%%%@@@@@@@%@@@@@@@@@@@@@@@:.............%@@@@@@@@@@@@@%%%%#%%%%%@@@@@@@
+%%%%%%%%######%@@@@@@@@@@@@@@@@@@-.............#%%%%%%%@@@@@@%%%%%%@%%%%@@@@@@
+%%%%%#####*+==*#%@@@@@@@@@@@@@@@@#............:%%%%%%%%%@@@@%%%%%##%%%@@@@@@@@
+%%%%%%%%%%%####%%@@@@@@@@@@@@@@@@@:...........*%%%%%%%#**#%%@@%%%#####%@@@@@@@
+%%%%%%%%%%%%@@%%@%%%@%*+==+#@@@@@@#..........-@@%#=::........:*%%%##***#%@@@@@
+@@%%%%%%%%%#%%%%%@%+..........:=%@#-.::::...:+@#-::............=%%%##*+**#%@@@
+@%%#*=-::---:::-=+.............:::=*:::::..::#--::..............:%%%%#****##%@
+@@%#+--::::::..................:::::-:::::..::-:.................#%%%%#*++++*%
+@@@%%*+==+##+=::.................::::::--:..--:.................=%%%%%%%###***
+@@@@@%%%@@@@@@%+:..................--=--=----:................:%@@%%%%%%%%%@@%
+@@%#%@@@@@@@@@@%:...................:--**=-::.............:=*%@@@@@@@%%%%%%%@@
+@#-:.:-*%@@@@@@@@%+=--:....=#@@%=-:::--:--:.......::=***+=+#%@@@@@@@@@%**##%%%
+@=.....-#@@@@@@@@@@@#=:. ..:**:......::::::..:::=+#####*+=+*%@@@@@@@@%#+=--+*%
+*=:..:=#@@@@@@@@@@%=......:=:..........:........:::--*##*+*#@@@@@@@@@@@@#+=+#%
+%##%@@@@@@@@@%#*#%%*-:-=*#=...........:=...........::::+%%%@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@%=::-*%%###%@-:...........+@:...........:::::#@@@%@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@#=::=*%@@@@@-::...........%@%............:::::*@%*#%@@@@@@@@@@@@%%
+@@@@@@@@@@@@@@%#%%@@@@@#::::.........-@@@@:.............::-%%%%@@@@@@@@@@@@@%%
+@@@@@@@@@@@@@@@@@@%%%%%=:::.....:::..#@@@@@-:......:::::::-%@@@@@@@@@@@@@@@%##
+@@@@@@@@@@@@@@@%%%%%%%%+::::::::::::-@@@@@@@=:::::::::::--*@%#**#%@@@@@@@@@%#%
+@@@@@@@@@@@@@@%%%%%%%%%#::::::::::.-@@@@@@@@@#=-------==*@@@%#***%@@@@@@@@%##%
+@@@@@@@@@@@@@%%%%%%%%%##*::::::::.-@@%@@@@@@@@@@*++++*%@@@@@@@####%@@@@@@@#*%%
+@@@@@@@%%%%@@@%%%%%%%%#%%%+=--::-%@@@%@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@@%*#@@
+@@@@@@@%%%%@@@@%%%%%%%%%%%%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#*%%@
+@@@@@%%%@@@@@@@@@%%%%%%%%%%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%*%@@@
+@@@@@@@@@@@@@@@@@%%%%%%%%%%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@**@@@@
+@@@@@@@@@@@@@@@@%%%@@@@@@%%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%@@@@@@%##%@@@
+@@@@@@@@@@@@@@@@%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%#%@@@@
+%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##@@@@@
+##%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@@@@@@@@@@@@%#%@@@@@
+###%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%@@@@@@@@@@@@@@@@@%#%@@@@@
+</pre>
+                      <div class="status-text">SYSTEM OFFLINE</div>
+                      <div class="trace-text">w0lf3n5731n :: s1rfr0s7y</div>
+                    </div>
+                  </div>
+                `;
+                setTimeout(()=>{
+
+                  document.querySelector('.shutdown-screen').style.transition = 'opacity 0.5s';
+                  document.querySelector('.shutdown-screen').style.opacity = '0';
+                  setTimeout(()=>{
+                    location.reload();
+                  },500);
+                },5000);
+              },800);
+            },600);
+          },500);
+          return;
+        default:
+          out=cmd!==""?"Unknown command: "+cmd:"";
+      }
+
+      input.disabled=true;
+      if(out) addLine(out);
+      newInput();
+    });
+  }
+  
+  handleInput();
+</script>
 </body>
 </html>
