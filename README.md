@@ -1,2 +1,2 @@
 # Official site for nCrypt 2k25
-[Check Out The Site!](https://ncrypt.net.in)
+[Check Out Our Site!](https://ncrypt.net.in)
