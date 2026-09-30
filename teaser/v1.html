@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>nCrypt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#000; width:100vw; height:100vh; overflow:hidden; }
+
+  /* ── Retro error window (design grid 190×107, scaled by --s) ── */
+  .win {
+    position:fixed; width:calc(190px*var(--s)); height:calc(107px*var(--s)); background:#c0c0c0;
+    font-family:"Pixelify Sans",monospace; -webkit-font-smoothing:none;
+    box-shadow:inset calc(1px*var(--s)) calc(1px*var(--s)) 0 #fff,
+               inset calc(-1px*var(--s)) calc(-1px*var(--s)) 0 #808080,
+               calc(1px*var(--s)) calc(1px*var(--s)) 0 #000;
+    opacity:0; transition:opacity .1s; overflow:hidden;
+  }
+  .win > *, .bar > * { position:absolute; }
+  .bar { left:calc(3px*var(--s)); top:calc(3px*var(--s)); width:calc(184px*var(--s)); height:calc(18px*var(--s));
+         background:linear-gradient(90deg,#ff1010 0%,#ff2222 60%,#ff5a5a 100%); }
+  .title { left:calc(5px*var(--s)); top:calc(2px*var(--s)); font-size:calc(11px*var(--s)); font-weight:600; line-height:1; color:#fff;
+    letter-spacing:calc(.2px*var(--s));
+    text-shadow:calc(.5px*var(--s)) calc(.5px*var(--s)) 0 #000,calc(-.5px*var(--s)) calc(.5px*var(--s)) 0 #000,
+                calc(.5px*var(--s)) calc(-.5px*var(--s)) 0 #000,calc(-.5px*var(--s)) calc(-.5px*var(--s)) 0 #000; }
+  .tb { top:calc(2px*var(--s)); width:calc(16px*var(--s)); height:calc(14px*var(--s)); background:#c0c0c0;
+    box-shadow:inset calc(1px*var(--s)) calc(1px*var(--s)) 0 #fff,inset calc(-1px*var(--s)) calc(-1px*var(--s)) 0 #000,
+               inset calc(-2px*var(--s)) calc(-2px*var(--s)) 0 #808080; }
+  .tb svg { position:absolute; inset:0; width:100%; height:100%; }
+  .msg { left:calc(24px*var(--s)); top:calc(38px*var(--s)); font-size:calc(20px*var(--s)); font-weight:500; line-height:1; white-space:nowrap; color:#000; }
+  .yes { left:calc(61px*var(--s)); top:calc(74px*var(--s)); width:calc(73px*var(--s)); height:calc(22px*var(--s)); background:#c0c0c0;
+    display:grid; place-items:center; padding-top:calc(1px*var(--s)); font:inherit; font-size:calc(15px*var(--s)); color:#000; border:0; cursor:pointer;
+    box-shadow:inset calc(1px*var(--s)) calc(1px*var(--s)) 0 #fff,inset calc(-1px*var(--s)) calc(-1px*var(--s)) 0 #000,
+               inset calc(-2px*var(--s)) calc(-2px*var(--s)) 0 #808080; }
+  .yes:active { box-shadow:inset calc(1px*var(--s)) calc(1px*var(--s)) 0 #000,inset calc(2px*var(--s)) calc(2px*var(--s)) 0 #808080; }
+</style>
+</head>
+<body>
+
+<script>
+const W = 190, H = 107;                       // window design size
+const FONT = '"Pixelify Sans"';
+const SCALE = 1.5;
+const popScale = () => Math.min(SCALE, (innerWidth - 20) / W);
+
+/* ── Window markup ── */
+const tbSvg = {
+  min:   '<rect x="4" y="9" width="7" height="2" fill="#000"/>',
+  max:   '<path d="M3 3h10v9H3z" fill="none" stroke="#000"/><rect x="3" y="3" width="10" height="2" fill="#000"/>',
+  close: '<g fill="#000"><rect x="4" y="3" width="2" height="2"/><rect x="10" y="3" width="2" height="2"/><rect x="5" y="4" width="2" height="2"/><rect x="9" y="4" width="2" height="2"/><rect x="6" y="5" width="4" height="2"/><rect x="6" y="7" width="4" height="2"/><rect x="5" y="8" width="2" height="2"/><rect x="9" y="8" width="2" height="2"/><rect x="4" y="9" width="2" height="2"/><rect x="10" y="9" width="2" height="2"/></g>'
+};
+const tb = (k, left) => `<div class="tb" style="left:calc(${left}px*var(--s))"><svg viewBox="0 0 16 14" shape-rendering="crispEdges">${tbSvg[k]}</svg></div>`;
+const WIN_HTML = `
+  <div class="bar"><span class="title" style="position:absolute">nCrypt</span>${tb('min',133)}${tb('max',150)}${tb('close',167)}</div>
+  <div class="msg">Registor Now!!!</div>
+  <button class="yes">YES</button>`;
+
+/* ── Spawn window ── */
+let z = 100;
+function makePopup(mini, cx, cy) {
+  const s  = popScale();
+  const bw = W*s, bh = H*s;
+  const x = cx !== undefined ? cx : Math.random() * Math.max(0, innerWidth  - bw);
+  const y = cy !== undefined ? cy : Math.random() * Math.max(0, innerHeight - bh);
+  const rot = cx !== undefined ? 0 : (Math.random() - 0.5) * 10;
+
+  const p = document.createElement('div');
+  p.className = 'win';
+  p.style.cssText = `--s:${s};left:${x}px;top:${y}px;z-index:${z++};transform:rotate(${rot}deg)`;
+  p.innerHTML = WIN_HTML;
+  document.body.appendChild(p);
+  requestAnimationFrame(() => { p.style.opacity = '1'; });
+}
+
+/* ── Waves ── */
+const waves = [
+  [1200,  1, false],
+  [1900,  1, false],
+  [2400,  2, false],
+  [2900,  5, true ],
+  [3300,  9, true ],
+  [3700, 15, true ],
+  [4100, 22, true ],
+  [4500, 32, true ],
+];
+
+Promise.all([
+  document.fonts.load(`400 15px ${FONT}`),
+  document.fonts.load(`500 20px ${FONT}`),
+  document.fonts.load(`600 11px ${FONT}`)
+]).catch(() => {}).then(() => {
+  const s = popScale();
+  makePopup(false, (innerWidth - W*s)/2, (innerHeight - H*s)/2);
+  waves.forEach(([delay, count, mini]) => {
+    setTimeout(() => {
+      for (let i = 0; i < count; i++) setTimeout(() => makePopup(mini), i * 22);
+    }, delay);
+  });
+});
+</script>
+</body>
+</html>

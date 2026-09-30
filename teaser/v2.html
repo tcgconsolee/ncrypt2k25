@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>nCrypt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#000; width:100vw; height:100vh; overflow:hidden; }
+
+  /* ── Retro error window (design grid 190×107, scaled by --s) ── */
+  .win {
+    position:fixed; width:calc(190px*var(--s)); height:calc(107px*var(--s)); background:#c0c0c0;
+    font-family:"Pixelify Sans",monospace; -webkit-font-smoothing:none;
+    box-shadow:inset calc(1px*var(--s)) calc(1px*var(--s)) 0 #fff,
+               inset calc(-1px*var(--s)) calc(-1px*var(--s)) 0 #808080,
+               calc(1px*var(--s)) calc(1px*var(--s)) 0 #000;
+    opacity:0; transition:opacity .1s; overflow:hidden;
+  }
+  .win > *, .bar > * { position:absolute; }
+  .bar { left:calc(3px*var(--s)); top:calc(3px*var(--s)); width:calc(184px*var(--s)); height:calc(18px*var(--s));
+         background:linear-gradient(90deg,#ff1010 0%,#ff2222 60%,#ff5a5a 100%); }
+  .title { left:calc(5px*var(--s)); top:calc(2px*var(--s)); font-size:calc(11px*var(--s)); font-weight:600; line-height:1; color:#fff;
+    letter-spacing:calc(.2px*var(--s));
+    text-shadow:calc(.5px*var(--s)) calc(.5px*var(--s)) 0 #000,calc(-.5px*var(--s)) calc(.5px*var(--s)) 0 #000,
+                calc(.5px*var(--s)) calc(-.5px*var(--s)) 0 #000,calc(-.5px*var(--s)) calc(-.5px*var(--s)) 0 #000; }
+  .tb { top:calc(2px*var(--s)); width:calc(16px*var(--s)); height:calc(14px*var(--s)); background:#c0c0c0;
+    box-shadow:inset calc(1px*var(--s)) calc(1px*var(--s)) 0 #fff,inset calc(-1px*var(--s)) calc(-1px*var(--s)) 0 #000,
+               inset calc(-2px*var(--s)) calc(-2px*var(--s)) 0 #808080; }
+  .tb svg { position:absolute; inset:0; width:100%; height:100%; }
+  .msg { left:calc(24px*var(--s)); top:calc(38px*var(--s)); font-size:calc(20px*var(--s)); font-weight:500; line-height:1; white-space:nowrap; color:#000; }
+  .yes { left:calc(61px*var(--s)); top:calc(74px*var(--s)); width:calc(73px*var(--s)); height:calc(22px*var(--s)); background:#c0c0c0;
+    display:grid; place-items:center; padding-top:calc(1px*var(--s)); font:inherit; font-size:calc(15px*var(--s)); color:#000; border:0; cursor:pointer;
+    box-shadow:inset calc(1px*var(--s)) calc(1px*var(--s)) 0 #fff,inset calc(-1px*var(--s)) calc(-1px*var(--s)) 0 #000,
+               inset calc(-2px*var(--s)) calc(-2px*var(--s)) 0 #808080; }
+  .yes:active { box-shadow:inset calc(1px*var(--s)) calc(1px*var(--s)) 0 #000,inset calc(2px*var(--s)) calc(2px*var(--s)) 0 #808080; }
+
+  /* glitch overlay covers the whole window */
+  .win .glitch-overlay { inset:0; width:100%; height:100%; pointer-events:none; z-index:5; image-rendering:pixelated; }
+</style>
+</head>
+<body>
+
+<script>
+const W = 190, H = 107;                       // window design size
+const FONT = '"Pixelify Sans"';
+const SCALE = 1.5;                            // every popup: 285×160 (between mini 190 and old 380)
+const popScale = () => Math.min(SCALE, (innerWidth - 20) / W);
+
+/* ── Window markup ── */
+const tbSvg = {
+  min:   '<rect x="4" y="9" width="7" height="2" fill="#000"/>',
+  max:   '<path d="M3 3h10v9H3z" fill="none" stroke="#000"/><rect x="3" y="3" width="10" height="2" fill="#000"/>',
+  close: '<g fill="#000"><rect x="4" y="3" width="2" height="2"/><rect x="10" y="3" width="2" height="2"/><rect x="5" y="4" width="2" height="2"/><rect x="9" y="4" width="2" height="2"/><rect x="6" y="5" width="4" height="2"/><rect x="6" y="7" width="4" height="2"/><rect x="5" y="8" width="2" height="2"/><rect x="9" y="8" width="2" height="2"/><rect x="4" y="9" width="2" height="2"/><rect x="10" y="9" width="2" height="2"/></g>'
+};
+const tb = (k, left) => `<div class="tb" style="left:calc(${left}px*var(--s))"><svg viewBox="0 0 16 14" shape-rendering="crispEdges">${tbSvg[k]}</svg></div>`;
+const WIN_HTML = `
+  <div class="bar"><span class="title" style="position:absolute">nCrypt</span>${tb('min',133)}${tb('max',150)}${tb('close',167)}</div>
+  <div class="msg">Registor Now!!!</div>
+  <button class="yes">YES</button>`;
+
+/* ── Draw the same window onto a canvas (feeds the glitch overlay) ── */
+function drawWin(s) {
+  const c = document.createElement('canvas');
+  c.width = Math.round(W*s); c.height = Math.round(H*s);
+  const x = c.getContext('2d');
+  x.imageSmoothingEnabled = false;
+  x.scale(s, s);
+  const R = (col, a, b, w, h) => { x.fillStyle = col; x.fillRect(a, b, w, h); };
+  const bevel = (a, b, w, h) => {                 // white TL, black outer BR, grey inner BR
+    R('#808080', a+w-2, b+1, 1, h-2); R('#808080', a+1, b+h-2, w-2, 1);
+    R('#000', a+w-1, b, 1, h);        R('#000', a, b+h-1, w, 1);
+    R('#fff', a, b, w-1, 1);          R('#fff', a, b, 1, h-1);
+  };
+  R('#c0c0c0', 0, 0, W, H);
+  R('#fff', 0, 0, W, 1); R('#fff', 0, 0, 1, H);
+  R('#808080', W-1, 0, 1, H); R('#808080', 0, H-1, W, 1);
+
+  const g = x.createLinearGradient(3, 0, 187, 0);
+  g.addColorStop(0, '#ff1010'); g.addColorStop(.6, '#ff2222'); g.addColorStop(1, '#ff5a5a');
+  R(g, 3, 3, 184, 18);
+
+  x.textBaseline = 'top';
+  x.font = `600 11px ${FONT}`;
+  x.lineWidth = 1; x.strokeStyle = '#000'; x.lineJoin = 'round';
+  x.strokeText('nCrypt', 8, 5);
+  x.fillStyle = '#fff'; x.fillText('nCrypt', 8, 5);
+
+  [133,150,167].forEach((l, i) => {
+    const bx = 3 + l, by = 5;
+    R('#c0c0c0', bx, by, 16, 14); bevel(bx, by, 16, 14);
+    x.save(); x.translate(bx, by); x.fillStyle = '#000';
+    if (i === 0) x.fillRect(4, 9, 7, 2);
+    if (i === 1) { x.strokeStyle = '#000'; x.strokeRect(3.5, 3.5, 9, 8); x.fillRect(3, 3, 10, 2); }
+    if (i === 2) [[4,3],[10,3],[5,4],[9,4],[6,5],[6,7],[5,8],[9,8],[4,9],[10,9]].forEach(([a,b]) => x.fillRect(a, b, a===6?4:2, 2));
+    x.restore();
+  });
+
+  x.fillStyle = '#000'; x.font = `500 20px ${FONT}`; x.fillText('Registor Now!!!', 24, 38);
+  R('#c0c0c0', 61, 74, 73, 22); bevel(61, 74, 73, 22);
+  x.fillStyle = '#000'; x.font = `400 15px ${FONT}`; x.textAlign = 'center';
+  x.fillText('YES', 61 + 36.5, 74 + 4); 
+  return c;
+}
+
+
+/* ── Glitch frame pool: built ONCE, shared by every window (no per-frame image decoding) ── */
+const rnd = (a, b) => a + Math.random() * (b - a);
+const pick = () => (Math.random() < .5 ? -1 : 1);
+let POOL = null;
+function buildPool(s) {
+  const base = drawWin(s), w = base.width, h = base.height;
+  const id = base.getContext('2d').getImageData(0, 0, w, h);
+  const chan = keep => {                                   // single-colour-channel copy of the window
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d'), o = x.createImageData(w, h);
+    for (let i = 0; i < id.data.length; i += 4) {
+      o.data[i]   = keep === 'r' ? id.data[i] : 0;
+      o.data[i+1] = keep === 'r' ? 0 : id.data[i+1];
+      o.data[i+2] = keep === 'r' ? 0 : id.data[i+2];
+      o.data[i+3] = 255;
+    }
+    x.putImageData(o, 0, 0); return c;
+  };
+  const red = chan('r'), cyan = chan('c');
+  POOL = [];
+  for (let n = 0; n < 16; n++) {
+    const f = document.createElement('canvas'); f.width = w; f.height = h;
+    const x = f.getContext('2d'); x.imageSmoothingEnabled = false;
+    const strips = n % 4 === 3 ? 1 : Math.floor(rnd(2, 5));
+    for (let k = 0; k < strips; k++) {                     // horizontal tears with RGB fringe
+      const band = n % 4 === 3;
+      const sh = Math.round(rnd(band ? 20 : 3, band ? 36 : 14) * s), y = Math.round(rnd(0, h - sh));
+      const dx = Math.round(pick() * rnd(band ? 2 : 4, band ? 6 : 16) * s), g = Math.round(rnd(1.5, 3.5) * s);
+      x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+      x.drawImage(base, 0, y, w, sh, dx, y, w, sh);
+      x.globalCompositeOperation = 'lighter'; x.globalAlpha = .55;
+      x.drawImage(red,  0, y, w, sh, dx - g, y, w, sh);
+      x.drawImage(cyan, 0, y, w, sh, dx + g, y, w, sh);
+    }
+    x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+    for (let k = Math.floor(rnd(1, 4)); k--;) {            // blocky displaced chunks (JPEG-corruption feel)
+      const bw = Math.round(rnd(10, 40) * s), bh = Math.round(rnd(4, 14) * s);
+      const sx = Math.round(rnd(0, w - bw)), sy = Math.round(rnd(0, h - bh));
+      x.drawImage(base, sx, sy, bw, bh, sx + Math.round(pick() * rnd(3, 12) * s), sy + Math.round(pick() * rnd(0, 5) * s), bw, bh);
+    }
+    POOL.push(f);
+  }
+}
+
+/* ── One shared animation loop: short glitch bursts, calm gaps in between ── */
+const glitching = new Set();
+function tick(t) {
+  requestAnimationFrame(tick);
+  for (const st of glitching) {
+    if (t < st.next) continue;
+    if (st.burst && t < st.burstEnd) {                     // inside a burst: swap frame every ~45–90ms
+      st.ctx.clearRect(0, 0, st.w, st.h);
+      st.ctx.drawImage(POOL[(Math.random() * POOL.length) | 0], 0, 0, st.w, st.h);
+      st.el.style.transform = `translate(${Math.round(rnd(-2, 2))}px,0) rotate(${st.rot}deg)`;
+      st.next = t + rnd(45, 90);
+    } else if (st.burst) {                                 // burst over: back to a clean window
+      st.burst = false;
+      st.ctx.clearRect(0, 0, st.w, st.h);
+      st.el.style.transform = `rotate(${st.rot}deg)`;
+      st.next = t + rnd(500, 1800);
+    } else {                                               // gap over: start a new burst
+      st.burst = true; st.burstEnd = t + rnd(90, 280); st.next = t;
+    }
+  }
+}
+
+/* ── Spawn window ── */
+let z = 100;
+function makePopup(mini, cx, cy) {
+  const s  = popScale();
+  const bw = W*s, bh = H*s;
+  const x = cx !== undefined ? cx : Math.random() * Math.max(0, innerWidth  - bw);
+  const y = cy !== undefined ? cy : Math.random() * Math.max(0, innerHeight - bh);
+  const rot = cx !== undefined ? 0 : (Math.random() - 0.5) * 10;
+
+  const p = document.createElement('div');
+  p.className = 'win';
+  p.style.cssText = `--s:${s};left:${x}px;top:${y}px;z-index:${z++};transform:rotate(${rot}deg)`;
+  p.innerHTML = WIN_HTML;
+
+  const overlay = document.createElement('canvas');
+  overlay.className = 'glitch-overlay';
+  overlay.width = Math.round(bw); overlay.height = Math.round(bh);
+  p.appendChild(overlay);
+  document.body.appendChild(p);
+  requestAnimationFrame(() => { p.style.opacity = '1'; });
+
+  if (!POOL) buildPool(s);
+  glitching.add({ el:p, ctx:overlay.getContext('2d'), w:overlay.width, h:overlay.height, rot,
+                  burst:false, burstEnd:0, next: performance.now() + rnd(0, 600) });
+}
+
+/* ── Waves ── */
+const waves = [
+  [1200,  1, false],
+  [1900,  1, false],
+  [2400,  2, false],
+  [2900,  5, true ],
+  [3300,  9, true ],
+  [3700, 15, true ],
+  [4100, 22, true ],
+  [4500, 32, true ],
+];
+
+Promise.all([
+  document.fonts.load(`400 15px ${FONT}`),
+  document.fonts.load(`500 20px ${FONT}`),
+  document.fonts.load(`600 11px ${FONT}`)
+]).catch(() => {}).then(() => {
+  const s = popScale();
+  makePopup(false, (innerWidth - W*s)/2, (innerHeight - H*s)/2);
+  requestAnimationFrame(tick);
+  waves.forEach(([delay, count, mini]) => {
+    setTimeout(() => {
+      for (let i = 0; i < count; i++) setTimeout(() => makePopup(mini), i * 22);
+    }, delay);
+  });
+});
+</script>
+</body>
+</html>
