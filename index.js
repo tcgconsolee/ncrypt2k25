@@ -376,33 +376,30 @@ document.getElementById("teamin").addEventListener("click", () => {
     teamd.style.animation = "pagepull 1s forwards"
     alumnid.style.animation = "pagepush 1s forwards"
 })
-const y25 = document.getElementsByClassName("25")[0];
-const y24 = document.getElementsByClassName("24")[0];
-const y22 = document.getElementsByClassName("22")[0];
-const classdiv = document.getElementsByClassName("class")[0]
-const pics = document.querySelectorAll(".pictures")
+const classdiv = document.getElementsByClassName("class")[0];
+const pics = document.querySelectorAll(".pictures");
+const alumBtns = document.querySelectorAll(".alumnisection .btns > div");
 
-y25.addEventListener("click", () => {
-    classdiv.innerHTML = "CLASS OF 2<span>K</span>25 CLASS OF 2<span>K</span>25"
-    pics.forEach(pic => {
-        pic.style.display = "none"
-    })
-    document.getElementById("alum25").style.display = "flex"
-})
-y24.addEventListener("click", () => {
-    classdiv.innerHTML = "CLASS OF 2<span>K</span>24 CLASS OF 2<span>K</span>24"
-    pics.forEach(pic => {
-        pic.style.display = "none"
-    })
-    document.getElementById("alum24").style.display = "flex"
-})
-y22.addEventListener("click", () => {
-    classdiv.innerHTML = "CLASS OF 2<span>K</span>22 CLASS OF 2<span>K</span>22"
-    pics.forEach(pic => {
-        pic.style.display = "none"
-    })
-    document.getElementById("alum22").style.display = "flex"
-})
+alumBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        let yearText = btn.innerHTML.trim().toUpperCase();
+        let formattedYear = yearText.replace("K", "<span>K</span>");
+        classdiv.innerHTML = `CLASS OF ${formattedYear} CLASS OF ${formattedYear}`;
+        
+        pics.forEach(pic => {
+            pic.style.display = "none";
+        });
+        
+        let alumDiv = document.getElementById("alum" + btn.className.trim());
+        if (alumDiv) {
+            alumDiv.style.display = "flex";
+        }
+    });
+});
+
+if (alumBtns.length > 0) {
+    alumBtns[0].click();
+}
 window.onload = function () {
     imageMapResize();
 }
