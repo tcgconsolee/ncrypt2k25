@@ -710,7 +710,9 @@ if (toggleNcrypt && toggleNcoris) {
         document.getElementById("ncoris-members").style.display = "none";
         
         toggleNcrypt.style.opacity = "1";
+        toggleNcrypt.style.fontSize = "1em";
         toggleNcoris.style.opacity = "0.5";
+        toggleNcoris.style.fontSize = "0.67em";
         
         team = document.querySelectorAll("#ncrypt-team .team");
         members = document.querySelectorAll("#ncrypt-members .member");
@@ -724,8 +726,10 @@ if (toggleNcrypt && toggleNcoris) {
         document.getElementById("ncoris-team").style.display = "block";
         document.getElementById("ncoris-members").style.display = "flex";
         
-        toggleNcrypt.style.opacity = "0.5";
         toggleNcoris.style.opacity = "1";
+        toggleNcoris.style.fontSize = "1em";
+        toggleNcrypt.style.opacity = "0.5";
+        toggleNcrypt.style.fontSize = "0.67em";
         
         team = document.querySelectorAll("#ncoris-team .team");
         members = document.querySelectorAll("#ncoris-members .member");
