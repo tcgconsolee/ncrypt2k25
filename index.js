@@ -176,20 +176,20 @@ const team = document.querySelectorAll(".team");
 team.forEach(tm => {
     tm.style.display = "none";
 })
-document.getElementById("aaryan_parveen").style.filter = "saturate(100%)"
-document.getElementById("aaryan-parveen").style.display = "block"
+document.getElementById("devansh_yadav").style.filter = "saturate(100%)"
+document.getElementById("devansh-yadav").style.display = "block"
 const members = document.querySelectorAll(".member")
-let current = "aaryan_parveen"
+let current = "devansh_yadav"
 let cooldown = 0;
-function selectm(member) {
+function selectm(member, forceDirection) {
     if (cooldown > 0) return;
     cooldown = 10;
 
     members.forEach(m => m.style.filter = "saturate(0%)");
     member.style.filter = "saturate(100%)";
 
-    let c = document.getElementById(current.replace("_", "-"));
-    let el = document.getElementById(member.id.replace("_", "-"));
+    let c = document.getElementById(current.replaceAll("_", "-"));
+    let el = document.getElementById(member.id.replaceAll("_", "-"));
     el.style.display = "block";
     current = member.id;
 
@@ -197,10 +197,13 @@ function selectm(member) {
     let i2 = Array.from(team).indexOf(el);
 
 
-    if (i1 > i2) {
+    let isPrev = forceDirection === "prev" || (!forceDirection && i1 > i2);
+    let isNext = forceDirection === "next" || (!forceDirection && i2 > i1);
+
+    if (isPrev) {
         c.style.animation = "lteampush 1s forwards";
         el.style.animation = "lteampull 1s forwards";
-    } else if (i2 > i1) {
+    } else if (isNext) {
         c.style.animation = "rteampush 1s forwards";
         el.style.animation = "rteampull 1s forwards";
     }
@@ -251,7 +254,7 @@ const secret = "penguin";
 let buffer = "";
 
 document.addEventListener("keydown", (e) => {
-    if(current!="aaryan_parveen" || teamd.style.animation!="1s ease 0s 1 normal forwards running pagepull") return;
+    if(current!="devansh_yadav" || teamd.style.animation!="1s ease 0s 1 normal forwards running pagepull") return;
     const key = e.key.toLowerCase();
 
     buffer += key;
@@ -344,21 +347,19 @@ pic.forEach(p => {
     new HoverButton(p);
 })
 document.addEventListener("keydown", (e) => {
-    if (e.keyCode == 39) {
+    // Only trigger if we are viewing the main team, not alumni
+    if (teamd.style.top === "100vh" || teamd.style.animation.includes("pagepush")) return;
+    
+    if (e.key === "ArrowRight" || e.keyCode === 39) {
         let el = document.getElementById(current);
         let i = Array.from(members).indexOf(el) + 1;
-        if (i + 1 > members.length) {
-            i = 0;
-        }
-        selectm(members[i])
-    } else if (e.keyCode == 37) {
-
+        if (i >= members.length) i = 0;
+        selectm(members[i], e.key === "ArrowRight" || e.keyCode === 39 ? "next" : "prev");
+    } else if (e.key === "ArrowLeft" || e.keyCode === 37) {
         let el = document.getElementById(current);
         let i = Array.from(members).indexOf(el) - 1;
-        if (i < 0) {
-            i = members.length - 1;
-        }
-        selectm(members[i])
+        if (i < 0) i = members.length - 1;
+        selectm(members[i], e.key === "ArrowRight" || e.keyCode === 39 ? "next" : "prev");
     }
 })
 const alumnid = document.getElementsByClassName("alumnisection")[0];
@@ -375,11 +376,19 @@ document.getElementById("teamin").addEventListener("click", () => {
     teamd.style.animation = "pagepull 1s forwards"
     alumnid.style.animation = "pagepush 1s forwards"
 })
+const y25 = document.getElementsByClassName("25")[0];
 const y24 = document.getElementsByClassName("24")[0];
 const y22 = document.getElementsByClassName("22")[0];
 const classdiv = document.getElementsByClassName("class")[0]
 const pics = document.querySelectorAll(".pictures")
 
+y25.addEventListener("click", () => {
+    classdiv.innerHTML = "CLASS OF 2<span>K</span>25 CLASS OF 2<span>K</span>25"
+    pics.forEach(pic => {
+        pic.style.display = "none"
+    })
+    document.getElementById("alum25").style.display = "flex"
+})
 y24.addEventListener("click", () => {
     classdiv.innerHTML = "CLASS OF 2<span>K</span>24 CLASS OF 2<span>K</span>24"
     pics.forEach(pic => {
