@@ -172,56 +172,37 @@ teamb.addEventListener("click", () => {
     teamd.style.animation = "pagepull 1s forwards"
     selectm(document.querySelector(".member#" + current))
 })
-const team = document.querySelectorAll(".team");
-team.forEach(tm => {
+document.querySelectorAll(".team").forEach(tm => {
     tm.style.display = "none";
-})
-document.getElementById("devansh_yadav").style.filter = "saturate(100%)"
-document.getElementById("devansh-yadav").style.display = "block"
-const members = document.querySelectorAll(".member")
-let current = "devansh_yadav"
+});
+let team = document.querySelectorAll("#ncrypt-team .team");
+let members = document.querySelectorAll("#ncrypt-members .member");
+let current = "devansh_yadav";
 let cooldown = 0;
-function selectm(member, forceDirection) {
-    if (cooldown > 0) return;
-    cooldown = 10;
 
+function showMemberDirect(memberId) {
+    cooldown = 0;
+    document.querySelectorAll(".team").forEach(tm => {
+        tm.style.display = "none";
+        tm.style.animation = "none";
+    });
     members.forEach(m => m.style.filter = "saturate(0%)");
-    member.style.filter = "saturate(100%)";
-
-    let c = document.getElementById(current.replaceAll("_", "-"));
-    let el = document.getElementById(member.id.replaceAll("_", "-"));
-    el.style.display = "block";
-    current = member.id;
-
-    let i1 = Array.from(team).indexOf(c);
-    let i2 = Array.from(team).indexOf(el);
-
-
-    let isPrev = forceDirection === "prev" || (!forceDirection && i1 > i2);
-    let isNext = forceDirection === "next" || (!forceDirection && i2 > i1);
-
-    if (isPrev) {
-        c.style.animation = "lteampush 1s forwards";
-        el.style.animation = "lteampull 1s forwards";
-    } else if (isNext) {
-        c.style.animation = "rteampush 1s forwards";
-        el.style.animation = "rteampull 1s forwards";
-    }
-
-    let target = document.querySelector(`#${el.id} .tbg p`);
-    let finalText = target.innerHTML;
-    target.innerHTML = "";
-    document.querySelector(`#${el.id} .tyear`).style.animation = "none"
-    document.querySelector(`#${el.id} .tamenu`).style.animation = "none"
-    document.querySelector(`#${el.id} .tname`).style.animation = "none"
-    document.querySelector(`#${el.id} .tnick`).style.animation = "none"
-    document.querySelector(`#${el.id} .tyear`).style.top = "-5vmax"
-    document.querySelector(`#${el.id} .tamenu`).style.top = "-5vmax"
-    document.querySelector(`#${el.id} .tname`).style.bottom = "-5vmax"
-    document.querySelector(`#${el.id} .tnick`).style.bottom = "-5vmax"
-
-    setTimeout(() => {
+    
+    current = memberId;
+    let targetId = memberId.replaceAll("_", "-");
+    let el = document.getElementById(targetId);
+    let thumb = document.getElementById(memberId);
+    
+    if (thumb) thumb.style.filter = "saturate(100%)";
+    if (el) {
+        el.style.display = "block";
+        let target = el.querySelector(".tbg p");
         if (target) {
+            if (!target.dataset.originalText) {
+                target.dataset.originalText = target.innerHTML;
+            }
+            let finalText = target.dataset.originalText;
+            target.innerHTML = "";
             gsap.to(target, {
                 duration: 2.5,
                 scrambleText: {
@@ -235,13 +216,95 @@ function selectm(member, forceDirection) {
                 ease: "power1.inOut"
             });
         }
+        let tyear = el.querySelector(".tyear");
+        let tamenu = el.querySelector(".tamenu");
+        let tname = el.querySelector(".tname");
+        let tnick = el.querySelector(".tnick");
+        if (tyear) tyear.style.animation = "toptxt 1s forwards";
+        if (tamenu) tamenu.style.animation = "toptxt 1s forwards";
+        if (tname) tname.style.animation = "bottomtxt 1s forwards";
+        if (tnick) tnick.style.animation = "bottomtxt 1s forwards";
+    }
+}
+
+showMemberDirect("devansh_yadav");
+
+function selectm(member, forceDirection) {
+    if (cooldown > 0) return;
+    if (!member) return;
+
+    let el = document.getElementById(member.id.replaceAll("_", "-"));
+    let c = document.getElementById(current.replaceAll("_", "-"));
+
+    if (!el) return;
+    if (c === el) {
+        showMemberDirect(member.id);
+        return;
+    }
+
+    cooldown = 10;
+
+    members.forEach(m => m.style.filter = "saturate(0%)");
+    member.style.filter = "saturate(100%)";
+
+    el.style.display = "block";
+    current = member.id;
+
+    let i1 = Array.from(team).indexOf(c);
+    let i2 = Array.from(team).indexOf(el);
+
+    let isPrev = forceDirection === "prev" || (!forceDirection && i1 > i2);
+    let isNext = forceDirection === "next" || (!forceDirection && i2 > i1);
+
+    if (c) {
+        if (isPrev) {
+            c.style.animation = "lteampush 1s forwards";
+            el.style.animation = "lteampull 1s forwards";
+        } else if (isNext) {
+            c.style.animation = "rteampush 1s forwards";
+            el.style.animation = "rteampull 1s forwards";
+        }
+    }
+
+    let target = el.querySelector(".tbg p");
+    if (target) {
+        if (!target.dataset.originalText) {
+            target.dataset.originalText = target.innerHTML;
+        }
+        let finalText = target.dataset.originalText;
+        target.innerHTML = "";
+    }
+    let tyear = el.querySelector(".tyear");
+    let tamenu = el.querySelector(".tamenu");
+    let tname = el.querySelector(".tname");
+    let tnick = el.querySelector(".tnick");
+    if (tyear) { tyear.style.animation = "none"; tyear.style.top = "-5vmax"; }
+    if (tamenu) { tamenu.style.animation = "none"; tamenu.style.top = "-5vmax"; }
+    if (tname) { tname.style.animation = "none"; tname.style.bottom = "-5vmax"; }
+    if (tnick) { tnick.style.animation = "none"; tnick.style.bottom = "-5vmax"; }
+
+    setTimeout(() => {
+        if (target && target.dataset.originalText) {
+            gsap.to(target, {
+                duration: 2.5,
+                scrambleText: {
+                    text: target.dataset.originalText,
+                    chars: "upperCase",
+                    revealDelay: 0.5,
+                    speed: 0.3,
+                    delimiter: "",
+                    tweenLength: true
+                },
+                ease: "power1.inOut"
+            });
+        }
     }, 500);
     setTimeout(() => {
-        document.querySelector(`#${el.id} .tyear`).style.animation = "toptxt 1s forwards"
-        document.querySelector(`#${el.id} .tamenu`).style.animation = "toptxt 1s forwards"
-        document.querySelector(`#${el.id} .tname`).style.animation = "bottomtxt 1s forwards"
-        document.querySelector(`#${el.id} .tnick`).style.animation = "bottomtxt 1s forwards"
-        c.style.display = "none";
+        if (tyear) tyear.style.animation = "toptxt 1s forwards";
+        if (tamenu) tamenu.style.animation = "toptxt 1s forwards";
+        if (tname) tname.style.animation = "bottomtxt 1s forwards";
+        if (tnick) tnick.style.animation = "bottomtxt 1s forwards";
+        if (c && c !== el) c.style.display = "none";
         el.style.display = "block";
     }, 1000);
 
@@ -268,7 +331,7 @@ document.addEventListener("keydown", (e) => {
         buffer = "";
     }
 });
-members.forEach(member => {
+document.querySelectorAll(".member").forEach(member => {
     member.addEventListener("click", () => {
         selectm(member);
     })
@@ -635,3 +698,38 @@ window.addEventListener("resize", () => {
     if (typeof imageMapResize === "function") imageMapResize();
     updateDotPositions();
 });
+
+const toggleNcrypt = document.getElementById("toggle-ncrypt");
+const toggleNcoris = document.getElementById("toggle-ncoris");
+
+if (toggleNcrypt && toggleNcoris) {
+    toggleNcrypt.addEventListener("click", () => {
+        document.getElementById("ncrypt-team").style.display = "block";
+        document.getElementById("ncrypt-members").style.display = "flex";
+        document.getElementById("ncoris-team").style.display = "none";
+        document.getElementById("ncoris-members").style.display = "none";
+        
+        toggleNcrypt.style.opacity = "1";
+        toggleNcoris.style.opacity = "0.5";
+        
+        team = document.querySelectorAll("#ncrypt-team .team");
+        members = document.querySelectorAll("#ncrypt-members .member");
+        
+        showMemberDirect("devansh_yadav");
+    });
+
+    toggleNcoris.addEventListener("click", () => {
+        document.getElementById("ncrypt-team").style.display = "none";
+        document.getElementById("ncrypt-members").style.display = "none";
+        document.getElementById("ncoris-team").style.display = "block";
+        document.getElementById("ncoris-members").style.display = "flex";
+        
+        toggleNcrypt.style.opacity = "0.5";
+        toggleNcoris.style.opacity = "1";
+        
+        team = document.querySelectorAll("#ncoris-team .team");
+        members = document.querySelectorAll("#ncoris-members .member");
+        
+        showMemberDirect("aadit_agarwal");
+    });
+}
