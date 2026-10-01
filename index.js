@@ -170,7 +170,7 @@ document.querySelector("#teamback img").addEventListener("click", () => {
 teamb.addEventListener("click", () => {
     if ((cooldowns.sofa > 0 && !isMobile) || cool > 0) return;
     teamd.style.animation = "pagepull 1s forwards"
-    selectm(document.getElementById(current))
+    selectm(document.querySelector(".member#" + current))
 })
 const team = document.querySelectorAll(".team");
 team.forEach(tm => {
@@ -351,12 +351,12 @@ document.addEventListener("keydown", (e) => {
     if (teamd.style.top === "100vh" || teamd.style.animation.includes("pagepush")) return;
     
     if (e.key === "ArrowRight" || e.keyCode === 39) {
-        let el = document.getElementById(current);
+        let el = document.querySelector(".member#" + current);
         let i = Array.from(members).indexOf(el) + 1;
         if (i >= members.length) i = 0;
         selectm(members[i], e.key === "ArrowRight" || e.keyCode === 39 ? "next" : "prev");
     } else if (e.key === "ArrowLeft" || e.keyCode === 37) {
-        let el = document.getElementById(current);
+        let el = document.querySelector(".member#" + current);
         let i = Array.from(members).indexOf(el) - 1;
         if (i < 0) i = members.length - 1;
         selectm(members[i], e.key === "ArrowRight" || e.keyCode === 39 ? "next" : "prev");
