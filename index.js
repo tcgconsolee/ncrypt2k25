@@ -447,7 +447,7 @@ alumBtns.forEach(btn => {
     btn.addEventListener("click", () => {
         let yearText = btn.innerHTML.trim().toUpperCase();
         let formattedYear = yearText.replace("K", "<span>K</span>");
-        classdiv.innerHTML = `CLASS OF ${formattedYear} CLASS OF ${formattedYear}`;
+        classdiv.innerHTML = `CLASS OF ${formattedYear}&nbsp;&nbsp;&nbsp;CLASS OF ${formattedYear}&nbsp;&nbsp;&nbsp;CLASS OF ${formattedYear}`;
         
         pics.forEach(pic => {
             pic.style.display = "none";

@@ -385,6 +385,12 @@ body {
     .team {
         left: 4vw
     }
+
+    .class {
+        left: 4vw;
+        font-size: 9vmax;
+        top: 3.5rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -422,6 +428,12 @@ body {
 
     .team {
         left: 8vw
+    }
+
+    .class {
+        left: 8vw;
+        font-size: 8vmax;
+        top: 3rem;
     }
 }
 
@@ -463,14 +475,17 @@ body {
 
 .class {
     position: relative;
-    top: 4rem;
+    top: 3.5rem;
     font-family: "Staff XXX Condensed Test SmBold";
-    font-size: 20vmax;
+    font-size: 10vmax;
+    line-height: 0.85;
     color: #ccc;
     white-space: nowrap;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min-content;
+    left: 2vw;
+    transform: none;
+    width: max-content;
+    pointer-events: none;
+    user-select: none;
 }
 
 .class span {
