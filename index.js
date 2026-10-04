@@ -1,3 +1,15 @@
+function ensureVideoLoaded(vid) {
+    if (!vid) return;
+    if ((!vid.src || vid.src === "" || vid.src === window.location.href) && vid.dataset.src) {
+        vid.src = vid.dataset.src;
+        vid.load();
+    }
+}
+function safePlayVideo(vid) {
+    if (!vid) return;
+    ensureVideoLoaded(vid);
+    return vid.play();
+}
 const load = document.getElementsByClassName("load")[0];
 const start = document.getElementById("start");
 document.addEventListener('keypress', n)
@@ -38,7 +50,7 @@ document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
     cool = 3;
     if (currentmode === 0) {
         currentmode = 1;
-        dark.style.display = "block"; dark.play();
+        ensureVideoLoaded(dark); dark.style.display = "block"; safePlayVideo(dark);
         for (let key in videos) {
             videos[key].pause();
             videos[key].currentTime = 0;
@@ -50,7 +62,7 @@ document.getElementsByClassName("modebtn")[0].addEventListener("click", () => {
         }, 100);
     } else {
         currentmode = 0;
-        light.style.display = "block"; light.play();
+        ensureVideoLoaded(light); light.style.display = "block"; safePlayVideo(light);
         for (let key in darkvideos) {
             darkvideos[key].pause();
             darkvideos[key].currentTime = 0;
@@ -93,7 +105,7 @@ function tick(now) {
             (isMobile ? true : cooldowns[key] === 0) &&
             cool === 0
         ) {
-            video.play();
+            safePlayVideo(video);
         }
     }
 
@@ -112,17 +124,19 @@ function playVideo(key, mouseFlag) {
 
     if (cool > 0 || (!isMobile && cooldowns[key] > 0)) return;
 
+    ensureVideoLoaded(video);
     video.style.display = "block";
 
+    const duration = (video.duration && !isNaN(video.duration)) ? video.duration : 1.5;
     if (!isMobile) {
-        cooldowns[key] = Math.floor(video.duration / 2);
+        cooldowns[key] = Math.floor(duration / 2);
     }
     video.currentTime = 0;
     video.play();
 
     setTimeout(() => {
         if (window[mouseFlag]) video.pause();
-    }, (video.duration / 2) * 1000);
+    }, (duration / 2) * 1000);
 }
 
 function continueVideo(key, mouseFlag) {
@@ -135,7 +149,7 @@ function continueVideo(key, mouseFlag) {
     }
 
     if (cool > 0 || (!isMobile && cooldowns[key] > 0)) return;
-    video.play();
+    safePlayVideo(video);
 }
 
 function playSofa() { playVideo("sofa", "mouseonsofa"); }
@@ -480,7 +494,7 @@ teaserbtn.addEventListener("click", () => {
     blur.style.display = "block";
     blur.style.animation = "blurin 1s forwards"
     teaser.style.display = "block"
-    video.play();
+    safePlayVideo(video);
 })
 blur.addEventListener("click", () => {
     blur.style.animation = "blurout 1s forwards"
@@ -504,7 +518,7 @@ function init() {
         cool = 3;
         if (currentmode === 0) {
             currentmode = 1;
-            dark.style.display = "block"; dark.play();
+            ensureVideoLoaded(dark); dark.style.display = "block"; safePlayVideo(dark);
             for (let key in videos) {
                 videos[key].pause();
                 videos[key].currentTime = 0;
@@ -516,7 +530,7 @@ function init() {
             }, 100);
         } else {
             currentmode = 0;
-            light.style.display = "block"; light.play();
+            ensureVideoLoaded(light); light.style.display = "block"; safePlayVideo(light);
             for (let key in darkvideos) {
                 darkvideos[key].pause();
                 darkvideos[key].currentTime = 0;

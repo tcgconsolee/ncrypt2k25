@@ -7,8 +7,18 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
     <title>nCrypt '26 - Home</title>
     <link href="./imgs/logo.png" rel="shortcut icon" type="image/x-icon" />
+    <!-- DNS prefetch & preconnect for external domains -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://code.jquery.com" />
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <!-- Preload critical assets -->
+    <link rel="preload" href="./imgs/room/start.webm" as="video" type="video/webm" />
+    <link rel="preload" href="./imgs/room.png" as="image" />
+    <link rel="preload" href="./fonts/ncrypt.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="./fonts/gtwalsheim.otf" as="font" type="font/otf" crossorigin />
+    <link rel="preload" href="./fonts/satoshi.ttf" as="font" type="font/ttf" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap"
         rel="stylesheet" />
     <link href="https://db.onlinewebfonts.com/c/17b362f3e1b747646536a29fea86993a?family=Staff+XXX+Condensed+Test+SmBold"
@@ -67,8 +77,8 @@
                 </div>
             </div>
         </div>
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     </div>
     <div class="topnav" style="border-bottom:none;top: 2.5vmin">
         <div class="nhome">
@@ -95,27 +105,27 @@
     </div>
     <div class="bg">
         <div class="bg-inner">
-            <img alt="" id="img" src="./imgs/room.png" style="opacity:0;" usemap="#image-map" />
+            <img alt="" id="img" src="./imgs/room.png" style="opacity:0;" usemap="#image-map" fetchpriority="high" />
             <div class="videos">
-                <video id="start" muted="" playsinline="" src="./imgs/room/start.mp4"></video>
-                <video id="tv" muted="" playsinline="" src="./imgs/room/tv.webm" style="display:none"></video>
+                <video id="start" muted="" playsinline="" preload="auto" src="./imgs/room/start.webm"></video>
+                <video id="tv" muted="" playsinline="" data-src="./imgs/room/tv.webm" style="display:none"></video>
                 <!-- <canvas id="tv-canvas"></canvas> -->
-                <video id="eventsv" muted="" playsinline="" src="./imgs/room/events.webm" style="display:none"></video>
+                <video id="eventsv" muted="" playsinline="" data-src="./imgs/room/events.webm" style="display:none"></video>
                 <!-- <canvas id="eventsv-canvas"></canvas> -->
-                <video id="sofa" muted="" playsinline="" src="./imgs/room/sofa.webm" style="display:none"></video>
+                <video id="sofa" muted="" playsinline="" data-src="./imgs/room/sofa.webm" style="display:none"></video>
                 <!-- <canvas id="sofa-canvas"></canvas> -->
-                <video id="computer" muted="" playsinline="" src="./imgs/room/computer.webm"
+                <video id="computer" muted="" playsinline="" data-src="./imgs/room/computer.webm"
                     style="display:none"></video>
-                <video id="dtv" muted="" playsinline="" src="./imgs/room/darkmode/tv.webm" style="display:none"></video>
-                <video id="deventsv" muted="" playsinline="" src="./imgs/room/darkmode/events.webm"
+                <video id="dtv" muted="" playsinline="" data-src="./imgs/room/darkmode/tv.webm" style="display:none"></video>
+                <video id="deventsv" muted="" playsinline="" data-src="./imgs/room/darkmode/events.webm"
                     style="display:none"></video>
-                <video id="dsofa" muted="" playsinline="" src="./imgs/room/darkmode/sofa.webm"
+                <video id="dsofa" muted="" playsinline="" data-src="./imgs/room/darkmode/sofa.webm"
                     style="display:none"></video>
-                <video id="dcomputer" muted="" playsinline="" src="./imgs/room/darkmode/computer.webm"
+                <video id="dcomputer" muted="" playsinline="" data-src="./imgs/room/darkmode/computer.webm"
                     style="display:none"></video>
-                <video id="darkmode" muted="" playsinline="" src="./imgs/room/darkmode.mp4"
+                <video id="darkmode" muted="" playsinline="" preload="none" data-src="./imgs/room/darkmode.webm"
                     style="display:none"></video>
-                <video id="lightmode" muted="" playsinline="" src="./imgs/room/lightmode.mp4"
+                <video id="lightmode" muted="" playsinline="" preload="none" data-src="./imgs/room/lightmode.webm"
                     style="display:none"></video>
             </div>
         </div>
@@ -143,7 +153,7 @@
     </div>
     <div class="blur"></div>
     <div class="teaser">
-        <video controls="" src="./imgs/room/teaser.mp4"></video>
+        <video controls="" preload="none" data-src="./imgs/room/teaser.webm"></video>
     </div>
     <div class="teamsection">
         <div class="top">
@@ -183,7 +193,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/devanshyadav.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/devanshyadav.png" />
                     </div>
                 </div>
                 <div class="team" id="aniket-halder" tabindex="-1">
@@ -209,7 +219,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/anikethalder.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/anikethalder.png" />
                     </div>
                 </div>
                 <div class="team" id="advit-sharma" tabindex="-1">
@@ -235,7 +245,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/advitsharma.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/advitsharma.png" />
                     </div>
                 </div>
                 <div class="team" id="aditya-patil" tabindex="-1">
@@ -261,7 +271,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/adityapatil.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/adityapatil.png" />
                     </div>
                 </div>
                 <div class="team" id="rishabh-pandey" tabindex="-1">
@@ -287,7 +297,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/rishabpandey.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/rishabpandey.png" />
                     </div>
                 </div>
 
@@ -368,7 +378,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/vihaanahuja.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/vihaanahuja.png" />
                     </div>
                 </div>
                 <div class="team" id="aarav-yadav" tabindex="-1">
@@ -422,7 +432,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/aaravmahendru.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/aaravmahendru.png" />
                     </div>
                 </div>
                 <div class="team" id="arhaan-goel" tabindex="-1">
@@ -660,7 +670,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/aaditagarwal.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/aaditagarwal.png" />
                     </div>
                 </div>
                 <div class="team" id="sarvangi-rana" tabindex="-1">
@@ -686,7 +696,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/sarvangirana.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/sarvangirana.png" />
                     </div>
                 </div>
                 <div class="team" id="nandini-pathania" tabindex="-1">
@@ -712,7 +722,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/nandinipathania.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/nandinipathania.png" />
                     </div>
                 </div>
                 <div class="team" id="preet-janghid" tabindex="-1">
@@ -764,7 +774,7 @@
                     </div>
                     <div class="timg" data-hover-type="outline" data-mouse-attraction="mid"
                         data-mouse-attractionstate="active" data-mouse-attractionval="30" data-mouse-magnetism="5">
-                        <img alt="" src="./imgs/members/rupkatharay.png" />
+                        <img alt="" loading="lazy" src="./imgs/members/rupkatharay.png" />
                     </div>
                 </div>
             </div>

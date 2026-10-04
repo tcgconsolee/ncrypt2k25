@@ -9,16 +9,19 @@ body {
 @font-face {
     font-family: 'n';
     src: url(./fonts/ncrypt.ttf);
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'gt';
     src: url(./fonts/gtwalsheim.otf);
+    font-display: swap;
 }
 
 @font-face {
     font-family: 's';
     src: url(./fonts/satoshi.ttf);
+    font-display: swap;
 }
 
 .top {
@@ -1349,4 +1352,5 @@ area {
     margin: auto;
     transform: translate(0px, 0px) scale(1.03);
     transform-origin: center center;
+    will-change: transform;
 }
