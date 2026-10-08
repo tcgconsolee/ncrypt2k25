@@ -734,6 +734,6 @@ if (toggleNcrypt && toggleNcoris) {
         team = document.querySelectorAll("#ncoris-team .team");
         members = document.querySelectorAll("#ncoris-members .member");
         
-        showMemberDirect("aadit_agarwal");
+        showMemberDirect("sarvangi_rana");
     });
 }
