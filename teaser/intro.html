@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>welcome aniket</title>
+
+  <style>
+    :root {
+      --ink: #FFFFFF;
+      --pure-red: #FF0000;
+      --pure-white: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      overflow: hidden;
+      background: #000000;
+      color: var(--ink);
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .screen {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow: hidden;
+      isolation: isolate;
+      background: #000000;
+    }
+
+    /* Centered text */
+    .fx-focus {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: nowrap;
+      max-width: 100%;
+      padding: 12px;
+      font-size: 60px;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: 0;
+      white-space: pre;
+      opacity: 0;
+      filter: blur(28px);
+      transform: scale(1);
+      will-change: filter, opacity, transform;
+    }
+
+    .fx-focus span {
+      display: inline-block;
+      font: inherit;
+      letter-spacing: 0;
+      white-space: pre;
+    }
+
+    /* Character colour flags */
+    .red {
+      color: var(--pure-red);
+    }
+
+    .white {
+      color: var(--pure-white);
+    }
+
+    /* Soft white spotlight */
+    .spotlight {
+      position: absolute;
+      z-index: 2;
+      inset: -25%;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(
+        ellipse 18% 20% at 50% 50%,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.045) 35%,
+        transparent 72%
+      );
+      transform: translateX(-55%);
+      will-change: transform, opacity;
+    }
+
+    @media (max-width: 700px) {
+      .fx-focus {
+        font-size: clamp(20px, 7vw, 60px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fx-focus,
+      .spotlight {
+        will-change: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="screen">
+    <div class="fx-focus" id="focusText" role="img"
+         aria-label="17 Years of nCrypt"></div>
+
+    <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+  </main>
+
+  <script>
+    /*
+      TIMELINE
+      0–1.5s   Text sharpens into focus
+      1.5–3s   White spotlight scans across
+      3–5s     Entire text gradually loses focus
+      5–6s     Text fades into black
+      6–16s    Full black pause
+      16s      Repeat
+    */
+
+    const text = document.getElementById("focusText");
+    const spotlight = document.getElementById("spotlight");
+
+    const phrase = [
+      { char: "17", flag: "red" },
+      { char: " ", flag: "" },
+      { char: "Y", flag: "" },
+      { char: "e", flag: "" },
+      { char: "a", flag: "" },
+      { char: "r", flag: "" },
+      { char: "s", flag: "" },
+      { char: " ", flag: "" },
+      { char: "o", flag: "" },
+      { char: "f", flag: "" },
+      { char: " ", flag: "" },
+      { char: "n", flag: "red" },
+      { char: "C", flag: "red" },
+      { char: "r", flag: "red" },
+      { char: "y", flag: "red" },
+      { char: "p", flag: "red" },
+      { char: "t", flag: "red" }
+    ];
+
+    // Set flag to "red" or "white" for any character.
+    phrase.forEach(({ char, flag }) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+
+      if (flag === "red") span.classList.add("red");
+      if (flag === "white") span.classList.add("white");
+
+      text.appendChild(span);
+    });
+
+    const DURATION = 16000;
+    const clamp = (v, min = 0, max = 1) =>
+      Math.max(min, Math.min(max, v));
+
+    const ease = t => t * t * (3 - 2 * t);
+
+    function animate(now) {
+      const t = (now % DURATION) / 1000;
+
+      let blur;
+      let opacity;
+      let scale;
+
+      if (t < 1.5) {
+        // Crisp reveal: blur resolves uniformly across all text.
+        const p = ease(t / 1.5);
+        blur = 14 * (1 - p);
+        opacity = 0.3 + 0.7 * p;
+        scale = 1.025 - 0.025 * p;
+      } else if (t < 3) {
+        blur = 0;
+        opacity = 1;
+        scale = 1;
+      } else if (t < 5) {
+        // Cinematic focus loss, not a letter-by-letter wave.
+        const p = ease((t - 3) / 2);
+        blur = 28 * p;
+        opacity = 1 - 0.7 * p;
+        scale = 1 + 0.025 * p;
+      } else if (t < 6) {
+        const p = ease(t - 5);
+        blur = 28 + 8 * p;
+        opacity = 0.3 * (1 - p);
+        scale = 1.025;
+      } else {
+        // Complete darkness for ten seconds.
+        blur = 36;
+        opacity = 0;
+        scale = 1.025;
+      }
+
+      text.style.filter = `blur(${blur}px)`;
+      text.style.opacity = opacity;
+      text.style.transform = `scale(${scale})`;
+
+      // Spotlight sweeps only while the text is coming into focus.
+      if (t >= 1.2 && t <= 3.3) {
+        const p = clamp((t - 1.2) / 2.1);
+        spotlight.style.opacity = String(
+          Math.sin(Math.PI * p) * 0.95
+        );
+        spotlight.style.transform =
+          `translateX(${-55 + 110 * p}%)`;
+      } else {
+        spotlight.style.opacity = "0";
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
